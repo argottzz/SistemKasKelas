@@ -3,20 +3,19 @@ import { useEffect, useState } from 'react';
 import { api } from '../lib/api';
 
 const TABS = [
-  { key: 'income', label: '💰 Pemasukan', color: '#16a34a' },
-  { key: 'expense', label: '💸 Pengeluaran', color: '#dc2626' },
-  { key: 'savings', label: '🏦 Tabungan', color: '#d97706' },
+  { key: 'income', label: '💰 Pemasukan', color: '#16a34a', placeholder: 'cth: Iuran kas minggu ini' },
+  { key: 'expense', label: '💸 Pengeluaran', color: '#dc2626', placeholder: 'cth: Beli spidol dan isi ulang' },
+  { key: 'savings', label: '🏦 Tabungan', color: '#d97706', placeholder: 'cth: Setoran tabungan ke guru' },
 ];
 
 const today = () => new Date().toISOString().slice(0, 10);
 
-export default function TransactionModal({ open, initialJenis = 'income', categories = [], onClose, onSaved }) {
+export default function TransactionModal({ open, initialJenis = 'income', onClose, onSaved }) {
   const [jenis, setJenis] = useState(initialJenis);
   const [tanggal, setTanggal] = useState(today());
   const [nominal, setNominal] = useState('');
   const [keterangan, setKeterangan] = useState('');
   const [penerima, setPenerima] = useState('Guru / Wali Kelas');
-  const [idCategory, setIdCategory] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -27,7 +26,6 @@ export default function TransactionModal({ open, initialJenis = 'income', catego
       setNominal('');
       setKeterangan('');
       setPenerima('Guru / Wali Kelas');
-      setIdCategory('');
       setErr('');
     }
   }, [open, initialJenis]);
@@ -40,7 +38,6 @@ export default function TransactionModal({ open, initialJenis = 'income', catego
 
   if (!open) return null;
   const tab = TABS.find((t) => t.key === jenis);
-  const filteredCats = categories.filter((c) => c.jenis === (jenis === 'income' ? 'income' : 'expense'));
 
   const submit = async (e) => {
     e.preventDefault();
@@ -57,7 +54,7 @@ export default function TransactionModal({ open, initialJenis = 'income', catego
         tanggal_transaksi: tanggal,
         keterangan: keterangan.trim(),
         penerima_tabungan: jenis === 'savings' ? penerima.trim() : null,
-        id_category: jenis === 'savings' ? null : idCategory || null,
+        id_category: null,
       });
       onSaved?.();
       onClose?.();
@@ -93,16 +90,7 @@ export default function TransactionModal({ open, initialJenis = 'income', catego
           <label className="fld">Tanggal
             <input type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} required />
           </label>
-          {jenis !== 'savings' ? (
-            <label className="fld">Kategori
-              <select value={idCategory} onChange={(e) => setIdCategory(e.target.value)}>
-                <option value="">— Tanpa kategori —</option>
-                {filteredCats.map((c) => (
-                  <option key={c.id_category} value={c.id_category}>{c.nama_kategori}</option>
-                ))}
-              </select>
-            </label>
-          ) : (
+          {jenis === 'savings' && (
             <label className="fld">Nama Penerima (guru)
               <input value={penerima} onChange={(e) => setPenerima(e.target.value)} placeholder="Guru / Wali Kelas" required />
             </label>
@@ -111,7 +99,7 @@ export default function TransactionModal({ open, initialJenis = 'income', catego
             <input inputMode="numeric" type="number" min="1" step="1" value={nominal} onChange={(e) => setNominal(e.target.value)} placeholder="cth: 50000" required />
           </label>
           <label className="fld">Keterangan
-            <textarea rows={2} value={keterangan} onChange={(e) => setKeterangan(e.target.value)} placeholder={jenis === 'income' ? 'cth: Iuran kas minggu ini' : jenis === 'expense' ? 'cth: Beli spidol' : 'cth: Setoran tabungan ke guru'} required />
+            <textarea rows={2} value={keterangan} onChange={(e) => setKeterangan(e.target.value)} placeholder={tab.placeholder} required />
           </label>
           <button className="btn" style={{ background: tab.color }} disabled={busy}>
             {busy ? 'Menyimpan...' : `Simpan ${tab.label}`}

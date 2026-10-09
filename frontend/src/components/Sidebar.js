@@ -5,10 +5,8 @@ import { useAuth } from '../context/AuthContext';
 
 const MENU = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-  { href: '/transaksi', label: 'Transaksi', icon: '📝' },
   { href: '/laporan', label: 'Laporan', icon: '📑' },
   { href: '/impor', label: 'Impor', icon: '📤' },
-  { href: '/kategori', label: 'Kategori', icon: '🏷️' },
 ];
 
 export function SidebarNav() {

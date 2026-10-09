@@ -6,6 +6,9 @@ Web pencatatan kas kelas — responsif (HP + laptop) + PWA. Satu codebase Next.j
 44 transaksi Kelas 11 dari `Laporan Kas RPL 2 2627.xlsx` sudah masuk DB:
 opening 476.000 + income 2.026.500 − expense 577.500 − savings 1.000.000 = **saldo 925.000**.
 
+## Menu
+Dashboard (ringkasan + transaksi terbaru) • Laporan (riwayat + tombol + Tambah popup pemasukan/pengeluaran/tabungan) • Impor Excel • Pengguna (khusus bendahara: ubah role pengurus↔bendahara).
+
 ## Cara menjalankan (2 terminal)
 
 Terminal 1 — backend:

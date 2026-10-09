@@ -47,7 +47,7 @@ export default function ImporPage() {
   return (
     <>
       <h2 style={{ marginTop: 0 }}>Impor Excel</h2>
-      <p style={{ fontSize: 14, color: '#64748b' }}>Template kolom: tanggal | keterangan | jenis (income/expense/savings/opening_balance) | nominal | penerima_tabungan | kategori. Maks 5MB. Data awal Kelas 11 sudah masuk otomatis, menu ini untuk file baru.</p>
+      <p style={{ fontSize: 14, color: '#64748b' }}>Template kolom: tanggal | keterangan | jenis (income/expense/savings/opening_balance) | nominal | penerima_tabungan (wajib untuk tabungan). Maks 5MB. Data awal Kelas 11 sudah masuk otomatis, menu ini untuk file baru.</p>
       {err && <div className="error">{err}</div>}
       <div className="form">
         <label>File Excel<input type="file" accept=".xlsx,.xls" onChange={(e) => setFile(e.target.files?.[0] || null)} /></label>
