@@ -1,0 +1,11 @@
+const express = require('express');
+const c = require('../controllers/transactionController');
+const { authRequired } = require('../middlewares/auth');
+const r = express.Router();
+r.use(authRequired);
+r.get('/', c.list);
+r.post('/', c.create);
+r.get('/:id', c.detail);
+r.put('/:id', c.update);
+r.delete('/:id', c.remove);
+module.exports = r;
