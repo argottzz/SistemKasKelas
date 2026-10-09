@@ -1,0 +1,56 @@
+-- KasSave seed data awal Kelas 11
+-- Urutan impor di MySQL cloud: schema.sql dulu, lalu file ini.
+-- Saldo target: 476000 + 2026500 - 577500 - 1000000 = 925000
+
+INSERT INTO categories (id_category, nama_kategori, jenis) VALUES (1, 'Iuran Kas', 'income') ON DUPLICATE KEY UPDATE nama_kategori=VALUES(nama_kategori);
+INSERT INTO categories (id_category, nama_kategori, jenis) VALUES (2, 'Denda', 'income') ON DUPLICATE KEY UPDATE nama_kategori=VALUES(nama_kategori);
+INSERT INTO categories (id_category, nama_kategori, jenis) VALUES (3, 'Lainnya Masuk', 'income') ON DUPLICATE KEY UPDATE nama_kategori=VALUES(nama_kategori);
+INSERT INTO categories (id_category, nama_kategori, jenis) VALUES (4, 'ATK / Fotocopy', 'expense') ON DUPLICATE KEY UPDATE nama_kategori=VALUES(nama_kategori);
+INSERT INTO categories (id_category, nama_kategori, jenis) VALUES (5, 'Kebersihan', 'expense') ON DUPLICATE KEY UPDATE nama_kategori=VALUES(nama_kategori);
+INSERT INTO categories (id_category, nama_kategori, jenis) VALUES (6, 'Kegiatan', 'expense') ON DUPLICATE KEY UPDATE nama_kategori=VALUES(nama_kategori);
+INSERT INTO categories (id_category, nama_kategori, jenis) VALUES (7, 'Konsumsi', 'expense') ON DUPLICATE KEY UPDATE nama_kategori=VALUES(nama_kategori);
+INSERT INTO import_batches (id_import, nama_file, sheet_name, file_hash, jumlah_data, total_income, total_expense, total_savings, id_user, status, keterangan) VALUES (1, 'Laporan Kas RPL 2 2627.xlsx', 'Kelas 11', 'f0a76abb571bda534eae3c11a7b27e992c3ba280363073e3c5f9b8d81062a8ab', 44, 2026500.00, 577500.00, 1000000.00, NULL, 'success', 'Seed awal Kelas 11 (tanpa user)') ON DUPLICATE KEY UPDATE id_import=id_import;
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'opening_balance', 476000.00, '2026-07-23', 'Sisa uang kas kelas 10', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 85000.00, '2026-07-24', 'Iuran kas 2026-07-24', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 45000.00, '2026-07-25', 'Iuran kas 2026-07-25', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 25000.00, '2026-07-27', 'Iuran kas 2026-07-27', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 20000.00, '2026-07-29', 'Iuran kas 2026-07-29', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 325000.00, '2026-07-30', 'Iuran kas 2026-07-30', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 25000.00, '2026-08-04', 'Iuran kas 2026-08-04', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 135000.00, '2026-08-14', 'Iuran kas 2026-08-14', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 90000.00, '2026-08-21', 'Iuran kas 2026-08-21', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 25000.00, '2026-08-22', 'Iuran kas 2026-08-22', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 58000.00, '2026-08-24', 'Iuran kas 2026-08-24', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 40000.00, '2026-08-28', 'Iuran kas 2026-08-28', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 42000.00, '2026-08-29', 'Iuran kas 2026-08-29', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 25000.00, '2026-08-31', 'Iuran kas 2026-08-31', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 18000.00, '2026-09-01', 'Iuran kas 2026-09-01', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 55000.00, '2026-09-02', 'Iuran kas 2026-09-02', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 125000.00, '2026-09-04', 'Iuran kas 2026-09-04', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 10000.00, '2026-09-07', 'Iuran kas 2026-09-07', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 30000.00, '2026-09-09', 'Iuran kas 2026-09-09', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 131500.00, '2026-09-11', 'Iuran kas 2026-09-11', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 20000.00, '2026-09-12', 'Iuran kas 2026-09-12', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 5000.00, '2026-09-21', 'Iuran kas 2026-09-21', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 35000.00, '2026-09-22', 'Iuran kas 2026-09-22', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 10000.00, '2026-09-23', 'Iuran kas 2026-09-23', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 147000.00, '2026-09-25', 'Iuran kas 2026-09-25', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 10000.00, '2026-09-26', 'Iuran kas 2026-09-26', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 30000.00, '2026-09-28', 'Iuran kas 2026-09-28', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 140000.00, '2026-09-29', 'Iuran kas 2026-09-29', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 60000.00, '2026-09-30', 'Iuran kas 2026-09-30', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 35000.00, '2026-10-01', 'Iuran kas 2026-10-01', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 80000.00, '2026-10-02', 'Iuran kas 2026-10-02', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 50000.00, '2026-10-03', 'Iuran kas 2026-10-03', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 20000.00, '2026-10-05', 'Iuran kas 2026-10-05', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 20000.00, '2026-10-06', 'Iuran kas 2026-10-06', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'income', 55000.00, '2026-10-09', 'Iuran kas 2026-10-09', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 15000.00, '2026-07-23', 'PRINT JADWAL PIKET', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 100000.00, '2026-07-24', 'FOTOCOPY PELAJARAN JEPANG 350 LEMBAR', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 26000.00, '2026-08-13', 'BELI SPIDOL DAN ISI SPIDOL', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 20500.00, '2026-08-29', 'Fotocopy beep test 35 lembar dan beli kertas folio 17 lembar', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 35000.00, '2026-09-21', 'Pengharum Ruangan', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 240000.00, '2026-09-25', 'Kok badminton 2 Slop', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 6000.00, '2026-09-26', 'Kertas Folio mapel inggris', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'expense', 135000.00, '2026-09-30', 'Beli Id Card', NULL);
+INSERT INTO transactions (id_user, id_category, id_import, jenis, nominal, tanggal_transaksi, keterangan, penerima_tabungan) VALUES (NULL, NULL, 1, 'savings', 1000000.00, '2026-09-30', 'Setoran tabungan ke guru', 'Guru / Wali Kelas');

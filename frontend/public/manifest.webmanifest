@@ -1,6 +1,6 @@
 {
-  "name": "Kas Kelas",
-  "short_name": "KasKelas",
+  "name": "KasSave",
+  "short_name": "KasSave",
   "description": "Pencatatan uang kas kelas",
   "start_url": "/dashboard",
   "display": "standalone",

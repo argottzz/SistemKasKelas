@@ -3,8 +3,8 @@ import { AuthProvider } from '../context/AuthContext';
 import AppShell from '../components/AppShell';
 
 export const metadata = {
-  title: 'Kas Kelas',
-  description: 'Pencatatan uang kas kelas',
+  title: 'KasSave',
+  description: 'KasSave — pencatatan uang kas kelas',
   manifest: '/manifest.webmanifest',
 };
 

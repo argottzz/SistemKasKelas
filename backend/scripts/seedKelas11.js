@@ -51,6 +51,18 @@ async function main() {
     await conn.end();
     return;
   }
+  // Pengaman lapis 2: file Excel yang disimpan ulang (byte berubah -> hash beda)
+  // tetap terdeteksi sebagai seed yang sama via nama file + sheet.
+  const [[sameFile]] = await conn.query(
+    "SELECT id_import FROM import_batches WHERE nama_file = 'Laporan Kas RPL 2 2627.xlsx' AND sheet_name = 'Kelas 11' AND status = 'success' LIMIT 1"
+  );
+  if (sameFile && !process.argv.includes('--force')) {
+    console.error('[seed] DITOLAK: batch seed Kelas 11 sudah ada (id_import=%s) dengan hash berbeda.', sameFile.id_import);
+    console.error('[seed] Kemungkinan file Excel disimpan ulang atau seed sudah dijalankan.');
+    console.error('[seed] Jika benar-benar ingin seed ulang, hapus dulu data seed lama, lalu jalankan dengan --force.');
+    await conn.end();
+    process.exit(3);
+  }
   await conn.beginTransaction();
   try {
     const [batch] = await conn.query(

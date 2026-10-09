@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+*/node_modules/
+
+# Build output
+.next/
+out/
+dist/
+
+# Env (jangan push kredensial!)
+.env
+.env.local
+backend/.env
+frontend/.env.local
+
+# Uploads & logs
+uploads/
+*.log
+
+# OS
+Thumbs.db
+.DS_Store

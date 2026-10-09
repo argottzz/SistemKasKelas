@@ -16,7 +16,7 @@ export default function LoginPage() {
         e.preventDefault(); setErr(''); setBusy(true);
         try { await login(username.trim(), password); } catch (ex) { setErr(ex.message); } finally { setBusy(false); }
       }}>
-        <h2 style={{ margin: 0 }}>💰 Kas Kelas</h2>
+        <h2 style={{ margin: 0 }}>💰 KasSave</h2>
         <p style={{ margin: 0, color: '#64748b', fontSize: 14 }}>Login untuk mencatat kas</p>
         {err && <div className="error">{err}</div>}
         <input placeholder="Username" value={username} onChange={(e) => setUsername(e.target.value)} required autoComplete="username" />

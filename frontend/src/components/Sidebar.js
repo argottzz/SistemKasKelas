@@ -15,7 +15,7 @@ export function SidebarNav() {
   return (
     <>
       <aside className="sidebar">
-        <h2>💰 Kas Kelas</h2>
+        <h2>💰 KasSave</h2>
         {MENU.map((m) => (
           <Link key={m.href} href={m.href} className={path.startsWith(m.href) ? 'active' : ''}>
             {m.icon} {m.label}

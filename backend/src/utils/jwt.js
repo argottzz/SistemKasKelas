@@ -9,10 +9,13 @@ function signToken(user) {
 }
 
 function setAuthCookie(res, token) {
+  // Di production frontend (Netlify) & backend (mis. Railway) beda domain,
+  // cookie harus SameSite=None + Secure agar terkirim lintas-situs.
+  // Di lokal (http) tetap Lax agar bisa jalan tanpa HTTPS.
   const isProd = process.env.NODE_ENV === 'production';
   res.cookie('token', token, {
     httpOnly: true,
-    sameSite: 'lax',
+    sameSite: isProd ? 'none' : 'lax',
     secure: isProd,
     maxAge: 7 * 24 * 60 * 60 * 1000,
     path: '/',
@@ -20,7 +23,12 @@ function setAuthCookie(res, token) {
 }
 
 function clearAuthCookie(res) {
-  res.clearCookie('token', { path: '/' });
+  const isProd = process.env.NODE_ENV === 'production';
+  res.clearCookie('token', {
+    path: '/',
+    sameSite: isProd ? 'none' : 'lax',
+    secure: isProd,
+  });
 }
 
 module.exports = { signToken, setAuthCookie, clearAuthCookie };
