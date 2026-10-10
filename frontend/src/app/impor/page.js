@@ -1,7 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { addMany, getImportLog, hasHash, addHash, sha256hex } from '../../lib/store';
-import { parseWorkbook, totalsOf } from '../../lib/excel';
 import { rupiah } from '../../lib/api';
 
 export default function ImporPage() {
@@ -12,22 +10,26 @@ export default function ImporPage() {
   const [busy, setBusy] = useState(false);
   const [agreed, setAgreed] = useState(false);
 
-  useEffect(() => {
-    setHist(getImportLog());
-  }, []);
+  const loadHist = async () => {
+    try {
+      const res = await fetch('/api/imports');
+      if (res.ok) setHist((await res.json()).data || []);
+    } catch {}
+  };
+
+  useEffect(() => { loadHist(); }, []);
 
   const doPreview = async () => {
     setErr(''); setPv(null); setAgreed(false);
     if (!file) { setErr('Pilih file .xlsx dulu'); return; }
     setBusy(true);
     try {
-      const buf = await file.arrayBuffer();
-      const hash = await sha256hex(buf);
-      if (hasHash(hash)) throw new Error('File ini sudah pernah diimpor. Impor ganda ditolak.');
-      const { rows, errors } = parseWorkbook(buf);
-      if (!rows.length) throw new Error('Tidak ada baris valid. ' + errors.slice(0, 3).join(' '));
-      const t = totalsOf(rows);
-      setPv({ rows, errors, totals: t, hash, namaFile: file.name });
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/imports/preview', { method: 'POST', body: fd });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.message || 'Gagal memproses file');
+      setPv(j);
     } catch (e) {
       setErr(e.message);
     } finally {
@@ -35,14 +37,19 @@ export default function ImporPage() {
     }
   };
 
-  const doConfirm = () => {
+  const doConfirm = async () => {
     setErr(''); setBusy(true);
     try {
-      const n = addMany(pv.rows);
-      addHash(pv.hash, { namaFile: pv.namaFile, jumlah: n });
-      alert(`Impor berhasil: ${n} baris`);
+      const res = await fetch('/api/imports/confirm', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ namaFile: pv.namaFile, fileHash: pv.fileHash, rows: pv.rows }),
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.message || 'Gagal menyimpan impor');
+      alert(`Impor berhasil: ${j.jumlah} baris`);
       setPv(null); setFile(null);
-      setHist(getImportLog());
+      loadHist();
     } catch (e) {
       setErr(e.message);
     } finally {
@@ -66,7 +73,7 @@ export default function ImporPage() {
       {pv && (
         <div className="card" style={{ marginTop: 14 }}>
           <h3>Pratinjau — {pv.namaFile}</h3>
-          <p>Valid: {pv.totals.count} • Saldo hasil file: {rupiah(pv.totals.saldo)}</p>
+          <p>Valid: {pv.totals.count} • Saldo hasil file: {rupiah(pv.saldoHasil)}</p>
           <p style={{ fontSize: 13 }}>Pemasukan {rupiah(pv.totals.income)} • Pengeluaran {rupiah(pv.totals.expense)} • Tabungan {rupiah(pv.totals.savings)} • Saldo awal {rupiah(pv.totals.opening)}</p>
           {pv.errors?.length > 0 && <ul style={{ fontSize: 13, color: '#991b1b' }}>{pv.errors.slice(0, 10).map((e, i) => <li key={i}>{e}</li>)}</ul>}
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14 }}>
@@ -82,7 +89,7 @@ export default function ImporPage() {
         <table>
           <thead><tr><th>File</th><th>Jumlah</th><th>Waktu</th></tr></thead>
           <tbody>
-            {hist.map((h, i) => <tr key={i}><td data-label="File">{h.namaFile}</td><td data-label="Jumlah">{h.jumlah}</td><td data-label="Waktu">{h.at ? h.at.slice(0, 16).replace('T', ' ') : '-'}</td></tr>)}
+            {hist.map((h, i) => <tr key={h.id || i}><td data-label="File">{h.nama_file}</td><td data-label="Jumlah">{h.jumlah}</td><td data-label="Waktu">{h.created_at ? h.created_at.slice(0, 16).replace('T', ' ') : '-'}</td></tr>)}
             {hist.length === 0 && <tr><td colSpan={3}>Belum ada impor</td></tr>}
           </tbody>
         </table>

@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { addTx } from '../lib/store';
 
 const TABS = [
   { key: 'income', label: '💰 Pemasukan', color: '#16a34a', placeholder: 'cth: Iuran kas minggu ini' },
@@ -18,7 +17,7 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
   const [tanggal, setTanggal] = useState(today());
   const [nominal, setNominal] = useState('');
   const [keterangan, setKeterangan] = useState('');
-  const [penerima, setPenerima] = useState('Guru / Wali Kelas');
+  const [penerima, setPenerima] = useState('Tabungan kelas');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
@@ -28,7 +27,7 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
       setTanggal(today());
       setNominal('');
       setKeterangan('');
-      setPenerima('Guru / Wali Kelas');
+      setPenerima('Tabungan kelas');
       setErr('');
     }
   }, [open, initialJenis]);
@@ -42,12 +41,18 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
   if (!open) return null;
   const tab = TABS.find((t) => t.key === jenis);
 
-  const submit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     setErr('');
     setBusy(true);
     try {
-      addTx({ jenis, nominal, tanggal, keterangan, penerima: jenis === 'savings' ? penerima : null });
+      const res = await fetch('/api/transactions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ jenis, nominal, tanggal, keterangan, penerima: jenis === 'savings' ? penerima : null }),
+      });
+      const j = await res.json();
+      if (!res.ok) throw new Error(j.message || 'Gagal menyimpan');
       onSaved?.();
       onClose?.();
     } catch (ex) {
@@ -84,7 +89,7 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
           </label>
           {jenis === 'savings' && (
             <label className="fld">Nama Penerima (guru)
-              <input value={penerima} onChange={(e) => setPenerima(e.target.value)} placeholder="Guru / Wali Kelas" required />
+              <input value={penerima} onChange={(e) => setPenerima(e.target.value)} placeholder="Tabungan kelas" required />
             </label>
           )}
           <label className="fld">Nominal (Rp)

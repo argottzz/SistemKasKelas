@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { loadTx, summary } from '../../lib/store';
 import { rupiah, fmtTanggal, labelJenis } from '../../lib/api';
 import { useProfile } from '../../context/ProfileContext';
 
@@ -8,11 +7,21 @@ export default function DashboardPage() {
   const { profile } = useProfile();
   const [sum, setSum] = useState(null);
   const [recent, setRecent] = useState([]);
+  const [err, setErr] = useState('');
 
   useEffect(() => {
-    const l = loadTx();
-    setSum(summary(l));
-    setRecent([...l].sort((a, b) => (a.tanggal < b.tanggal ? 1 : -1)).slice(0, 8));
+    (async () => {
+      try {
+        const [s, r] = await Promise.all([
+          fetch('/api/summary').then((x) => { if (!x.ok) throw new Error('Gagal memuat ringkasan'); return x.json(); }),
+          fetch('/api/transactions?limit=8').then((x) => { if (!x.ok) throw new Error('Gagal memuat transaksi'); return x.json(); }),
+        ]);
+        setSum(s);
+        setRecent(r.data || []);
+      } catch (e) {
+        setErr(e.message);
+      }
+    })();
   }, []);
 
   return (
@@ -21,6 +30,7 @@ export default function DashboardPage() {
         <h2 style={{ margin: 0 }}>Dashboard</h2>
         <span style={{ fontSize: 13, color: '#64748b' }}>Halo, {profile.nama || 'Bendahara'} 👋</span>
       </div>
+      {err && <div className="error">{err}</div>}
       {sum?.peringatan_saldo_besar && (
         <div className="alert">⚠️ Saldo melebihi Rp1.000.000. Pertimbangkan setor tabungan ke guru. (Tidak otomatis.)</div>
       )}
@@ -46,7 +56,7 @@ export default function DashboardPage() {
                 <td data-label="Nominal">{rupiah(t.nominal)}</td>
               </tr>
             ))}
-            {recent.length === 0 && <tr><td colSpan={4}>Belum ada transaksi</td></tr>}
+            {recent.length === 0 && !err && <tr><td colSpan={4}>Belum ada transaksi</td></tr>}
           </tbody>
         </table>
       </div>

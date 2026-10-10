@@ -1,6 +1,5 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { loadTx, removeTx } from '../../lib/store';
 import { rupiah, fmtTanggal, labelJenis } from '../../lib/api';
 import { downloadExcel } from '../../lib/excel';
 import TransactionModal from '../../components/TransactionModal';
@@ -15,29 +14,45 @@ export default function LaporanPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalJenis, setModalJenis] = useState('income');
 
-  const load = () => {
-    const l = [...loadTx()].sort((a, b) => (a.tanggal < b.tanggal ? 1 : -1));
-    setRows(l.filter((t) =>
-      (!jenis || t.jenis === jenis) &&
-      (!startDate || t.tanggal >= startDate) &&
-      (!endDate || t.tanggal <= endDate) &&
-      (!q || (t.keterangan + ' ' + (t.penerima || '')).toLowerCase().includes(q.toLowerCase())
-    )));
+  const load = async () => {
+    try {
+      setErr('');
+      const p = new URLSearchParams({ limit: '500' });
+      if (jenis) p.set('jenis', jenis);
+      if (q) p.set('q', q);
+      if (startDate) p.set('startDate', startDate);
+      if (endDate) p.set('endDate', endDate);
+      const res = await fetch('/api/transactions?' + p.toString());
+      if (!res.ok) throw new Error('Gagal memuat laporan');
+      const j = await res.json();
+      setRows(j.data || []);
+    } catch (e) {
+      setErr(e.message);
+    }
   };
 
-  useEffect(load, []); // eslint-disable-line
+  useEffect(() => { load(); }, []); // eslint-disable-line
 
   const bukaModal = (j = 'income') => { setModalJenis(j); setModalOpen(true); };
 
-  const hapus = (id) => {
+  const hapus = async (id) => {
     if (!confirm('Hapus data ini? Saldo akan dihitung ulang.')) return;
-    removeTx(id);
-    load();
+    try {
+      const res = await fetch('/api/transactions/' + id, { method: 'DELETE' });
+      if (!res.ok) throw new Error('Gagal menghapus');
+      load();
+    } catch (e) {
+      setErr(e.message);
+    }
   };
 
-  const ekspor = () => {
+  const ekspor = async () => {
     try {
-      const t = downloadExcel(loadTx());
+      setErr('');
+      const res = await fetch('/api/transactions?limit=1000');
+      if (!res.ok) throw new Error('Gagal memuat data untuk export');
+      const j = await res.json();
+      const t = downloadExcel(j.data || []);
       alert(`Excel terunduh: ${t.count} baris, saldo ${rupiah(t.saldo)}`);
     } catch (e) {
       setErr('Gagal export: ' + e.message);
