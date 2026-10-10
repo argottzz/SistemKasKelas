@@ -1,41 +1,43 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { rupiah, fmtTanggal, labelJenis } from '../../lib/api';
 import { downloadExcel } from '../../lib/excel';
 import TransactionModal from '../../components/TransactionModal';
 
-export default function LaporanPage() {
+function LaporanDalam() {
+  const sp = useSearchParams();
   const [rows, setRows] = useState([]);
   const [jenis, setJenis] = useState('');
-  const [q, setQ] = useState('');
+  const [q, setQ] = useState(sp.get('q') || '');
   const [startDate, setStartDate] = useState('');
   const [endDate, setEndDate] = useState('');
   const [err, setErr] = useState('');
   const [modalOpen, setModalOpen] = useState(false);
   const [modalJenis, setModalJenis] = useState('income');
 
-  const load = async () => {
+  const load = async (override) => {
     try {
       setErr('');
+      const v = override || { jenis, q, startDate, endDate };
       const p = new URLSearchParams({ limit: '500' });
-      if (jenis) p.set('jenis', jenis);
-      if (q) p.set('q', q);
-      if (startDate) p.set('startDate', startDate);
-      if (endDate) p.set('endDate', endDate);
+      if (v.jenis) p.set('jenis', v.jenis);
+      if (v.q) p.set('q', v.q);
+      if (v.startDate) p.set('startDate', v.startDate);
+      if (v.endDate) p.set('endDate', v.endDate);
       const res = await fetch('/api/transactions?' + p.toString());
       if (!res.ok) {
         let detail = '';
         try { detail = ': ' + ((await res.json()).message || ''); } catch {}
         throw new Error(`Gagal memuat laporan (HTTP ${res.status}${detail})`);
       }
-      const j = await res.json();
-      setRows(j.data || []);
+      setRows((await res.json()).data || []);
     } catch (e) {
       setErr(e.message);
     }
   };
 
-  useEffect(() => { load(); }, []); // eslint-disable-line
+  useEffect(() => { load({ jenis: '', q: sp.get('q') || '', startDate: '', endDate: '' }); }, []); // eslint-disable-line
 
   const bukaModal = (j = 'income') => { setModalJenis(j); setModalOpen(true); };
 
@@ -43,7 +45,7 @@ export default function LaporanPage() {
     if (!confirm('Hapus data ini? Saldo akan dihitung ulang.')) return;
     try {
       const res = await fetch('/api/transactions/' + id, { method: 'DELETE' });
-      if (!res.ok) throw new Error('Gagal menghapus');
+      if (!res.ok) throw new Error(`Gagal menghapus (HTTP ${res.status})`);
       load();
     } catch (e) {
       setErr(e.message);
@@ -54,9 +56,8 @@ export default function LaporanPage() {
     try {
       setErr('');
       const res = await fetch('/api/transactions?limit=1000');
-      if (!res.ok) throw new Error('Gagal memuat data untuk export');
-      const j = await res.json();
-      const t = downloadExcel(j.data || []);
+      if (!res.ok) throw new Error(`Gagal memuat data (HTTP ${res.status})`);
+      const t = downloadExcel((await res.json()).data || []);
       alert(`Excel terunduh: ${t.count} baris, saldo ${rupiah(t.saldo)}`);
     } catch (e) {
       setErr('Gagal export: ' + e.message);
@@ -65,8 +66,11 @@ export default function LaporanPage() {
 
   return (
     <>
-      <div className="topbar">
-        <h2 style={{ margin: 0 }}>Laporan Kas ({rows.length})</h2>
+      <div className="page-head">
+        <div>
+          <h2>Laporan Kas ({rows.length})</h2>
+          <div className="greet-sub">Semua pemasukan, pengeluaran, dan tabungan.</div>
+        </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="btn ghost" onClick={ekspor}>📥 Export Excel</button>
           <button className="btn" onClick={() => bukaModal('income')}>+ Tambah</button>
@@ -84,7 +88,7 @@ export default function LaporanPage() {
         <input type="date" value={startDate} onChange={(e) => setStartDate(e.target.value)} />
         <input type="date" value={endDate} onChange={(e) => setEndDate(e.target.value)} />
         <input placeholder="Cari keterangan..." value={q} onChange={(e) => setQ(e.target.value)} />
-        <button className="btn" onClick={load}>Filter</button>
+        <button className="btn" onClick={() => load()}>Filter</button>
       </div>
       <div className="table-wrap" style={{ marginBottom: 18 }}>
         <table>
@@ -110,8 +114,16 @@ export default function LaporanPage() {
         open={modalOpen}
         initialJenis={modalJenis}
         onClose={() => setModalOpen(false)}
-        onSaved={load}
+        onSaved={() => load()}
       />
     </>
+  );
+}
+
+export default function LaporanPage() {
+  return (
+    <Suspense fallback={<p style={{ padding: 24 }}>Memuat laporan...</p>}>
+      <LaporanDalam />
+    </Suspense>
   );
 }
