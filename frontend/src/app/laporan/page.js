@@ -23,7 +23,11 @@ export default function LaporanPage() {
       if (startDate) p.set('startDate', startDate);
       if (endDate) p.set('endDate', endDate);
       const res = await fetch('/api/transactions?' + p.toString());
-      if (!res.ok) throw new Error('Gagal memuat laporan');
+      if (!res.ok) {
+        let detail = '';
+        try { detail = ': ' + ((await res.json()).message || ''); } catch {}
+        throw new Error(`Gagal memuat laporan (HTTP ${res.status}${detail})`);
+      }
       const j = await res.json();
       setRows(j.data || []);
     } catch (e) {

@@ -10,11 +10,20 @@ export default function DashboardPage() {
   const [err, setErr] = useState('');
 
   useEffect(() => {
+    const get = async (url, apa) => {
+      const x = await fetch(url);
+      if (!x.ok) {
+        let detail = '';
+        try { detail = ': ' + ((await x.json()).message || ''); } catch {}
+        throw new Error(`${apa} (HTTP ${x.status}${detail})`);
+      }
+      return x.json();
+    };
     (async () => {
       try {
         const [s, r] = await Promise.all([
-          fetch('/api/summary').then((x) => { if (!x.ok) throw new Error('Gagal memuat ringkasan'); return x.json(); }),
-          fetch('/api/transactions?limit=8').then((x) => { if (!x.ok) throw new Error('Gagal memuat transaksi'); return x.json(); }),
+          get('/api/summary', 'Gagal memuat ringkasan'),
+          get('/api/transactions?limit=8', 'Gagal memuat transaksi'),
         ]);
         setSum(s);
         setRecent(r.data || []);

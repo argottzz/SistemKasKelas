@@ -1,5 +1,6 @@
 'use client';
 import Link from 'next/link';
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useProfile } from '../context/ProfileContext';
 
@@ -29,11 +30,22 @@ export function Avatar({ nama, foto, size = 44 }) {
 export function SidebarNav() {
   const path = usePathname();
   const { profile } = useProfile();
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+
   return (
     <>
-      <aside className="sidebar">
+      <header className="mobilebar">
+        <button className="hamburger" onClick={() => setOpen((v) => !v)} aria-label="Buka menu" aria-expanded={open}>
+          ☰
+        </button>
+        <span className="mobilebar-title">💰 KasSave</span>
+        <span style={{ width: 44 }} />
+      </header>
+      {open && <div className="drawer-overlay" onClick={close} aria-hidden="true" />}
+      <aside className={`sidebar${open ? ' open' : ''}`}>
         <h2>💰 KasSave</h2>
-        <Link href="/profil" className={path.startsWith('/profil') ? 'active' : ''} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <Link href="/profil" onClick={close} className={path.startsWith('/profil') ? 'active' : ''} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <Avatar nama={profile.nama} foto={profile.foto} size={40} />
           <span>
             <div style={{ fontWeight: 700 }}>{profile.nama || 'Atur nama...'}</div>
@@ -41,18 +53,11 @@ export function SidebarNav() {
           </span>
         </Link>
         {MENU.map((m) => (
-          <Link key={m.href} href={m.href} className={path.startsWith(m.href) ? 'active' : ''}>
+          <Link key={m.href} href={m.href} onClick={close} className={path.startsWith(m.href) ? 'active' : ''}>
             {m.icon} {m.label}
           </Link>
         ))}
       </aside>
-      <nav className="bottomnav">
-        {MENU.map((m) => (
-          <Link key={m.href} href={m.href} className={path.startsWith(m.href) ? 'active' : ''}>
-            <div style={{ fontSize: 18 }}>{m.icon}</div>{m.label}
-          </Link>
-        ))}
-      </nav>
     </>
   );
 }
