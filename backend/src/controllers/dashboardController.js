@@ -1,4 +1,3 @@
-const { pool } = require('../config/db');
 const { getSummary, getRecent } = require('../services/dashboardService');
 
 async function summary(req, res, next) {

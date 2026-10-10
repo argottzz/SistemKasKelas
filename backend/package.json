@@ -4,13 +4,17 @@
   "description": "Backend Express Sistem Kas Kelas",
   "main": "src/server.js",
   "type": "commonjs",
+  "engines": { "node": "20.x" },
   "scripts": {
     "start": "node src/server.js",
     "dev": "node --watch src/server.js",
     "seed": "node scripts/seedKelas11.js",
-    "test": "node --test tests/"
+    "seed:supabase": "node scripts/seedSupabase.js",
+    "check:supabase": "node scripts/checkSupabase.js",
+    "test": "node --test tests/transaction.test.js tests/excel.test.js"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.117.3",
     "bcryptjs": "^2.4.3",
     "cookie-parser": "^1.4.6",
     "cors": "^2.8.5",

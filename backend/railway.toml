@@ -1,0 +1,19 @@
+# Railway — backend KasSave (Express + Supabase).
+# Cara pakai: Railway → New Project → Deploy from GitHub → pilih repo ini,
+# lalu di service backend: Settings → Root Directory = `backend`.
+# File ini otomatis terbaca (builder Nixpacks, healthcheck /api/health).
+# Variabel wajib diisi di Railway → Variables (lihat backend/.env.example):
+#   SUPABASE_URL, SUPABASE_SERVICE_ROLE_KEY, JWT_SECRET,
+#   FRONTEND_URL=https://ALAMAT-NETLIFY-KAMU, NODE_ENV=production
+# PORT diisi otomatis oleh Railway. EXCEL_PATH & kredensial MySQL tidak dipakai.
+
+[build]
+builder = "NIXPACKS"
+buildCommand = "npm ci --omit=dev"
+
+[deploy]
+startCommand = "node src/server.js"
+healthcheckPath = "/api/health"
+healthcheckTimeout = 300
+restartPolicyType = "ON_FAILURE"
+restartPolicyMaxRetries = 10

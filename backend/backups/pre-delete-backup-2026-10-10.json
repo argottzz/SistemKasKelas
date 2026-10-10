@@ -1,0 +1,164 @@
+{
+ "at": "2026-10-10T15:22:37.841Z",
+ "transactions": [
+  {
+   "id": 1,
+   "import_id": 1,
+   "jenis": "income",
+   "nominal": 385000,
+   "tanggal": "2026-07-31",
+   "keterangan": "Rekap pemasukan Juli 2026 berdasarkan total bulanan di Excel Kelas 11",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 2,
+   "import_id": 1,
+   "jenis": "income",
+   "nominal": 393500,
+   "tanggal": "2026-08-31",
+   "keterangan": "Rekap pemasukan Agustus 2026 berdasarkan total bulanan di Excel Kelas 11",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 3,
+   "import_id": 1,
+   "jenis": "income",
+   "nominal": 410500,
+   "tanggal": "2026-09-30",
+   "keterangan": "Rekap pemasukan September 2026 berdasarkan total bulanan di Excel Kelas 11",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 4,
+   "import_id": 1,
+   "jenis": "income",
+   "nominal": 561000,
+   "tanggal": "2026-10-31",
+   "keterangan": "Rekap pemasukan Oktober 2026 berdasarkan total bulanan di Excel Kelas 11",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 5,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 15000,
+   "tanggal": "2026-07-23",
+   "keterangan": "PRINT JADWAL PIKET",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 6,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 100000,
+   "tanggal": "2026-07-24",
+   "keterangan": "FOTOCOPY PELAJARAN JEPANG 350 LEMBAR",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 7,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 26000,
+   "tanggal": "2026-08-13",
+   "keterangan": "BELI SPIDOL DAN ISI SPIDOL",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 8,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 20500,
+   "tanggal": "2026-08-29",
+   "keterangan": "Fotocopy beep test 35 lembar dan beli kertas folio 17 lembar",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 9,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 35000,
+   "tanggal": "2026-09-21",
+   "keterangan": "Pengharum Ruangan",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 10,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 240000,
+   "tanggal": "2026-09-25",
+   "keterangan": "Kok badminton 2 Slop",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 11,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 6000,
+   "tanggal": "2026-09-26",
+   "keterangan": "Kertas Folio mapel inggris",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 12,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 135000,
+   "tanggal": "2026-09-30",
+   "keterangan": "Beli Id Card",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 13,
+   "import_id": 1,
+   "jenis": "savings",
+   "nominal": 1000000,
+   "tanggal": "2026-09-30",
+   "keterangan": "Tabungan kelas",
+   "penerima": "Tabungan kelas",
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 14,
+   "import_id": 1,
+   "jenis": "opening_balance",
+   "nominal": 476000,
+   "tanggal": "2026-07-01",
+   "keterangan": "Saldo awal dari sisa uang kas kelas 10",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 15,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 44000,
+   "tanggal": "2026-10-10",
+   "keterangan": "Beli air minum + print nomor urut",
+   "penerima": null,
+   "created_at": "2026-10-10T14:31:58.365829+00:00"
+  }
+ ],
+ "import_batches": [
+  {
+   "id": 1,
+   "nama_file": "Laporan Kas RPL 2 2627 - Kelas 11",
+   "file_hash": "kassave-kelas11-2026-v1",
+   "jumlah": 15,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  }
+ ]
+}

@@ -1,30 +1,5 @@
-const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000/api';
-
-async function req(path, opts = {}) {
-  const res = await fetch(`${API}${path}`, {
-    credentials: 'include',
-    headers: { 'Content-Type': 'application/json', ...(opts.headers || {}) },
-    ...opts,
-  });
-  const text = await res.text();
-  let data = null;
-  try { data = text ? JSON.parse(text) : null; } catch { data = { message: text }; }
-  if (!res.ok) throw new Error(data?.message || `Error ${res.status}`);
-  return data;
-}
-
-export const api = {
-  get: (p) => req(p),
-  post: (p, body) => req(p, { method: 'POST', body: JSON.stringify(body) }),
-  put: (p, body) => req(p, { method: 'PUT', body: JSON.stringify(body) }),
-  del: (p) => req(p, { method: 'DELETE' }),
-  upload: async (p, formData) => {
-    const res = await fetch(`${API}${p}`, { method: 'POST', credentials: 'include', body: formData });
-    const data = await res.json().catch(() => ({}));
-    if (!res.ok) throw new Error(data?.message || `Error ${res.status}`);
-    return data;
-  },
-};
+// Helper format murni (tidak ada fetch / akses database).
+// Frontend offline: data dari localStorage (lib/store.js), bukan dari backend/Supabase.
 
 export const rupiah = (n) =>
   new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR', maximumFractionDigits: 0 }).format(Number(n) || 0);

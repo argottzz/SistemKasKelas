@@ -1,0 +1,481 @@
+{
+ "at": "2026-10-10T15:26:15.022Z",
+ "transactions": [
+  {
+   "id": 5,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 15000,
+   "tanggal": "2026-07-23",
+   "keterangan": "PRINT JADWAL PIKET",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 6,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 100000,
+   "tanggal": "2026-07-24",
+   "keterangan": "FOTOCOPY PELAJARAN JEPANG 350 LEMBAR",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 7,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 26000,
+   "tanggal": "2026-08-13",
+   "keterangan": "BELI SPIDOL DAN ISI SPIDOL",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 8,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 20500,
+   "tanggal": "2026-08-29",
+   "keterangan": "Fotocopy beep test 35 lembar dan beli kertas folio 17 lembar",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 9,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 35000,
+   "tanggal": "2026-09-21",
+   "keterangan": "Pengharum Ruangan",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 10,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 240000,
+   "tanggal": "2026-09-25",
+   "keterangan": "Kok badminton 2 Slop",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 11,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 6000,
+   "tanggal": "2026-09-26",
+   "keterangan": "Kertas Folio mapel inggris",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 12,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 135000,
+   "tanggal": "2026-09-30",
+   "keterangan": "Beli Id Card",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 13,
+   "import_id": 1,
+   "jenis": "savings",
+   "nominal": 1000000,
+   "tanggal": "2026-09-30",
+   "keterangan": "Tabungan kelas",
+   "penerima": "Tabungan kelas",
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 14,
+   "import_id": 1,
+   "jenis": "opening_balance",
+   "nominal": 476000,
+   "tanggal": "2026-07-01",
+   "keterangan": "Saldo awal dari sisa uang kas kelas 10",
+   "penerima": null,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 15,
+   "import_id": 1,
+   "jenis": "expense",
+   "nominal": 44000,
+   "tanggal": "2026-10-10",
+   "keterangan": "Beli air minum + print nomor urut",
+   "penerima": null,
+   "created_at": "2026-10-10T14:31:58.365829+00:00"
+  },
+  {
+   "id": 16,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 85000,
+   "tanggal": "2026-07-24",
+   "keterangan": "Iuran kas 2026-07-24",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 17,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 45000,
+   "tanggal": "2026-07-25",
+   "keterangan": "Iuran kas 2026-07-25",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 18,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 25000,
+   "tanggal": "2026-07-27",
+   "keterangan": "Iuran kas 2026-07-27",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 19,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 20000,
+   "tanggal": "2026-07-29",
+   "keterangan": "Iuran kas 2026-07-29",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 20,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 325000,
+   "tanggal": "2026-07-30",
+   "keterangan": "Iuran kas 2026-07-30",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 21,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 25000,
+   "tanggal": "2026-08-04",
+   "keterangan": "Iuran kas 2026-08-04",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 22,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 135000,
+   "tanggal": "2026-08-14",
+   "keterangan": "Iuran kas 2026-08-14",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 23,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 90000,
+   "tanggal": "2026-08-21",
+   "keterangan": "Iuran kas 2026-08-21",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 24,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 25000,
+   "tanggal": "2026-08-22",
+   "keterangan": "Iuran kas 2026-08-22",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 25,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 58000,
+   "tanggal": "2026-08-24",
+   "keterangan": "Iuran kas 2026-08-24",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 26,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 40000,
+   "tanggal": "2026-08-28",
+   "keterangan": "Iuran kas 2026-08-28",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 27,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 42000,
+   "tanggal": "2026-08-29",
+   "keterangan": "Iuran kas 2026-08-29",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 28,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 25000,
+   "tanggal": "2026-08-31",
+   "keterangan": "Iuran kas 2026-08-31",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 29,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 18000,
+   "tanggal": "2026-09-01",
+   "keterangan": "Iuran kas 2026-09-01",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 30,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 55000,
+   "tanggal": "2026-09-02",
+   "keterangan": "Iuran kas 2026-09-02",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 31,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 125000,
+   "tanggal": "2026-09-04",
+   "keterangan": "Iuran kas 2026-09-04",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 32,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 10000,
+   "tanggal": "2026-09-07",
+   "keterangan": "Iuran kas 2026-09-07",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 33,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 30000,
+   "tanggal": "2026-09-09",
+   "keterangan": "Iuran kas 2026-09-09",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 34,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 131500,
+   "tanggal": "2026-09-11",
+   "keterangan": "Iuran kas 2026-09-11",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 35,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 20000,
+   "tanggal": "2026-09-12",
+   "keterangan": "Iuran kas 2026-09-12",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 36,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 5000,
+   "tanggal": "2026-09-21",
+   "keterangan": "Iuran kas 2026-09-21",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 37,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 35000,
+   "tanggal": "2026-09-22",
+   "keterangan": "Iuran kas 2026-09-22",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 38,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 10000,
+   "tanggal": "2026-09-23",
+   "keterangan": "Iuran kas 2026-09-23",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 39,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 147000,
+   "tanggal": "2026-09-25",
+   "keterangan": "Iuran kas 2026-09-25",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 40,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 10000,
+   "tanggal": "2026-09-26",
+   "keterangan": "Iuran kas 2026-09-26",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 41,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 30000,
+   "tanggal": "2026-09-28",
+   "keterangan": "Iuran kas 2026-09-28",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 42,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 140000,
+   "tanggal": "2026-09-29",
+   "keterangan": "Iuran kas 2026-09-29",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 43,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 60000,
+   "tanggal": "2026-09-30",
+   "keterangan": "Iuran kas 2026-09-30",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 44,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 35000,
+   "tanggal": "2026-10-01",
+   "keterangan": "Iuran kas 2026-10-01",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 45,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 80000,
+   "tanggal": "2026-10-02",
+   "keterangan": "Iuran kas 2026-10-02",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 46,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 50000,
+   "tanggal": "2026-10-03",
+   "keterangan": "Iuran kas 2026-10-03",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 47,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 20000,
+   "tanggal": "2026-10-05",
+   "keterangan": "Iuran kas 2026-10-05",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 48,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 20000,
+   "tanggal": "2026-10-06",
+   "keterangan": "Iuran kas 2026-10-06",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 49,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 55000,
+   "tanggal": "2026-10-09",
+   "keterangan": "Iuran kas 2026-10-09",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  },
+  {
+   "id": 50,
+   "import_id": 3,
+   "jenis": "income",
+   "nominal": 345000,
+   "tanggal": "2026-10-10",
+   "keterangan": "Iuran kas 2026-10-10",
+   "penerima": null,
+   "created_at": "2026-10-10T15:23:01.621514+00:00"
+  }
+ ],
+ "import_batches": [
+  {
+   "id": 1,
+   "nama_file": "Laporan Kas RPL 2 2627 - Kelas 11",
+   "file_hash": "kassave-kelas11-2026-v1",
+   "jumlah": 15,
+   "created_at": "2026-10-10T14:17:40.803613+00:00"
+  },
+  {
+   "id": 3,
+   "nama_file": "Laporan Kas RPL 2 2627.xlsx",
+   "file_hash": "6a6128a36a0b83bebcc6cd0a31ddbb45a697749816665495b82289ff7c25cb39",
+   "jumlah": 45,
+   "created_at": "2026-10-10T15:23:01.542852+00:00"
+  }
+ ]
+}
