@@ -1,6 +1,6 @@
 'use client';
 import { useEffect, useState } from 'react';
-import { api } from '../lib/api';
+import { addTx } from '../lib/store';
 
 const TABS = [
   { key: 'income', label: '💰 Pemasukan', color: '#16a34a', placeholder: 'cth: Iuran kas minggu ini' },
@@ -8,7 +8,10 @@ const TABS = [
   { key: 'savings', label: '🏦 Tabungan', color: '#d97706', placeholder: 'cth: Setoran tabungan ke guru' },
 ];
 
-const today = () => new Date().toISOString().slice(0, 10);
+const today = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
+};
 
 export default function TransactionModal({ open, initialJenis = 'income', onClose, onSaved }) {
   const [jenis, setJenis] = useState(initialJenis);
@@ -39,23 +42,12 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
   if (!open) return null;
   const tab = TABS.find((t) => t.key === jenis);
 
-  const submit = async (e) => {
+  const submit = (e) => {
     e.preventDefault();
     setErr('');
-    if (!tanggal) return setErr('Tanggal wajib diisi');
-    if (!Number(nominal) || Number(nominal) <= 0) return setErr('Nominal harus lebih dari 0');
-    if (!keterangan.trim()) return setErr('Keterangan wajib diisi');
-    if (jenis === 'savings' && !penerima.trim()) return setErr('Nama penerima wajib diisi');
     setBusy(true);
     try {
-      await api.post('/transactions', {
-        jenis,
-        nominal: Number(nominal),
-        tanggal_transaksi: tanggal,
-        keterangan: keterangan.trim(),
-        penerima_tabungan: jenis === 'savings' ? penerima.trim() : null,
-        id_category: null,
-      });
+      addTx({ jenis, nominal, tanggal, keterangan, penerima: jenis === 'savings' ? penerima : null });
       onSaved?.();
       onClose?.();
     } catch (ex) {

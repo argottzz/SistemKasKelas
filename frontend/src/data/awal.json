@@ -1,0 +1,310 @@
+[
+ {
+  "jenis": "opening_balance",
+  "nominal": 476000,
+  "tanggal": "2026-07-23",
+  "keterangan": "Sisa uang kas kelas 10",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 15000,
+  "tanggal": "2026-07-23",
+  "keterangan": "PRINT JADWAL PIKET",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 85000,
+  "tanggal": "2026-07-24",
+  "keterangan": "Iuran kas 2026-07-24",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 100000,
+  "tanggal": "2026-07-24",
+  "keterangan": "FOTOCOPY PELAJARAN JEPANG 350 LEMBAR",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 45000,
+  "tanggal": "2026-07-25",
+  "keterangan": "Iuran kas 2026-07-25",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 25000,
+  "tanggal": "2026-07-27",
+  "keterangan": "Iuran kas 2026-07-27",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 20000,
+  "tanggal": "2026-07-29",
+  "keterangan": "Iuran kas 2026-07-29",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 325000,
+  "tanggal": "2026-07-30",
+  "keterangan": "Iuran kas 2026-07-30",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 25000,
+  "tanggal": "2026-08-04",
+  "keterangan": "Iuran kas 2026-08-04",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 26000,
+  "tanggal": "2026-08-13",
+  "keterangan": "BELI SPIDOL DAN ISI SPIDOL",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 135000,
+  "tanggal": "2026-08-14",
+  "keterangan": "Iuran kas 2026-08-14",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 90000,
+  "tanggal": "2026-08-21",
+  "keterangan": "Iuran kas 2026-08-21",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 25000,
+  "tanggal": "2026-08-22",
+  "keterangan": "Iuran kas 2026-08-22",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 58000,
+  "tanggal": "2026-08-24",
+  "keterangan": "Iuran kas 2026-08-24",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 40000,
+  "tanggal": "2026-08-28",
+  "keterangan": "Iuran kas 2026-08-28",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 42000,
+  "tanggal": "2026-08-29",
+  "keterangan": "Iuran kas 2026-08-29",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 20500,
+  "tanggal": "2026-08-29",
+  "keterangan": "Fotocopy beep test 35 lembar dan beli kertas folio 17 lembar",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 25000,
+  "tanggal": "2026-08-31",
+  "keterangan": "Iuran kas 2026-08-31",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 18000,
+  "tanggal": "2026-09-01",
+  "keterangan": "Iuran kas 2026-09-01",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 55000,
+  "tanggal": "2026-09-02",
+  "keterangan": "Iuran kas 2026-09-02",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 125000,
+  "tanggal": "2026-09-04",
+  "keterangan": "Iuran kas 2026-09-04",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 10000,
+  "tanggal": "2026-09-07",
+  "keterangan": "Iuran kas 2026-09-07",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 30000,
+  "tanggal": "2026-09-09",
+  "keterangan": "Iuran kas 2026-09-09",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 131500,
+  "tanggal": "2026-09-11",
+  "keterangan": "Iuran kas 2026-09-11",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 20000,
+  "tanggal": "2026-09-12",
+  "keterangan": "Iuran kas 2026-09-12",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 5000,
+  "tanggal": "2026-09-21",
+  "keterangan": "Iuran kas 2026-09-21",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 35000,
+  "tanggal": "2026-09-21",
+  "keterangan": "Pengharum Ruangan",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 35000,
+  "tanggal": "2026-09-22",
+  "keterangan": "Iuran kas 2026-09-22",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 10000,
+  "tanggal": "2026-09-23",
+  "keterangan": "Iuran kas 2026-09-23",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 147000,
+  "tanggal": "2026-09-25",
+  "keterangan": "Iuran kas 2026-09-25",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 240000,
+  "tanggal": "2026-09-25",
+  "keterangan": "Kok badminton 2 Slop",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 10000,
+  "tanggal": "2026-09-26",
+  "keterangan": "Iuran kas 2026-09-26",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 6000,
+  "tanggal": "2026-09-26",
+  "keterangan": "Kertas Folio mapel inggris",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 30000,
+  "tanggal": "2026-09-28",
+  "keterangan": "Iuran kas 2026-09-28",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 140000,
+  "tanggal": "2026-09-29",
+  "keterangan": "Iuran kas 2026-09-29",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 60000,
+  "tanggal": "2026-09-30",
+  "keterangan": "Iuran kas 2026-09-30",
+  "penerima": null
+ },
+ {
+  "jenis": "expense",
+  "nominal": 135000,
+  "tanggal": "2026-09-30",
+  "keterangan": "Beli Id Card",
+  "penerima": null
+ },
+ {
+  "jenis": "savings",
+  "nominal": 1000000,
+  "tanggal": "2026-09-30",
+  "keterangan": "Setoran tabungan ke guru",
+  "penerima": "Guru / Wali Kelas"
+ },
+ {
+  "jenis": "income",
+  "nominal": 35000,
+  "tanggal": "2026-10-01",
+  "keterangan": "Iuran kas 2026-10-01",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 80000,
+  "tanggal": "2026-10-02",
+  "keterangan": "Iuran kas 2026-10-02",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 50000,
+  "tanggal": "2026-10-03",
+  "keterangan": "Iuran kas 2026-10-03",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 20000,
+  "tanggal": "2026-10-05",
+  "keterangan": "Iuran kas 2026-10-05",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 20000,
+  "tanggal": "2026-10-06",
+  "keterangan": "Iuran kas 2026-10-06",
+  "penerima": null
+ },
+ {
+  "jenis": "income",
+  "nominal": 55000,
+  "tanggal": "2026-10-09",
+  "keterangan": "Iuran kas 2026-10-09",
+  "penerima": null
+ }
+]

@@ -1,35 +1,26 @@
 'use client';
-export const dynamic = 'force-dynamic';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { api, rupiah, fmtTanggal, labelJenis } from '../../lib/api';
-import { useAuth } from '../../context/AuthContext';
+import { loadTx, summary } from '../../lib/store';
+import { rupiah, fmtTanggal, labelJenis } from '../../lib/api';
+import { useProfile } from '../../context/ProfileContext';
 
 export default function DashboardPage() {
-  const { user, loading } = useAuth();
-  const router = useRouter();
+  const { profile } = useProfile();
   const [sum, setSum] = useState(null);
   const [recent, setRecent] = useState([]);
-  const [err, setErr] = useState('');
 
   useEffect(() => {
-    if (!loading && !user) router.push('/login');
-  }, [loading, user, router]);
+    const l = loadTx();
+    setSum(summary(l));
+    setRecent([...l].sort((a, b) => (a.tanggal < b.tanggal ? 1 : -1)).slice(0, 8));
+  }, []);
 
-  useEffect(() => {
-    if (!user) return;
-    api.get('/dashboard/summary').then(setSum).catch((e) => setErr(e.message));
-    api.get('/dashboard/recent-transactions?limit=8').then((d) => setRecent(d.data)).catch(() => {});
-  }, [user]);
-
-  if (loading || !user) return <main className="main"><p>Memuat...</p></main>;
   return (
     <>
       <div className="topbar">
         <h2 style={{ margin: 0 }}>Dashboard</h2>
-        <span style={{ fontSize: 13, color: '#64748b' }}>Halo, {user.nama} ({user.role})</span>
+        <span style={{ fontSize: 13, color: '#64748b' }}>Halo, {profile.nama || 'Bendahara'} 👋</span>
       </div>
-      {err && <div className="error">{err}</div>}
       {sum?.peringatan_saldo_besar && (
         <div className="alert">⚠️ Saldo melebihi Rp1.000.000. Pertimbangkan setor tabungan ke guru. (Tidak otomatis.)</div>
       )}
@@ -48,9 +39,9 @@ export default function DashboardPage() {
           <thead><tr><th>Tanggal</th><th>Keterangan</th><th>Jenis</th><th>Nominal</th></tr></thead>
           <tbody>
             {recent.map((t) => (
-              <tr key={t.id_transaction}>
-                <td data-label="Tanggal">{fmtTanggal(t.tanggal_transaksi)}</td>
-                <td data-label="Keterangan">{t.keterangan}</td>
+              <tr key={t.id}>
+                <td data-label="Tanggal">{fmtTanggal(t.tanggal)}</td>
+                <td data-label="Keterangan">{t.keterangan}{t.penerima ? ` → ${t.penerima}` : ''}</td>
                 <td data-label="Jenis"><span className={`badge ${t.jenis}`}>{labelJenis(t.jenis)}</span></td>
                 <td data-label="Nominal">{rupiah(t.nominal)}</td>
               </tr>

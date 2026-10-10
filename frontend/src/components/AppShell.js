@@ -4,8 +4,7 @@ import { SidebarNav } from './Sidebar';
 
 export default function AppShell({ children }) {
   const path = usePathname();
-  const bare = path === '/login' || path === '/register' || path === '/';
-  if (bare) return <>{children}</>;
+  if (path === '/') return <>{children}</>;
   return (
     <div className="layout">
       <SidebarNav />
