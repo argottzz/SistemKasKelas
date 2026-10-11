@@ -3,6 +3,7 @@ import Link from 'next/link';
 import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useProfile } from '../context/ProfileContext';
+import { useTheme } from '../context/ThemeContext';
 
 const MENU = [
   { href: '/dashboard', label: 'Dashboard', icon: '📊' },
@@ -21,9 +22,18 @@ export function Avatar({ nama, foto, size = 44 }) {
     return <img src={foto} alt={nama} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' }} />;
   }
   return (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: '#0ea5e9', color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: size * 0.45 }}>
+    <div style={{ width: size, height: size, borderRadius: '50%', background: '#3F72AF', color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: size * 0.45 }}>
       {initialOf(nama)}
     </div>
+  );
+}
+
+export function ThemeToggleButton() {
+  const { theme, toggle } = useTheme() || { theme: 'light', toggle: () => {} };
+  return (
+    <button className="theme-btn" onClick={toggle} aria-label={theme === 'light' ? 'Ganti ke mode gelap' : 'Ganti ke mode terang'}>
+      {theme === 'light' ? '🌙' : '☀️'}
+    </button>
   );
 }
 
@@ -34,7 +44,7 @@ export function MobileBar({ open, onToggle }) {
         ☰
       </button>
       <span className="mobilebar-title">💰 KasSave</span>
-      <span style={{ width: 44 }} />
+      <ThemeToggleButton />
     </header>
   );
 }
@@ -42,6 +52,7 @@ export function MobileBar({ open, onToggle }) {
 export function SidebarDrawer({ open, onClose }) {
   const path = usePathname();
   const { profile } = useProfile();
+  const { theme, toggle } = useTheme() || { theme: 'light', toggle: () => {} };
   return (
     <>
       {open && <div className="drawer-overlay" onClick={onClose} aria-hidden="true" />}
@@ -59,6 +70,12 @@ export function SidebarDrawer({ open, onClose }) {
             {m.icon} {m.label}
           </Link>
         ))}
+        <div style={{ marginTop: 'auto', display: 'grid', gap: 4 }}>
+          <div className="theme-row">
+            <span>Theme {theme === 'light' ? '☀️' : '🌙'}</span>
+            <button className="theme-switch" data-on={theme === 'dark'} onClick={toggle} aria-label="Ganti tema terang/gelap" />
+          </div>
+        </div>
       </aside>
     </>
   );
