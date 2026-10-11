@@ -55,21 +55,21 @@ export default function PublikPage() {
 
       <div className="fin-grid">
         <div className="card stat-card">
-          <div className="stat-ico" style={{ background: 'rgba(47,163,107,.15)', color: '#2FA36B' }}><Icon name="in" size={22} /></div>
+          <div className="stat-ico" style={{ background: 'rgba(47,163,107,.15)', color: '#2FA36B' }}><Icon name="in" size={26} /></div>
           <div style={{ minWidth: 0 }}>
             <div className="v">{sum ? rupiah(sum.total_income) : '...'}</div>
             <div className="k">Total Pemasukan</div>
           </div>
         </div>
         <div className="card stat-card">
-          <div className="stat-ico" style={{ background: 'rgba(30,58,95,.1)', color: '#1E3A5F' }}><Icon name="out" size={22} /></div>
+          <div className="stat-ico" style={{ background: 'rgba(30,58,95,.1)', color: '#1E3A5F' }}><Icon name="out" size={26} /></div>
           <div style={{ minWidth: 0 }}>
             <div className="v">{sum ? rupiah(sum.total_expense) : '...'}</div>
             <div className="k">Total Pengeluaran</div>
           </div>
         </div>
         <div className="card stat-card">
-          <div className="stat-ico" style={{ background: 'rgba(190,134,28,.15)', color: '#BE861C' }}><Icon name="savings" size={22} /></div>
+          <div className="stat-ico" style={{ background: 'rgba(190,134,28,.15)', color: '#BE861C' }}><Icon name="savings" size={26} /></div>
           <div style={{ minWidth: 0 }}>
             <div className="v">{sum ? rupiah(sum.total_savings) : '...'}</div>
             <div className="k">Total Tabungan</div>

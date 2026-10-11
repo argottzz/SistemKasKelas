@@ -230,13 +230,13 @@ th { background: rgba(47, 163, 107, .1); font-size: 11px; color: var(--muted); t
 .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--line); padding: 12px 18px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px; }
 .btn-outline:hover { border-color: var(--primary); color: var(--primary); }
 .hero-spark { min-width: 0; }
-.fin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
+.fin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 16px; }
 .fin-card { border-radius: var(--radius); padding: 16px; border: 1px solid var(--line); border-top: 3px solid var(--primary); background: var(--card); color: var(--ink); box-shadow: var(--shadow); min-width: 0; }
 /* ===== Kartu statistik ala referensi (ikon lingkaran + badge MoM) ===== */
-.stat-card { display: flex; gap: 14px; align-items: center; padding: 20px; flex-wrap: wrap; row-gap: 8px; }
-.stat-ico { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
-.stat-card .v { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
-.stat-card .k { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.stat-card { display: flex; gap: 18px; align-items: center; padding: 22px; flex-wrap: wrap; row-gap: 10px; }
+.stat-ico { width: 56px; height: 56px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+.stat-card .v { font-size: 20px; font-weight: 800; letter-spacing: -0.01em; }
+.stat-card .k { font-size: 13px; color: var(--muted); margin-top: 4px; }
 .stat-mom { margin-left: auto; font-size: 13px; font-weight: 800; white-space: nowrap; flex-shrink: 0; }
 .fin-card.solid, .fin-card.navy { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--primary); color: var(--ink); }
 .fin-card .k { font-size: 13px; font-weight: 500; color: var(--muted); display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }

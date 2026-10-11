@@ -204,7 +204,7 @@ export default function DashboardPage() {
       <div className="fin-grid">
         {statCards.map((c) => (
           <div className="card stat-card" key={c.label}>
-            <div className="stat-ico" style={{ background: c.soft, color: c.color }}><Icon name={c.icon} size={22} /></div>
+            <div className="stat-ico" style={{ background: c.soft, color: c.color }}><Icon name={c.icon} size={26} /></div>
             <div style={{ minWidth: 0 }}>
               <div className="v">{c.value}</div>
               <div className="k">{c.label}</div>
