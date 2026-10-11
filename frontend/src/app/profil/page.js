@@ -118,9 +118,9 @@ export default function ProfilPage() {
   const riwayat = rows.slice(0, 8);
 
   const stats = [
-    { label: 'Saldo Tersedia', value: sum ? rupiah(sum.saldo_tersedia) : '...', sub: `${pct(sum?.saldo_tersedia)}% dari dana masuk`, vals: monthly.net, color: '#16A34A' },
-    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', sub: `${pct(sum?.total_income)}% dari dana masuk`, vals: monthly.income, color: '#103257' },
-    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', sub: `${pct(sum?.total_expense)}% dari dana masuk`, vals: monthly.expense, color: '#D97706' },
+    { label: 'Saldo Tersedia', value: sum ? rupiah(sum.saldo_tersedia) : '...', sub: `${pct(sum?.saldo_tersedia)}% dari dana masuk`, vals: monthly.net, color: '#2FA36B' },
+    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', sub: `${pct(sum?.total_income)}% dari dana masuk`, vals: monthly.income, color: '#1E3A5F' },
+    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', sub: `${pct(sum?.total_expense)}% dari dana masuk`, vals: monthly.expense, color: '#BE861C' },
   ];
 
   return (

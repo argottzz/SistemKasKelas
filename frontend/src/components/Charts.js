@@ -19,13 +19,13 @@ export function AreaChart({ points, height = 170 }) {
     <svg viewBox={`0 0 ${W} ${H + 14}`} style={{ width: '100%', height, display: 'block' }} role="img" aria-label="Grafik saldo">
       <defs>
         <linearGradient id={`g${gid}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#16A34A" stopOpacity=".35" />
-          <stop offset="1" stopColor="#16A34A" stopOpacity="0" />
+          <stop offset="0" stopColor="#2FA36B" stopOpacity=".35" />
+          <stop offset="1" stopColor="#2FA36B" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path d={`${line} L${W},${H + 14} L0,${H + 14} Z`} fill={`url(#g${gid})`} />
-      <path d={line} fill="none" stroke="#16A34A" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-      <circle cx={X(points.length - 1)} cy={Y(points[points.length - 1])} r="4" fill="#16A34A" stroke="#fff" strokeWidth="1.5" />
+      <path d={line} fill="none" stroke="#2FA36B" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx={X(points.length - 1)} cy={Y(points[points.length - 1])} r="4" fill="#2FA36B" stroke="#fff" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -76,8 +76,8 @@ export function MonthlyFlow({ data }) {
     <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block', color: 'var(--muted)' }} role="img" aria-label="Grafik arus kas bulanan">
       <defs>
         <linearGradient id={`f${gid}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#D97706" stopOpacity=".35" />
-          <stop offset="1" stopColor="#D97706" stopOpacity="0" />
+          <stop offset="0" stopColor="#BE861C" stopOpacity=".35" />
+          <stop offset="1" stopColor="#BE861C" stopOpacity="0" />
         </linearGradient>
       </defs>
       {ticks.map((t, i) => (
@@ -87,13 +87,13 @@ export function MonthlyFlow({ data }) {
         </g>
       ))}
       <path d={`${line} L${X(data.length - 1)},${H - padB} L${X(0)},${H - padB} Z`} fill={`url(#f${gid})`} />
-      <path d={line} fill="none" stroke="#D97706" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+      <path d={line} fill="none" stroke="#BE861C" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
       {data.map((d, i) => (
         <text key={i} x={X(i)} y={H - 8} textAnchor="middle" fontSize="10" fill="currentColor">{d.label}</text>
       ))}
       {data.map((d, i) => (
         <g key={`h${i}`}>
-          {hov === i && <circle cx={X(i)} cy={Y(d.net)} r="6" fill="#D97706" stroke="#fff" strokeWidth="2" />}
+          {hov === i && <circle cx={X(i)} cy={Y(d.net)} r="6" fill="#BE861C" stroke="#fff" strokeWidth="2" />}
           <circle
             cx={X(i)}
             cy={Y(d.net)}
@@ -170,8 +170,8 @@ export function Gauge({ ratio, label }) {
   const cl = Math.min(Math.max(ratio, 0), 1);
   return (
     <svg viewBox="0 0 160 92" style={{ width: '100%', maxWidth: 260, display: 'block', margin: '0 auto', color: 'var(--ink)' }} role="img" aria-label={label}>
-      <path d={arc(Math.PI, 0)} fill="none" stroke="rgba(22,163,74,.25)" strokeWidth="13" strokeLinecap="round" />
-      <path d={arc(Math.PI, Math.PI - cl * Math.PI)} fill="none" stroke="#16A34A" strokeWidth="13" strokeLinecap="round" />
+      <path d={arc(Math.PI, 0)} fill="none" stroke="rgba(47,163,107,.25)" strokeWidth="13" strokeLinecap="round" />
+      <path d={arc(Math.PI, Math.PI - cl * Math.PI)} fill="none" stroke="#2FA36B" strokeWidth="13" strokeLinecap="round" />
       <text x={cx} y={cy - 12} textAnchor="middle" fontSize="19" fontWeight="800" fill="currentColor">{Math.round(cl * 100)}%</text>
       <text x={cx} y={cy + 4} textAnchor="middle" fontSize="10" fill="currentColor" opacity=".65">{label}</text>
     </svg>

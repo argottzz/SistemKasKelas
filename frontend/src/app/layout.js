@@ -11,7 +11,7 @@ export const metadata = {
   icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#103257' };
+export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#1E3A5F' };
 
 export default function RootLayout({ children }) {
   return (
