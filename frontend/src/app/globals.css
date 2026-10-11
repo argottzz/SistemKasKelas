@@ -1,10 +1,10 @@
-/* ===== KasSave — palet 3 warna: 3F72AF / 112D4E / DBE2EF + toggle terang/gelap ===== */
+/* ===== KasSave — bersih terang: kartu putih, aksen tipis (3F72AF/112D4E/DBE2EF) ===== */
 :root, [data-theme="light"] {
-  --bg: #DBE2EF;
+  --bg: #EDF1F7;
   --card: #ffffff;
   --ink: #112D4E;
-  --muted: rgba(17, 45, 78, .65);
-  --line: rgba(63, 114, 175, .25);
+  --muted: rgba(17, 45, 78, .72);
+  --line: rgba(63, 114, 175, .18);
   --primary: #3F72AF;
   --primary-ink: #ffffff;
   --sidebar-bg: #112D4E;
@@ -12,41 +12,44 @@
   --sidebar-active: #3F72AF;
   /* alias lama -> dipetakan ke primer agar hemat warna */
   --blue: #3F72AF;
-  --blue-soft: rgba(63, 114, 175, .14);
+  --blue-soft: rgba(63, 114, 175, .1);
   --green: #3F72AF;
-  --green-soft: rgba(63, 114, 175, .14);
+  --green-soft: rgba(63, 114, 175, .1);
   --red: #112D4E;
-  --red-soft: rgba(17, 45, 78, .08);
+  --red-soft: rgba(17, 45, 78, .06);
   --amber: #3F72AF;
-  --amber-soft: rgba(63, 114, 175, .14);
-  --radius: 20px;
-  --shadow: 0 1px 3px rgba(17, 45, 78, .08), 0 8px 24px rgba(17, 45, 78, .08);
+  --amber-soft: rgba(63, 114, 175, .1);
+  --radius: 16px;
+  --shadow: 0 1px 2px rgba(17, 45, 78, .05), 0 4px 16px rgba(17, 45, 78, .05);
 }
 [data-theme="dark"] {
   --bg: #112D4E;
-  --card: rgba(219, 226, 239, .06);
+  --card: rgba(255, 255, 255, .045);
   --ink: #DBE2EF;
-  --muted: rgba(219, 226, 239, .65);
-  --line: rgba(63, 114, 175, .45);
-  --primary: #3F72AF;
-  --primary-ink: #ffffff;
-  --sidebar-bg: rgba(0, 0, 0, .25);
+  --muted: rgba(219, 226, 239, .72);
+  --line: rgba(219, 226, 239, .16);
+  --primary: #7FA8D9;
+  --primary-ink: #112D4E;
+  --sidebar-bg: rgba(0, 0, 0, .28);
   --sidebar-ink: #DBE2EF;
   --sidebar-active: #3F72AF;
-  --blue: #3F72AF;
-  --blue-soft: rgba(63, 114, 175, .25);
+  --blue: #7FA8D9;
+  --blue-soft: rgba(127, 168, 217, .16);
   --green: #DBE2EF;
-  --green-soft: rgba(219, 226, 239, .12);
+  --green-soft: rgba(219, 226, 239, .1);
   --red: #DBE2EF;
-  --red-soft: rgba(219, 226, 239, .12);
+  --red-soft: rgba(219, 226, 239, .1);
   --amber: #DBE2EF;
-  --amber-soft: rgba(219, 226, 239, .12);
-  --radius: 20px;
-  --shadow: 0 1px 3px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .3);
+  --amber-soft: rgba(219, 226, 239, .1);
+  --radius: 16px;
+  --shadow: 0 1px 2px rgba(0, 0, 0, .25), 0 4px 16px rgba(0, 0, 0, .25);
 }
 * { box-sizing: border-box; }
 html { -webkit-text-size-adjust: 100%; }
-body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; line-height: 1.6; font-weight: 400; }
+h1, h2, h3 { line-height: 1.35; letter-spacing: -0.01em; }
+button, input, select, textarea { font-family: inherit; }
+:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; }
 
@@ -73,12 +76,12 @@ img { max-width: 100%; }
 
 /* ===== Kartu & tipografi ===== */
 .card { background: var(--card); border-radius: var(--radius); padding: 18px; box-shadow: var(--shadow); border: 1px solid var(--line); }
-.card h3 { margin: 0 0 10px; font-size: 16px; }
-.label { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-.value { font-size: 22px; font-weight: 800; }
+.card h3 { margin: 0 0 10px; font-size: 15px; font-weight: 600; }
+.label { font-size: 13px; line-height: 1.5; color: var(--muted); margin-bottom: 6px; }
+.value { font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
 .page-head { display: flex; justify-content: space-between; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 16px; }
-.page-head h2 { margin: 0; font-size: 22px; }
-.greet-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.page-head h2 { margin: 0; font-size: 20px; font-weight: 700; }
+.greet-sub { font-size: 14px; line-height: 1.5; color: var(--muted); margin-top: 2px; }
 .alert { background: rgba(63, 114, 175, .14); border: 1px solid var(--primary); color: var(--ink); padding: 12px; border-radius: 14px; margin-bottom: 14px; font-size: 14px; }
 .error { background: rgba(17, 45, 78, .08); color: var(--ink); border: 1px solid var(--line); padding: 10px 12px; border-radius: 12px; font-size: 14px; margin-bottom: 12px; }
 [data-theme="dark"] .error { background: rgba(219, 226, 239, .1); }
@@ -122,9 +125,9 @@ img { max-width: 100%; }
 .tx-ico.savings { background: var(--amber-soft); }
 .tx-ico.opening_balance { background: var(--blue-soft); }
 .tx-item .tt { flex: 1; min-width: 0; }
-.tx-item .tt b { display: block; font-size: 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.tx-item .tt small { color: var(--muted); font-size: 12px; }
-.tx-amt { font-weight: 800; font-size: 14px; white-space: nowrap; }
+.tx-item .tt b { display: block; font-size: 14px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.tx-item .tt small { color: var(--muted); font-size: 13px; }
+.tx-amt { font-weight: 700; font-size: 14px; white-space: nowrap; }
 .tx-amt.in { color: var(--green); }
 .tx-amt.out { color: var(--ink); }
 
@@ -133,7 +136,7 @@ img { max-width: 100%; }
 table { width: 100%; border-collapse: collapse; font-size: 14px; }
 th, td { padding: 11px 14px; border-bottom: 1px solid var(--line); text-align: left; }
 th { background: rgba(63, 114, 175, .1); font-size: 11px; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; }
-.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; border: 1px solid var(--line); }
+.badge { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 12px; font-weight: 600; border: 1px solid var(--line); }
 .badge.income { background: rgba(63, 114, 175, .16); color: var(--ink); }
 .badge.expense { background: transparent; border-style: dashed; color: var(--ink); }
 .badge.savings { background: var(--primary); color: #fff; border-color: var(--primary); }
@@ -144,7 +147,7 @@ th { background: rgba(63, 114, 175, .1); font-size: 11px; color: var(--muted); t
 .form label { font-size: 13px; font-weight: 600; display: grid; gap: 6px; }
 .form input, .form select, .form textarea { padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px; font-size: 15px; width: 100%; font-family: inherit; background: var(--card); color: var(--ink); }
 [data-theme="light"] .form input, [data-theme="light"] .form select, [data-theme="light"] .form textarea { background: #fff; }
-.btn { background: var(--primary); color: var(--primary-ink); border: 0; padding: 12px 18px; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; min-height: 44px; }
+.btn { background: var(--primary); color: var(--primary-ink); border: 0; padding: 12px 18px; border-radius: 12px; font-size: 15px; font-weight: 600; cursor: pointer; min-height: 44px; }
 .btn:hover { filter: brightness(.94); }
 .btn.danger { background: transparent; color: var(--ink); border: 1px solid var(--line); }
 .btn.ghost { background: rgba(63, 114, 175, .14); color: var(--ink); }
