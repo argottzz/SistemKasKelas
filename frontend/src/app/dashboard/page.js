@@ -94,6 +94,28 @@ export default function DashboardPage() {
     return d.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
   };
 
+  const rekap = month
+    ? filtered.reduce(
+        (a, r) => {
+          const n = Number(r.nominal) || 0;
+          if (r.jenis === 'income' || r.jenis === 'opening_balance') a.masuk += n;
+          else a.keluar += n;
+          return a;
+        },
+        { masuk: 0, keluar: 0 }
+      )
+    : null;
+
+  const eksporBulan = () => {
+    try {
+      if (!filtered.length) { setErr('Tidak ada data pada bulan ini untuk diekspor'); return; }
+      const t = downloadExcel(filtered);
+      alert(`Excel terunduh (${monthLabel(month)}): ${t.count} baris, saldo ${rupiah(t.saldo)}`);
+    } catch (e) {
+      setErr('Gagal export: ' + e.message);
+    }
+  };
+
   const ekspor = async () => {
     try {
       const t = downloadExcel(rows);
@@ -180,13 +202,19 @@ export default function DashboardPage() {
                 {months.map((m) => <option key={m} value={m}>{monthLabel(m)}</option>)}
               </select>
             </div>
+            {rekap && (
+              <div className="label" style={{ marginBottom: 8 }}>
+                Rekap {monthLabel(month)}: masuk {rupiah(rekap.masuk)} • keluar {rupiah(rekap.keluar)} • bersih {rupiah(rekap.masuk - rekap.keluar)}{' '}
+                <button className="btn ghost" style={{ minHeight: 32, padding: '4px 12px', marginLeft: 6 }} onClick={eksporBulan}>Export bulan ini</button>
+              </div>
+            )}
             {groups.map((g) => (
               <div className="tx-group" key={g.tanggal}>
                 <div className="tx-group-head"><span>{groupLabel(g.tanggal)}</span><span>{g.items.length} transaksi</span></div>
                 {g.items.map((t) => (
                   <div className="tx-item" key={t.id}>
                     <div className={`tx-ico ${t.jenis}`}><Icon name={ICO_JENIS[t.jenis] || 'report'} size={20} /></div>
-                    <div className="tt"><b>{t.keterangan}{t.penerima ? ` → ${t.penerima}` : ''}</b><small>{fmtTanggal(t.tanggal)}</small></div>
+                    <div className="tt"><b>{t.keterangan}{t.penerima ? ` → ${t.penerima}` : ''}</b><small>{fmtTanggal(t.tanggal)}{t.kategori ? ` • ${t.kategori}` : ''}</small></div>
                     <div className={`tx-amt ${t.jenis === 'income' || t.jenis === 'opening_balance' ? 'in' : 'out'}`}>
                       {(t.jenis === 'income' || t.jenis === 'opening_balance' ? '+' : '−') + rupiah(t.nominal).replace('Rp', '').trim()}
                     </div>

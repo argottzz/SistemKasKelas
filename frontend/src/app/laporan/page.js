@@ -84,7 +84,7 @@ function LaporanDalam() {
   const ekspor = async () => {
     try {
       setErr('');
-      const params = new URLSearchParams({ page: '1', pageSize: '100' });
+      const params = new URLSearchParams({ page: '1', pageSize: '1000' });
       if (jenis) params.set('jenis', jenis);
       if (kategori) params.set('kategori', kategori);
       if (q) params.set('q', q);

@@ -240,6 +240,8 @@ th { background: rgba(63, 114, 175, .1); font-size: 11px; color: var(--muted); t
   .table-wrap td { border: 0; padding: 4px 14px; }
   .table-wrap td[data-label]::before { content: attr(data-label) ': '; font-weight: 700; color: var(--muted); font-size: 12px; }
   .filters input, .filters select { flex: 1 1 46%; }
+  .stat-row { grid-template-columns: 1fr; }
+  .steps { flex-direction: column; }
   .fab { display: grid; place-items: center; }
   .modal-overlay { align-items: flex-end; padding: 0; }
   .modal { max-width: 100%; border-radius: 20px 20px 0 0; padding-bottom: calc(20px + env(safe-area-inset-bottom)); }
