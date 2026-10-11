@@ -1,9 +1,10 @@
 'use client';
 import Link from 'next/link';
 import { useState } from 'react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useProfile } from '../context/ProfileContext';
 import { useTheme } from '../context/ThemeContext';
+import { supabaseBrowser } from '../lib/supabase-client';
 import { Icon } from './icons';
 
 const MENU = [
@@ -52,8 +53,17 @@ export function MobileBar({ open, onToggle }) {
 
 export function SidebarDrawer({ open, onClose }) {
   const path = usePathname();
+  const router = useRouter();
   const { profile } = useProfile();
   const { theme, toggle } = useTheme() || { theme: 'light', toggle: () => {} };
+  const keluar = async () => {
+    try {
+      await supabaseBrowser().auth.signOut();
+    } catch {}
+    onClose();
+    router.replace('/login');
+    router.refresh();
+  };
   return (
     <>
       {open && <div className="drawer-overlay" onClick={onClose} aria-hidden="true" />}
@@ -76,6 +86,9 @@ export function SidebarDrawer({ open, onClose }) {
             <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}><Icon name={theme === 'light' ? 'sun' : 'moon'} size={18} /> Tema</span>
             <button className="theme-switch" data-on={theme === 'dark'} onClick={toggle} aria-label="Ganti tema terang/gelap" />
           </div>
+          <button className="btn ghost" onClick={keluar} style={{ justifyContent: 'flex-start' }}>
+            <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="out" size={17} /> Keluar</span>
+          </button>
         </div>
       </aside>
     </>
