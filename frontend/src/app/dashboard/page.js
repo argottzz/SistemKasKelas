@@ -91,13 +91,17 @@ export default function DashboardPage() {
     const d = new Date(Date.now() - i * 864e5);
     const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const list = rows.filter((r) => r.tanggal === iso);
+    const dInc = list.filter((r) => r.jenis === 'income').reduce((a, r) => a + Number(r.nominal), 0);
+    const dExp = list.filter((r) => r.jenis === 'expense').reduce((a, r) => a + Number(r.nominal), 0);
+    const dSav = list.filter((r) => r.jenis === 'savings').reduce((a, r) => a + Number(r.nominal), 0);
     days.push({
       label: range <= 7
         ? d.toLocaleDateString('id-ID', { weekday: 'short' })
         : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric' }),
-      income: list.filter((r) => r.jenis === 'income').reduce((a, r) => a + Number(r.nominal), 0),
-      expense: list.filter((r) => r.jenis === 'expense').reduce((a, r) => a + Number(r.nominal), 0),
-      savings: list.filter((r) => r.jenis === 'savings').reduce((a, r) => a + Number(r.nominal), 0),
+      income: dInc,
+      expense: dExp,
+      savings: dSav,
+      net: dInc - dExp,
     });
   }
 
@@ -219,7 +223,7 @@ export default function DashboardPage() {
           </div>
           <div className="card">
             <div className="card-head"><h3>Masuk vs Keluar per Bulan</h3><span className="label">12 bulan</span></div>
-            <WeekBars days={flowMonths.map((m) => ({ label: m.label, income: m.income, expense: m.expense, savings: m.savings }))} />
+            <WeekBars days={flowMonths.map((m) => ({ label: m.label, income: m.income, expense: m.expense, savings: m.savings, net: m.net }))} />
             <div className="label">Garis penuh = masuk, garis outline = keluar</div>
           </div>
           <div className="card">

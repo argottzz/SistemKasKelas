@@ -115,6 +115,10 @@ img { max-width: 100%; }
 .weekbar .cb.in { background: #3F72AF; }
 .weekbar .cb.out { background: transparent; border: 1px solid var(--primary); }
 .weekbar span { font-size: 11px; color: var(--muted); }
+.wbinfo { min-height: 20px; margin-bottom: 4px; }
+.wbinfo b { color: var(--ink); }
+.weekbar { cursor: pointer; border-radius: 8px; }
+.weekbar.hot { background: rgba(63, 114, 175, .12); }
 
 /* ===== Profil ala referensi (kartu profil + mini stat + tab) ===== */
 .prof-grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; align-items: start; }

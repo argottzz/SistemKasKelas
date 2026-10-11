@@ -1,5 +1,6 @@
 'use client';
-import { useId } from 'react';
+import { useId, useState } from 'react';
+import { rupiah } from '../lib/api';
 
 // Grafik area saldo kumulatif (SVG murni, tanpa library). Palet 3-warna: primer 3F72AF.
 export function AreaChart({ points, height = 170 }) {
@@ -81,22 +82,42 @@ export function MonthlyFlow({ data }) {
   );
 }
 
-// Batang 7 hari terakhir: pemasukan (biru) vs pengeluaran (oranye).
-export function WeekBars({ days }) {
+// Batang per periode: pemasukan (biru) vs pengeluaran (oranye).
+// Arahkan kursor / ketuk bar -> baris info di atas menampilkan nominalnya.
+export function WeekBars({ days, hint }) {
+  const [hi, setHi] = useState(-1);
   if (!days || !days.length) return <div className="label">Belum ada data minggu ini</div>;
   const mx = Math.max(...days.flatMap((d) => [d.income, d.expense]), 1);
+  const d = hi >= 0 && hi < days.length ? days[hi] : null;
   return (
-    <div className="weekbars">
-      {days.map((d, i) => (
-        <div className="weekbar" key={i}>
-          <div className="cols">
-            <div className="cb in" style={{ height: Math.max(4, (d.income / mx) * 96) }} title={`Masuk ${d.income}`} />
-            <div className="cb out" style={{ height: Math.max(4, (d.expense / mx) * 96) }} title={`Keluar ${d.expense}`} />
+    <>
+      <div className="wbinfo label" aria-live="polite">
+        {d ? (
+          <span>
+            <b>{d.label}</b> • Masuk {rupiah(d.income)} • Keluar {rupiah(d.expense)}
+            {d.savings > 0 && <> • Tabungan {rupiah(d.savings)}</>}
+            {d.net !== undefined && d.net !== null && <> • Bersih {rupiah(d.net)}</>}
+          </span>
+        ) : (hint || 'Arahkan kursor / ketuk bar untuk detail nominal')}
+      </div>
+      <div className="weekbars">
+        {days.map((x, i) => (
+          <div
+            className={`weekbar${hi === i ? ' hot' : ''}`}
+            key={i}
+            onMouseEnter={() => setHi(i)}
+            onMouseLeave={() => setHi(-1)}
+            onClick={() => setHi(hi === i ? -1 : i)}
+          >
+            <div className="cols">
+              <div className="cb in" style={{ height: Math.max(4, (x.income / mx) * 96) }} />
+              <div className="cb out" style={{ height: Math.max(4, (x.expense / mx) * 96) }} />
+            </div>
+            <span>{x.label}</span>
           </div>
-          <span>{d.label}</span>
-        </div>
-      ))}
-    </div>
+        ))}
+      </div>
+    </>
   );
 }
 
