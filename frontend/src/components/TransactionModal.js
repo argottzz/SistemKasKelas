@@ -2,9 +2,9 @@
 import { useEffect, useState } from 'react';
 
 const TABS = [
-  { key: 'income', label: '💰 Pemasukan', color: '#16a34a', placeholder: 'cth: Iuran kas minggu ini' },
-  { key: 'expense', label: '💸 Pengeluaran', color: '#dc2626', placeholder: 'cth: Beli spidol dan isi ulang' },
-  { key: 'savings', label: '🏦 Tabungan', color: '#d97706', placeholder: 'cth: Setoran tabungan ke guru' },
+  { key: 'income', label: '💰 Pemasukan', color: '#3F72AF', placeholder: 'cth: Iuran kas minggu ini' },
+  { key: 'expense', label: '💸 Pengeluaran', color: '#112D4E', placeholder: 'cth: Beli spidol dan isi ulang' },
+  { key: 'savings', label: '🏦 Tabungan', color: '#3F72AF', placeholder: 'cth: Setoran tabungan ke guru' },
 ];
 
 const today = () => {

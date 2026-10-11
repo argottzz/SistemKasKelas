@@ -1,9 +1,10 @@
 'use client';
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { rupiah, fmtTanggal } from '../../lib/api';
 import { downloadExcel } from '../../lib/excel';
 import { useProfile } from '../../context/ProfileContext';
 import { AreaChart, WeekBars, Gauge } from '../../components/Charts';
+import TransactionModal from '../../components/TransactionModal';
 
 const ICO = { income: '💰', expense: '💸', savings: '🏦', opening_balance: '🪙' };
 
@@ -30,21 +31,25 @@ export default function DashboardPage() {
   const [sum, setSum] = useState(null);
   const [rows, setRows] = useState([]);
   const [err, setErr] = useState('');
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalJenis, setModalJenis] = useState('income');
+  const [month, setMonth] = useState('');
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const sRes = await fetch('/api/summary');
-        if (!sRes.ok) throw new Error(`Gagal memuat ringkasan (HTTP ${sRes.status})`);
-        const tRes = await fetch('/api/transactions?limit=1000');
-        if (!tRes.ok) throw new Error(`Gagal memuat transaksi (HTTP ${tRes.status})`);
-        setSum(await sRes.json());
-        setRows((await tRes.json()).data || []);
-      } catch (e) {
-        setErr(e.message);
-      }
-    })();
-  }, []);
+  const load = async () => {
+    try {
+      setErr('');
+      const sRes = await fetch('/api/summary');
+      if (!sRes.ok) throw new Error(`Gagal memuat ringkasan (HTTP ${sRes.status})`);
+      const tRes = await fetch('/api/transactions?limit=1000');
+      if (!tRes.ok) throw new Error(`Gagal memuat transaksi (HTTP ${tRes.status})`);
+      setSum(await sRes.json());
+      setRows((await tRes.json()).data || []);
+    } catch (e) {
+      setErr(e.message);
+    }
+  };
+
+  useEffect(() => { load(); }, []);
 
   const byDate = [...rows].sort((a, b) => (a.tanggal < b.tanggal ? -1 : 1));
   let run = 0;
@@ -63,18 +68,32 @@ export default function DashboardPage() {
       label: d.toLocaleDateString('id-ID', { weekday: 'short' }),
       income: list.filter((r) => r.jenis === 'income').reduce((a, r) => a + Number(r.nominal), 0),
       expense: list.filter((r) => r.jenis === 'expense').reduce((a, r) => a + Number(r.nominal), 0),
+      savings: list.filter((r) => r.jenis === 'savings').reduce((a, r) => a + Number(r.nominal), 0),
     });
   }
 
   const inflow = (sum?.opening_balance || 0) + (sum?.total_income || 0);
   const ratio = inflow > 0 ? (sum?.total_expense || 0) / inflow : 0;
+  const pct = (v) => (inflow > 0 ? Math.round((v / inflow) * 100) : 0);
+
+  const months = useMemo(() => {
+    const m = [...new Set(rows.map((r) => String(r.tanggal || '').slice(0, 7)).filter(Boolean))].sort().reverse();
+    return m;
+  }, [rows]);
+
+  const filtered = month ? rows.filter((r) => String(r.tanggal || '').startsWith(month)) : rows;
 
   const groups = [];
-  [...rows].sort((a, b) => (a.tanggal < b.tanggal ? 1 : -1)).slice(0, 12).forEach((r) => {
+  [...filtered].sort((a, b) => (a.tanggal < b.tanggal ? 1 : -1)).slice(0, 12).forEach((r) => {
     const g = groups.find((x) => x.tanggal === r.tanggal);
     if (g) g.items.push(r);
     else groups.push({ tanggal: r.tanggal, items: [r] });
   });
+
+  const monthLabel = (ym) => {
+    const d = new Date(ym + '-01T00:00:00');
+    return d.toLocaleDateString('id-ID', { month: 'short', year: 'numeric' });
+  };
 
   const ekspor = async () => {
     try {
@@ -84,6 +103,8 @@ export default function DashboardPage() {
       setErr('Gagal export: ' + e.message);
     }
   };
+
+  const bukaModal = (j) => { setModalJenis(j); setModalOpen(true); };
 
   return (
     <>
@@ -96,22 +117,73 @@ export default function DashboardPage() {
       </div>
       {err && <div className="error">{err}</div>}
 
-      <div className="snap">
-        <div className="snap-card saldo"><div className="k"><span>Saldo Tersedia</span><span>➚</span></div><div className="v">{sum ? rupiah(sum.saldo_tersedia) : '...'}</div></div>
-        <div className="snap-card income"><div className="k"><span>Pemasukan</span><span>💰</span></div><div className="v">{sum ? rupiah(sum.total_income) : '...'}</div></div>
-        <div className="snap-card expense"><div className="k"><span>Pengeluaran</span><span>💸</span></div><div className="v">{sum ? rupiah(sum.total_expense) : '...'}</div></div>
-        <div className="snap-card savings"><div className="k"><span>Tabungan Guru</span><span>🏦</span></div><div className="v">{sum ? rupiah(sum.total_savings) : '...'}</div></div>
+      <div className="hero-card">
+        <div>
+          <div className="hero-label">Saldo Tersedia • KasSave</div>
+          <div className="hero-value">{sum ? rupiah(sum.saldo_tersedia) : '...'}</div>
+          <div className="hero-sub">Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
+          <div className="hero-actions">
+            <button className="btn" onClick={() => bukaModal('income')}>＋ Pemasukan</button>
+            <button className="btn-outline" onClick={() => bukaModal('expense')}>− Pengeluaran</button>
+          </div>
+        </div>
+        <div className="hero-spark">
+          <AreaChart points={curve} height={110} />
+          <div className="hero-sub">▲ {pct(sum?.total_income || 0)}% dana masuk tercatat</div>
+        </div>
+      </div>
+
+      <div className="fin-grid">
+        <div className="fin-card solid">
+          <div className="k"><span>Total Pemasukan</span><span>💰</span></div>
+          <div className="v">{sum ? rupiah(sum.total_income) : '...'}</div>
+          <div className="sub">▲ {pct(sum?.total_income || 0)}% dari dana masuk</div>
+          <AreaChart points={days.map((d) => d.income)} height={56} />
+        </div>
+        <div className="fin-card navy">
+          <div className="k"><span>Total Pengeluaran</span><span>💸</span></div>
+          <div className="v">{sum ? rupiah(sum.total_expense) : '...'}</div>
+          <div className="sub">▼ {pct(sum?.total_expense || 0)}% dari dana masuk</div>
+          <AreaChart points={days.map((d) => d.expense)} height={56} />
+        </div>
+        <div className="fin-card">
+          <div className="k"><span>Total Tabungan</span><span>🏦</span></div>
+          <div className="v">{sum ? rupiah(sum.total_savings) : '...'}</div>
+          <div className="sub">▲ {pct(sum?.total_savings || 0)}% dari dana masuk</div>
+          <AreaChart points={days.map((d) => d.savings)} height={56} />
+        </div>
       </div>
 
       <div className="dash-grid">
         <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
           <div className="card">
-            <h3>Pergerakan Saldo</h3>
+            <div className="card-head"><h3>Pergerakan Saldo</h3><span className="label">Mingguan</span></div>
             <div className="label">Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
             <AreaChart points={curve} />
           </div>
           <div className="card">
-            <h3>Transaksi Terbaru</h3>
+            <div className="card-head"><h3>Aksi Cepat</h3><span>⋮</span></div>
+            <div className="quick-grid">
+              <button className="quick-btn solid" onClick={() => bukaModal('income')}>💰<br />Pemasukan</button>
+              <button className="quick-btn" onClick={() => bukaModal('expense')}>💸<br />Pengeluaran</button>
+              <button className="quick-btn" onClick={() => bukaModal('savings')}>🏦<br />Tabungan</button>
+            </div>
+          </div>
+          <div className="card">
+            <div className="card-head"><h3>Aktivitas 7 Hari</h3><span className="label">masuk vs keluar</span></div>
+            <WeekBars days={days} />
+            <div className="label">■ masuk • □ keluar</div>
+          </div>
+        </div>
+        <div className="dash-side">
+          <div className="card">
+            <div className="card-head">
+              <h3>Transaksi</h3>
+              <select className="month-select" value={month} onChange={(e) => setMonth(e.target.value)} aria-label="Filter bulan">
+                <option value="">Semua</option>
+                {months.map((m) => <option key={m} value={m}>{monthLabel(m)}</option>)}
+              </select>
+            </div>
             {groups.map((g) => (
               <div className="tx-group" key={g.tanggal}>
                 <div className="tx-group-head"><span>{groupLabel(g.tanggal)}</span><span>{g.items.length} transaksi</span></div>
@@ -128,18 +200,11 @@ export default function DashboardPage() {
             ))}
             {groups.length === 0 && !err && <div className="label">Belum ada transaksi</div>}
           </div>
-        </div>
-        <div className="dash-side">
           <div className="card">
             <h3>Tabungan di Guru</h3>
             <div className="value">{sum ? rupiah(sum.total_savings) : '...'}</div>
             <div className="progress"><div style={{ width: `${inflow > 0 ? Math.min(100, ((sum?.total_savings || 0) / inflow) * 100) : 0}%` }} /></div>
             <div className="label" style={{ marginTop: 6 }}>dari total dana masuk {sum ? rupiah(inflow) : '...'}</div>
-          </div>
-          <div className="card">
-            <h3>Aktivitas 7 Hari</h3>
-            <WeekBars days={days} />
-            <div className="label">🔵 masuk • 🟠 keluar</div>
           </div>
           <div className="card">
             <h3>Kesehatan Kas</h3>
@@ -148,6 +213,8 @@ export default function DashboardPage() {
           </div>
         </div>
       </div>
+
+      <TransactionModal open={modalOpen} initialJenis={modalJenis} onClose={() => setModalOpen(false)} onSaved={() => load()} />
     </>
   );
 }
