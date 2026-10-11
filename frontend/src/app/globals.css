@@ -116,6 +116,28 @@ img { max-width: 100%; }
 .weekbar .cb.out { background: transparent; border: 1px solid var(--primary); }
 .weekbar span { font-size: 11px; color: var(--muted); }
 
+/* ===== Profil ala referensi (kartu profil + mini stat + tab) ===== */
+.prof-grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; align-items: start; }
+.prof-card { display: grid; gap: 12px; justify-items: center; }
+.prof-card form { width: 100%; }
+.prof-avatar { display: flex; justify-content: center; }
+.prof-name { font-weight: 700; font-size: 19px; }
+.prof-info { display: grid; gap: 8px; width: 100%; text-align: left; }
+.prof-info .row { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.prof-info .k { font-size: 12px; color: var(--muted); }
+.prof-info .v { font-size: 14px; font-weight: 600; word-break: break-word; }
+.mini-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.mini-card { min-width: 0; }
+.mini-num { font-size: 22px; font-weight: 800; }
+.mini-bars { display: flex; gap: 4px; align-items: flex-end; height: 44px; margin-top: 8px; }
+.mini-bars i { flex: 1; border-radius: 3px; min-height: 4px; display: block; }
+.prof-tabs { display: flex; gap: 18px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.prof-tab { background: none; border: 0; padding: 10px 2px; font-size: 14px; font-weight: 600; color: var(--muted); cursor: pointer; border-bottom: 2px solid transparent; margin-bottom: -1px; font-family: inherit; }
+.prof-tab.active { color: var(--ink); border-bottom-color: var(--primary); }
+.prof-sum .row { display: flex; justify-content: space-between; gap: 10px; padding: 10px 2px; border-bottom: 1px solid var(--line); font-size: 14px; }
+.prof-sum .row:last-child { border-bottom: 0; }
+.prof-sum .row.total { font-weight: 800; font-size: 15px; }
+
 /* ===== Daftar transaksi ala mobile foto ===== */
 .tx-group { margin-bottom: 6px; }
 .tx-group-head { display: flex; justify-content: space-between; gap: 8px; min-width: 0; font-size: 12px; color: var(--muted); background: rgba(63, 114, 175, .12); border-radius: 10px; padding: 7px 12px; margin: 12px 0 6px; }
@@ -246,6 +268,8 @@ th { background: rgba(63, 114, 175, .1); font-size: 11px; color: var(--muted); t
   .table-wrap td[data-label]::before { content: attr(data-label) ': '; font-weight: 700; color: var(--muted); font-size: 12px; }
   .filters input, .filters select { flex: 1 1 46%; }
   .stat-row { grid-template-columns: 1fr; }
+  .prof-grid { grid-template-columns: 1fr; }
+  .mini-grid { grid-template-columns: 1fr; }
   .steps { flex-direction: column; }
   .fab { display: grid; place-items: center; }
   .modal-overlay { align-items: flex-end; padding: 0; }
