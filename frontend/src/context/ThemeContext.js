@@ -29,7 +29,7 @@ export function ThemeProvider({ children }) {
       window.localStorage.setItem(KEY, theme);
     } catch {}
     const meta = document.querySelector('meta[name="theme-color"]');
-    if (meta) meta.setAttribute('content', theme === 'dark' ? '#112D4E' : '#DBE2EF');
+    if (meta) meta.setAttribute('content', theme === 'dark' ? '#081C34' : '#EBF2EB');
   }, [theme]);
 
   const toggle = () => setTheme((t) => (t === 'light' ? 'dark' : 'light'));

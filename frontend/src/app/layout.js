@@ -8,9 +8,10 @@ export const metadata = {
   title: 'KasSave',
   description: 'KasSave — pencatatan uang kas kelas',
   manifest: '/manifest.webmanifest',
+  icons: { icon: '/favicon.ico', apple: '/apple-touch-icon.png' },
 };
 
-export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#112D4E' };
+export const viewport = { width: 'device-width', initialScale: 1, viewportFit: 'cover', themeColor: '#103257' };
 
 export default function RootLayout({ children }) {
   return (

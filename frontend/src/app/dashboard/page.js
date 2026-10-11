@@ -111,9 +111,9 @@ export default function DashboardPage() {
 
   // Kartu statistik: badge % bulan-ke-bulan. Baik = hijau, buruk = merah.
   const statCards = [
-    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', icon: 'in', color: '#3F72AF', soft: 'rgba(63,114,175,.15)', mom: momOf((m) => m.income), goodWhenUp: true },
-    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', icon: 'out', color: '#7C5CBF', soft: 'rgba(124,92,191,.15)', mom: momOf((m) => m.expense), goodWhenUp: false },
-    { label: 'Total Tabungan', value: sum ? rupiah(sum.total_savings) : '...', icon: 'savings', color: '#E8833A', soft: 'rgba(232,131,58,.15)', mom: momOf((m) => m.savings), goodWhenUp: true },
+    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', icon: 'in', color: '#16A34A', soft: 'rgba(22,163,74,.15)', mom: momOf((m) => m.income), goodWhenUp: true },
+    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', icon: 'out', color: '#103257', soft: 'rgba(16,50,87,.1)', mom: momOf((m) => m.expense), goodWhenUp: false },
+    { label: 'Total Tabungan', value: sum ? rupiah(sum.total_savings) : '...', icon: 'savings', color: '#D97706', soft: 'rgba(217,119,6,.15)', mom: momOf((m) => m.savings), goodWhenUp: true },
   ];
   const momColor = (c) => {
     if (c.mom === null || c.mom === undefined) return 'var(--muted)';

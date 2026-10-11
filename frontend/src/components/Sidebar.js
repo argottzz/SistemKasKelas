@@ -44,7 +44,7 @@ export function MobileBar({ open, onToggle }) {
       <button className="hamburger" onClick={onToggle} aria-label="Buka menu" aria-expanded={!!open}>
         <Icon name="menu" size={22} />
       </button>
-      <span className="mobilebar-title"><Icon name="card" size={18} /> KasSave</span>
+      <span className="mobilebar-title"><img src="/logo.png" alt="KasSave" className="brand-logo" /> KasSave</span>
       <ThemeToggleButton />
     </header>
   );
@@ -58,7 +58,7 @@ export function SidebarDrawer({ open, onClose }) {
     <>
       {open && <div className="drawer-overlay" onClick={onClose} aria-hidden="true" />}
       <aside className={`sidebar${open ? ' open' : ''}`}>
-        <h2><Icon name="card" size={20} /> KasSave</h2>
+        <h2><img src="/logo.png" alt="KasSave" className="brand-logo" /> KasSave</h2>
         <Link href="/profil" onClick={onClose} className={path.startsWith('/profil') ? 'active' : ''} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <Avatar nama={profile.nama} foto={profile.foto} size={40} />
           <span>
