@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react';
 import { Icon } from './icons';
 import { KATEGORI } from '../lib/validate';
+import { rupiah } from '../lib/api';
 
 const TABS = [
   { key: 'income', label: 'Pemasukan', icon: 'in', color: 'var(--primary)', placeholder: 'cth: Iuran kas minggu ini' },
@@ -14,7 +15,7 @@ const today = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
-export default function TransactionModal({ open, initialJenis = 'income', editTx = null, onClose, onSaved }) {
+export default function TransactionModal({ open, initialJenis = 'income', editTx = null, saldoTersedia = null, onClose, onSaved }) {
   const isEdit = !!editTx;
   const [jenis, setJenis] = useState(initialJenis);
   const [tanggal, setTanggal] = useState(today());
@@ -24,6 +25,7 @@ export default function TransactionModal({ open, initialJenis = 'income', editTx
   const [kategori, setKategori] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
+  const [baseSaldo, setBaseSaldo] = useState(saldoTersedia);
 
   useEffect(() => {
     if (open) {
@@ -43,8 +45,19 @@ export default function TransactionModal({ open, initialJenis = 'income', editTx
         setKategori('');
       }
       setErr('');
+      // Saldo dasar untuk prediksi: pakai prop bila ada, bila tidak ambil fresh dari server.
+      if (saldoTersedia !== null && saldoTersedia !== undefined) {
+        setBaseSaldo(saldoTersedia);
+      } else {
+        (async () => {
+          try {
+            const r = await fetch('/api/summary', { cache: 'no-store' });
+            if (r.ok) setBaseSaldo((await r.json()).saldo_tersedia ?? 0);
+          } catch {}
+        })();
+      }
     }
-  }, [open, initialJenis, editTx]);
+  }, [open, initialJenis, editTx, saldoTersedia]);
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose?.(); };
@@ -53,7 +66,15 @@ export default function TransactionModal({ open, initialJenis = 'income', editTx
   }, [open, onClose]);
 
   if (!open) return null;
-  const tab = TABS.find((t) => t.key === jenis);
+  const tab = TABS.find((t) => t.key === jenis) || { label: 'Data', placeholder: 'cth: Keterangan' };
+
+  // Prediksi saldo tersedia: opening/income menambah, expense/savings mengurangi.
+  const effectOf = (j, n) => ((j === 'income' || j === 'opening_balance') ? 1 : -1) * (Number(n) || 0);
+  let prediksi = null;
+  if (baseSaldo !== null && baseSaldo !== undefined && Number(nominal) > 0) {
+    if (isEdit && editTx) prediksi = Number(baseSaldo) - effectOf(editTx.jenis, editTx.nominal) + effectOf(jenis, nominal);
+    else prediksi = Number(baseSaldo) + effectOf(jenis, nominal);
+  }
 
   const submit = async (e) => {
     e.preventDefault();
@@ -99,6 +120,12 @@ export default function TransactionModal({ open, initialJenis = 'income', editTx
           ))}
         </div>
         {err && <div className="error" style={{ marginBottom: 10 }}>{err}</div>}
+        {baseSaldo !== null && baseSaldo !== undefined && (
+          <div className="label" style={{ marginBottom: 0 }}>
+            Saldo tersedia saat ini {rupiah(baseSaldo)}
+            {prediksi !== null && <> • Saldo nanti jadi {rupiah(prediksi)}</>}
+          </div>
+        )}
         <form onSubmit={submit} style={{ display: 'grid', gap: 12 }}>
           <label className="fld">Tanggal
             <input type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} required />

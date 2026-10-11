@@ -37,9 +37,9 @@ export default function DashboardPage() {
   const load = async () => {
     try {
       setErr('');
-      const sRes = await fetch('/api/summary');
+      const sRes = await fetch('/api/summary', { cache: 'no-store' });
       if (!sRes.ok) throw new Error(`Gagal memuat ringkasan (HTTP ${sRes.status})`);
-      const tRes = await fetch('/api/transactions?limit=1000');
+      const tRes = await fetch('/api/transactions?limit=1000', { cache: 'no-store' });
       if (!tRes.ok) throw new Error(`Gagal memuat transaksi (HTTP ${tRes.status})`);
       setSum(await sRes.json());
       setRows((await tRes.json()).data || []);
@@ -240,7 +240,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <TransactionModal open={modalOpen} initialJenis={modalJenis} onClose={() => setModalOpen(false)} onSaved={() => load()} />
+      <TransactionModal open={modalOpen} initialJenis={modalJenis} saldoTersedia={sum?.saldo_tersedia} onClose={() => setModalOpen(false)} onSaved={() => load()} />
     </>
   );
 }

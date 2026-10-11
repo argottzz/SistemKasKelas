@@ -28,6 +28,14 @@ function LaporanDalam() {
   const [editTx, setEditTx] = useState(null);
   const [confirmTx, setConfirmTx] = useState(null);
   const [busy, setBusy] = useState(false);
+  const [sum, setSum] = useState(null);
+
+  const loadSum = useCallback(async () => {
+    try {
+      const r = await fetch('/api/summary', { cache: 'no-store' });
+      if (r.ok) setSum(await r.json());
+    } catch {}
+  }, []);
 
   const load = useCallback(async (p = page, override) => {
     try {
@@ -40,18 +48,19 @@ function LaporanDalam() {
       if (v.q) params.set('q', v.q);
       if (v.startDate) params.set('startDate', v.startDate);
       if (v.endDate) params.set('endDate', v.endDate);
-      const res = await fetch('/api/transactions?' + params.toString());
+      const res = await fetch('/api/transactions?' + params.toString(), { cache: 'no-store' });
       const j = await res.json();
       if (!res.ok) throw new Error(j.message || j.error?.message || `Gagal memuat laporan (HTTP ${res.status})`);
       setRows(j.data || []);
       setPagination(j.pagination || { page: p, pageSize: PAGE_SIZE, totalItems: j.total || 0, totalPages: 1 });
       setPage(p);
+      loadSum();
     } catch (e) {
       setErr(e.message);
     } finally {
       setLoading(false);
     }
-  }, [page, jenis, kategori, q, startDate, endDate]);
+  }, [page, jenis, kategori, q, startDate, endDate, loadSum]);
 
   useEffect(() => { load(1, { jenis: '', kategori: '', q: sp.get('q') || '', startDate: '', endDate: '' }); }, []); // eslint-disable-line
 
@@ -90,7 +99,7 @@ function LaporanDalam() {
       if (q) params.set('q', q);
       if (startDate) params.set('startDate', startDate);
       if (endDate) params.set('endDate', endDate);
-      const res = await fetch('/api/transactions?' + params.toString());
+      const res = await fetch('/api/transactions?' + params.toString(), { cache: 'no-store' });
       if (!res.ok) throw new Error(`Gagal memuat data (HTTP ${res.status})`);
       const t = downloadExcel((await res.json()).data || []);
       toast?.show(`Excel terunduh: ${t.count} baris.`);
@@ -106,7 +115,7 @@ function LaporanDalam() {
       <div className="page-head">
         <div>
           <h2>Laporan Kas</h2>
-          <div className="greet-sub">{pagination.totalItems} transaksi • halaman {pagination.page} dari {pagination.totalPages}</div>
+          <div className="greet-sub">{pagination.totalItems} transaksi • halaman {pagination.page} dari {pagination.totalPages}{sum ? ` • Saldo tersedia ${rupiah(sum.saldo_tersedia)}` : ''}</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="btn ghost" onClick={ekspor}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="download" size={17} /> Export</span></button>
@@ -174,8 +183,9 @@ function LaporanDalam() {
         open={modalOpen}
         initialJenis={modalJenis}
         editTx={editTx}
+        saldoTersedia={sum?.saldo_tersedia}
         onClose={() => { setModalOpen(false); setEditTx(null); }}
-        onSaved={(msg) => { if (msg) toast?.show(msg); load(editTx ? page : 1); }}
+        onSaved={(msg) => { if (msg) toast?.show(msg); else toast?.show('Tersimpan. Saldo dihitung ulang.'); load(editTx ? page : 1); }}
       />
 
       {confirmTx && (

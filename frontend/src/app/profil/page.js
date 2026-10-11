@@ -46,7 +46,7 @@ export default function ProfilPage() {
   useEffect(() => {
     (async () => {
       try {
-        const res = await fetch('/api/summary');
+        const res = await fetch('/api/summary', { cache: 'no-store' });
         if (res.ok) setSum(await res.json());
       } catch {}
     })();

@@ -18,7 +18,7 @@ export default function ImporPage() {
 
   const loadHist = async () => {
     try {
-      const res = await fetch('/api/imports');
+      const res = await fetch('/api/imports', { cache: 'no-store' });
       if (res.ok) setHist((await res.json()).data || []);
     } catch {}
   };
@@ -61,7 +61,13 @@ export default function ImporPage() {
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.message || j.error?.message || 'Gagal menyimpan impor');
-      toast?.show(`Impor berhasil: ${j.jumlah} baris.`);
+      // Ambil saldo terbaru agar terlihat langsung ikut berubah (tetap 1.226.000-an bila data lama masih ada).
+      let saldoBaru = null;
+      try {
+        const s = await fetch('/api/summary', { cache: 'no-store' });
+        if (s.ok) saldoBaru = (await s.json()).saldo_tersedia;
+      } catch {}
+      toast?.show(`Impor berhasil: ${j.jumlah} baris.${saldoBaru !== null ? ` Saldo tersedia ${rupiah(saldoBaru)}.` : ''}`);
       setPv(null); setFile(null);
       loadHist();
     } catch (e) {
