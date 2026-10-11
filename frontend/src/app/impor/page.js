@@ -60,7 +60,7 @@ export default function ImporPage() {
   return (
     <>
       <h2 style={{ marginTop: 0 }}>Impor Excel</h2>
-      <p style={{ fontSize: 14, color: '#64748b' }}>
+      <p className="greet-sub" style={{ fontSize: 14 }}>
         Unggah file Excel format laporan KasSave (hasil Export atau file asli Kelas 11).
         Blok pemasukan &amp; nabung tidak punya kolom keterangan, jadi keterangannya dibuat otomatis.
         Maks 5MB, file yang sama tidak bisa diimpor dua kali.
@@ -75,7 +75,7 @@ export default function ImporPage() {
           <h3>Pratinjau — {pv.namaFile}</h3>
           <p>Valid: {pv.totals.count} • Saldo hasil file: {rupiah(pv.saldoHasil)}</p>
           <p style={{ fontSize: 13 }}>Pemasukan {rupiah(pv.totals.income)} • Pengeluaran {rupiah(pv.totals.expense)} • Tabungan {rupiah(pv.totals.savings)} • Saldo awal {rupiah(pv.totals.opening)}</p>
-          {pv.errors?.length > 0 && <ul style={{ fontSize: 13, color: '#991b1b' }}>{pv.errors.slice(0, 10).map((e, i) => <li key={i}>{e}</li>)}</ul>}
+          {pv.errors?.length > 0 && <ul className="error" style={{ fontSize: 13 }}>{pv.errors.slice(0, 10).map((e, i) => <li key={i}>{e}</li>)}</ul>}
           <label style={{ display: 'flex', gap: 8, alignItems: 'center', fontSize: 14 }}>
             <input type="checkbox" checked={agreed} onChange={(e) => setAgreed(e.target.checked)} /> Saya sudah memeriksa data di atas
           </label>

@@ -60,7 +60,7 @@ export default function ProfilPage() {
     <>
       <h2 style={{ marginTop: 0 }}>Profil</h2>
       {err && <div className="error">{err}</div>}
-      {ok && <div className="card" style={{ marginBottom: 12, borderLeft: '4px solid #16a34a' }}>{ok}</div>}
+      {ok && <div className="card" style={{ marginBottom: 12, borderLeft: '4px solid var(--primary)' }}>{ok}</div>}
       <div className="card" style={{ display: 'flex', gap: 14, alignItems: 'center', marginBottom: 14 }}>
         <Avatar nama={nama} foto={foto} size={72} />
         <div>
