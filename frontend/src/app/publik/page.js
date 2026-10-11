@@ -16,10 +16,9 @@ export default function PublikPage() {
       try {
         const sb = supabaseBrowser();
         const { data, error } = await sb
-          .from('transactions')
-          .select('*')
+          .from('v_transaksi_publik')
+          .select('tanggal,jenis,nominal,keterangan')
           .order('tanggal', { ascending: false })
-          .order('id', { ascending: false })
           .limit(100);
         if (error) throw error;
         setRows(data || []);
@@ -80,14 +79,14 @@ export default function PublikPage() {
 
       <div className="card">
         <div className="card-head"><h3>Transaksi Terbaru</h3><span className="label">read-only</span></div>
-        {recent.length ? recent.map((t) => (
-          <div className="tx-item" key={t.id}>
+        {recent.length ? recent.map((t, i) => (
+          <div className="tx-item" key={`${t.tanggal}-${t.nominal}-${i}`}>
             <div className={`tx-ico ${t.jenis}`}><Icon name={ICO_JENIS[t.jenis] || 'report'} size={20} /></div>
-            <div className="tt"><b>{t.keterangan}{t.penerima ? ` → ${t.penerima}` : ''}</b><small>{fmtTanggal(t.tanggal)}</small></div>
+            <div className="tt"><b>{t.keterangan}</b><small>{fmtTanggal(t.tanggal)}</small></div>
             <span className={`badge ${t.jenis}`}>{labelJenis(t.jenis)}</span>
             <div className={`tx-amt ${t.jenis === 'income' || t.jenis === 'opening_balance' ? 'in' : 'out'}`}>{rupiah(t.nominal)}</div>
           </div>
-        )) : <div className="label">Belum ada data tampil. Jika kas sebenarnya ada, policy baca publik belum dipasang.</div>}
+        )) : <div className="label">Belum ada data tampil. Jika kas sebenarnya ada, view publik belum dipasang.</div>}
       </div>
     </>
   );
