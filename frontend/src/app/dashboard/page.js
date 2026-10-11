@@ -148,10 +148,6 @@ export default function DashboardPage() {
             <button className="btn-outline" onClick={() => bukaModal('expense')}>Pengeluaran</button>
           </div>
         </div>
-        <div className="hero-spark">
-          <AreaChart points={curve} height={110} />
-          <div className="hero-sub">{pct(sum?.total_income || 0)}% dana masuk tercatat</div>
-        </div>
       </div>
 
       <div className="fin-grid">
