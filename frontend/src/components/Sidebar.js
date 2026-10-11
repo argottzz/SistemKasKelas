@@ -86,8 +86,8 @@ export function SidebarDrawer({ open, onClose }) {
             <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}><Icon name={theme === 'light' ? 'sun' : 'moon'} size={18} /> Tema</span>
             <button className="theme-switch" data-on={theme === 'dark'} onClick={toggle} aria-label="Ganti tema terang/gelap" />
           </div>
-          <button className="btn ghost" onClick={keluar} style={{ justifyContent: 'flex-start' }}>
-            <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="out" size={17} /> Keluar</span>
+          <button className="side-logout" onClick={keluar}>
+            <Icon name="out" size={18} /> Keluar
           </button>
         </div>
       </aside>

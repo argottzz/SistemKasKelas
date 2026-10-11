@@ -80,6 +80,8 @@ img { max-width: 100%; }
 .sidebar a:hover { background: rgba(255, 255, 255, .08); opacity: 1; }
 .sidebar a.active { background: rgba(255, 255, 255, .14); color: #fff; opacity: 1; box-shadow: inset 3px 0 0 var(--primary); }
 .side-profile { margin-top: auto; background: rgba(47, 163, 107, .18); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
+.side-logout { display: flex; align-items: center; gap: 10px; width: 100%; padding: 11px 12px; border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--sidebar-ink); opacity: .8; background: transparent; border: 0; cursor: pointer; font-family: inherit; text-align: left; }
+.side-logout:hover { background: rgba(255, 255, 255, .08); opacity: 1; }
 .theme-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 12px; font-size: 14px; font-weight: 600; color: var(--sidebar-ink); opacity: .9; }
 .theme-switch { position: relative; width: 46px; height: 26px; border-radius: 999px; border: 1px solid var(--line); background: rgba(219, 226, 239, .2); cursor: pointer; flex-shrink: 0; }
 .theme-switch::after { content: ''; position: absolute; top: 2px; left: 2px; width: 20px; height: 20px; border-radius: 50%; background: #DBE2EF; transition: transform .18s ease; }
