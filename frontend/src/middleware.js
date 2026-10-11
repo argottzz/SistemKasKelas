@@ -38,8 +38,12 @@ export async function middleware(req) {
     const { data } = await sb.auth.getUser();
     const user = data?.user || null;
 
+    // Root: tamu -> /publik (siswa/wali), sesi login -> /dashboard (bendahara).
+    if (path === '/') {
+      return NextResponse.redirect(new URL(user ? '/dashboard' : '/publik', req.url));
+    }
     // API menjaga dirinya sendiri (401 via requireSession) — middleware hanya urus halaman.
-    // /publik boleh dibuka tanpa login (read-only, data via policy anon).
+    // /publik boleh dibuka tanpa login (read-only, data via view aman).
     if (!isApi && !user && !isLogin && !isPublik) {
       return NextResponse.redirect(loginUrl);
     }

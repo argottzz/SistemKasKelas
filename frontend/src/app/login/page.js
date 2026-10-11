@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { supabaseBrowser } from '../../lib/supabase-client';
 
@@ -51,6 +52,7 @@ export default function LoginPage() {
           <button className="btn" disabled={busy}>{busy ? 'Memeriksa...' : 'Masuk'}</button>
         </form>
         <div className="label" style={{ marginTop: 12, marginBottom: 0 }}>Halaman kas hanya untuk bendahara. Tidak ada pendaftaran akun baru.</div>
+        <div className="label" style={{ marginTop: 6, marginBottom: 0 }}><Link href="/publik">Lihat kas kelas (publik, tanpa login)</Link></div>
       </div>
     </div>
   );
