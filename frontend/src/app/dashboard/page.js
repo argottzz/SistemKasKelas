@@ -33,6 +33,7 @@ export default function DashboardPage() {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalJenis, setModalJenis] = useState('income');
   const [month, setMonth] = useState('');
+  const [range, setRange] = useState(7);
 
   const load = async () => {
     try {
@@ -59,12 +60,14 @@ export default function DashboardPage() {
   });
 
   const days = [];
-  for (let i = 6; i >= 0; i--) {
+  for (let i = range - 1; i >= 0; i--) {
     const d = new Date(Date.now() - i * 864e5);
     const iso = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
     const list = rows.filter((r) => r.tanggal === iso);
     days.push({
-      label: d.toLocaleDateString('id-ID', { weekday: 'short' }),
+      label: range <= 7
+        ? d.toLocaleDateString('id-ID', { weekday: 'short' })
+        : d.toLocaleDateString('id-ID', { day: 'numeric', month: 'numeric' }),
       income: list.filter((r) => r.jenis === 'income').reduce((a, r) => a + Number(r.nominal), 0),
       expense: list.filter((r) => r.jenis === 'expense').reduce((a, r) => a + Number(r.nominal), 0),
       savings: list.filter((r) => r.jenis === 'savings').reduce((a, r) => a + Number(r.nominal), 0),
@@ -185,7 +188,14 @@ export default function DashboardPage() {
             </div>
           </div>
           <div className="card">
-            <div className="card-head"><h3>Aktivitas 7 Hari</h3><span className="label">masuk vs keluar</span></div>
+            <div className="card-head">
+              <h3>Aktivitas {range} Hari</h3>
+              <select className="month-select" value={range} onChange={(e) => setRange(Number(e.target.value))} aria-label="Rentang aktivitas">
+                <option value={7}>7 hari</option>
+                <option value={14}>14 hari</option>
+                <option value={30}>30 hari</option>
+              </select>
+            </div>
             <WeekBars days={days} />
             <div className="label">Garis penuh = masuk, garis outline = keluar</div>
           </div>

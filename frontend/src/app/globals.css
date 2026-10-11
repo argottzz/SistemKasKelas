@@ -108,8 +108,8 @@ img { max-width: 100%; }
 .progress > div { height: 100%; border-radius: 999px; background: linear-gradient(90deg, #3F72AF, #112D4E); }
 
 /* ===== Grafik batang mingguan (div) ===== */
-.weekbars { display: flex; align-items: flex-end; gap: 10px; height: 130px; padding-top: 8px; }
-.weekbar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; }
+.weekbars { display: flex; align-items: flex-end; gap: 10px; height: 130px; padding-top: 8px; overflow-x: auto; }
+.weekbar { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 6px; height: 100%; justify-content: flex-end; min-width: 20px; }
 .weekbar .cols { display: flex; gap: 4px; align-items: flex-end; height: 100px; }
 .weekbar .cb { width: 12px; border-radius: 6px; background: rgba(63, 114, 175, .25); min-height: 4px; }
 .weekbar .cb.in { background: #3F72AF; }
