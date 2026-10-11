@@ -6,13 +6,14 @@ import { createServerClient } from '@supabase/ssr';
 export async function middleware(req) {
   const path = req.nextUrl.pathname;
   const isLogin = path === '/login';
+  const isPublik = path === '/publik';
   const isApi = path.startsWith('/api/');
   const loginUrl = new URL('/login', req.url);
 
   // Konfigurasi belum lengkap (Env Vercel/Netlify kurang) -> jangan 500,
   // arahkan ke login. Halaman login menampilkan pesan konfigurasi yang jelas.
   if (!process.env.NEXT_PUBLIC_SUPABASE_URL || !process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY) {
-    if (!isApi && !isLogin) return NextResponse.redirect(loginUrl);
+    if (!isApi && !isLogin && !isPublik) return NextResponse.redirect(loginUrl);
     if (!isApi) return NextResponse.next();
     return NextResponse.json({ message: 'Konfigurasi server belum lengkap.' }, { status: 500 });
   }
@@ -38,7 +39,8 @@ export async function middleware(req) {
     const user = data?.user || null;
 
     // API menjaga dirinya sendiri (401 via requireSession) — middleware hanya urus halaman.
-    if (!isApi && !user && !isLogin) {
+    // /publik boleh dibuka tanpa login (read-only, data via policy anon).
+    if (!isApi && !user && !isLogin && !isPublik) {
       return NextResponse.redirect(loginUrl);
     }
     if (user && isLogin) {
