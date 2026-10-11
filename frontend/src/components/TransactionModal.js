@@ -1,10 +1,11 @@
 'use client';
 import { useEffect, useState } from 'react';
+import { Icon } from './icons';
 
 const TABS = [
-  { key: 'income', label: '💰 Pemasukan', color: '#3F72AF', placeholder: 'cth: Iuran kas minggu ini' },
-  { key: 'expense', label: '💸 Pengeluaran', color: '#112D4E', placeholder: 'cth: Beli spidol dan isi ulang' },
-  { key: 'savings', label: '🏦 Tabungan', color: '#3F72AF', placeholder: 'cth: Setoran tabungan ke guru' },
+  { key: 'income', label: 'Pemasukan', icon: 'in', color: 'var(--primary)', placeholder: 'cth: Iuran kas minggu ini' },
+  { key: 'expense', label: 'Pengeluaran', icon: 'out', color: 'var(--ink)', placeholder: 'cth: Beli spidol dan isi ulang' },
+  { key: 'savings', label: 'Tabungan', icon: 'savings', color: 'var(--primary)', placeholder: 'cth: Setoran tabungan ke guru' },
 ];
 
 const today = () => {
@@ -75,10 +76,10 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
               key={t.key}
               type="button"
               className={`modal-tab ${jenis === t.key ? 'active' : ''}`}
-              style={jenis === t.key ? { borderColor: t.color, color: t.color } : {}}
+              style={jenis === t.key ? { borderColor: 'var(--primary)' } : {}}
               onClick={() => setJenis(t.key)}
             >
-              {t.label}
+              <span style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}><Icon name={t.icon} size={16} /> {t.label}</span>
             </button>
           ))}
         </div>
@@ -98,7 +99,7 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
           <label className="fld">Keterangan
             <textarea rows={2} value={keterangan} onChange={(e) => setKeterangan(e.target.value)} placeholder={tab.placeholder} required />
           </label>
-          <button className="btn" style={{ background: tab.color }} disabled={busy}>
+          <button className="btn" disabled={busy}>
             {busy ? 'Menyimpan...' : `Simpan ${tab.label}`}
           </button>
         </form>

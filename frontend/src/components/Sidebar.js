@@ -4,12 +4,13 @@ import { useState } from 'react';
 import { usePathname } from 'next/navigation';
 import { useProfile } from '../context/ProfileContext';
 import { useTheme } from '../context/ThemeContext';
+import { Icon } from './icons';
 
 const MENU = [
-  { href: '/dashboard', label: 'Dashboard', icon: '📊' },
-  { href: '/laporan', label: 'Laporan', icon: '📑' },
-  { href: '/impor', label: 'Impor', icon: '📤' },
-  { href: '/profil', label: 'Profil', icon: '👤' },
+  { href: '/dashboard', label: 'Dashboard', icon: 'dashboard' },
+  { href: '/laporan', label: 'Laporan', icon: 'report' },
+  { href: '/impor', label: 'Impor', icon: 'upload' },
+  { href: '/profil', label: 'Profil', icon: 'user' },
 ];
 
 export function initialOf(nama) {
@@ -22,7 +23,7 @@ export function Avatar({ nama, foto, size = 44 }) {
     return <img src={foto} alt={nama} style={{ width: size, height: size, borderRadius: '50%', objectFit: 'cover' }} />;
   }
   return (
-    <div style={{ width: size, height: size, borderRadius: '50%', background: '#3F72AF', color: '#fff', display: 'grid', placeItems: 'center', fontWeight: 800, fontSize: size * 0.45 }}>
+    <div style={{ width: size, height: size, borderRadius: '50%', background: 'var(--primary)', color: 'var(--primary-ink)', display: 'grid', placeItems: 'center', fontWeight: 700, fontSize: size * 0.45 }}>
       {initialOf(nama)}
     </div>
   );
@@ -32,7 +33,7 @@ export function ThemeToggleButton() {
   const { theme, toggle } = useTheme() || { theme: 'light', toggle: () => {} };
   return (
     <button className="theme-btn" onClick={toggle} aria-label={theme === 'light' ? 'Ganti ke mode gelap' : 'Ganti ke mode terang'}>
-      {theme === 'light' ? '🌙' : '☀️'}
+      <Icon name={theme === 'light' ? 'moon' : 'sun'} size={20} />
     </button>
   );
 }
@@ -41,9 +42,9 @@ export function MobileBar({ open, onToggle }) {
   return (
     <header className="mobilebar">
       <button className="hamburger" onClick={onToggle} aria-label="Buka menu" aria-expanded={!!open}>
-        ☰
+        <Icon name="menu" size={22} />
       </button>
-      <span className="mobilebar-title">💰 KasSave</span>
+      <span className="mobilebar-title"><Icon name="card" size={18} /> KasSave</span>
       <ThemeToggleButton />
     </header>
   );
@@ -57,7 +58,7 @@ export function SidebarDrawer({ open, onClose }) {
     <>
       {open && <div className="drawer-overlay" onClick={onClose} aria-hidden="true" />}
       <aside className={`sidebar${open ? ' open' : ''}`}>
-        <h2>💰 KasSave</h2>
+        <h2><Icon name="card" size={20} /> KasSave</h2>
         <Link href="/profil" onClick={onClose} className={path.startsWith('/profil') ? 'active' : ''} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <Avatar nama={profile.nama} foto={profile.foto} size={40} />
           <span>
@@ -67,12 +68,12 @@ export function SidebarDrawer({ open, onClose }) {
         </Link>
         {MENU.map((m) => (
           <Link key={m.href} href={m.href} onClick={onClose} className={path.startsWith(m.href) ? 'active' : ''}>
-            {m.icon} {m.label}
+            <Icon name={m.icon} size={18} /> {m.label}
           </Link>
         ))}
         <div style={{ marginTop: 'auto', display: 'grid', gap: 4 }}>
           <div className="theme-row">
-            <span>Theme {theme === 'light' ? '☀️' : '🌙'}</span>
+            <span style={{ display: 'flex', gap: 8, alignItems: 'center' }}><Icon name={theme === 'light' ? 'sun' : 'moon'} size={18} /> Tema</span>
             <button className="theme-switch" data-on={theme === 'dark'} onClick={toggle} aria-label="Ganti tema terang/gelap" />
           </div>
         </div>

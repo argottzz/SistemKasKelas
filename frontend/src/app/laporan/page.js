@@ -4,6 +4,7 @@ import { useSearchParams } from 'next/navigation';
 import { rupiah, fmtTanggal, labelJenis } from '../../lib/api';
 import { downloadExcel } from '../../lib/excel';
 import TransactionModal from '../../components/TransactionModal';
+import { Icon } from '../../components/icons';
 
 function LaporanDalam() {
   const sp = useSearchParams();
@@ -72,8 +73,8 @@ function LaporanDalam() {
           <div className="greet-sub">Semua pemasukan, pengeluaran, dan tabungan.</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
-          <button className="btn ghost" onClick={ekspor}>📥 Export Excel</button>
-          <button className="btn" onClick={() => bukaModal('income')}>+ Tambah</button>
+          <button className="btn ghost" onClick={ekspor}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="download" size={17} /> Export Excel</span></button>
+          <button className="btn" onClick={() => bukaModal('income')}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="plus" size={17} /> Tambah</span></button>
         </div>
       </div>
       {err && <div className="error">{err}</div>}
@@ -100,7 +101,7 @@ function LaporanDalam() {
                 <td data-label="Keterangan">{t.keterangan}{t.penerima ? ` → ${t.penerima}` : ''}</td>
                 <td data-label="Jenis"><span className={`badge ${t.jenis}`}>{labelJenis(t.jenis)}</span></td>
                 <td data-label="Nominal">{rupiah(t.nominal)}</td>
-                <td data-label="Aksi"><button className="btn danger" style={{ padding: '8px 12px', minHeight: 36 }} onClick={() => hapus(t.id)}>Hapus</button></td>
+                <td data-label="Aksi"><button className="btn danger" style={{ padding: '8px 12px', minHeight: 36 }} onClick={() => hapus(t.id)}><span style={{ display: 'inline-flex', gap: 6, alignItems: 'center' }}><Icon name="trash" size={16} /> Hapus</span></button></td>
               </tr>
             ))}
             {rows.length === 0 && <tr><td colSpan={5}>Tidak ada data</td></tr>}
@@ -108,7 +109,7 @@ function LaporanDalam() {
         </table>
       </div>
 
-      <button className="fab" onClick={() => bukaModal('income')} aria-label="Tambah data">+</button>
+      <button className="fab" onClick={() => bukaModal('income')} aria-label="Tambah data"><Icon name="plus" size={24} /></button>
 
       <TransactionModal
         open={modalOpen}

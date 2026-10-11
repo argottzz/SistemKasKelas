@@ -5,8 +5,7 @@ import { downloadExcel } from '../../lib/excel';
 import { useProfile } from '../../context/ProfileContext';
 import { AreaChart, WeekBars, Gauge } from '../../components/Charts';
 import TransactionModal from '../../components/TransactionModal';
-
-const ICO = { income: '💰', expense: '💸', savings: '🏦', opening_balance: '🪙' };
+import { Icon, ICO_JENIS } from '../../components/icons';
 
 function salam() {
   const h = new Date().getHours();
@@ -110,10 +109,10 @@ export default function DashboardPage() {
     <>
       <div className="page-head">
         <div>
-          <h2>{salam()}, {profile.nama || 'Bendahara'}! 👋</h2>
+          <h2>{salam()}, {profile.nama || 'Bendahara'}!</h2>
           <div className="greet-sub">Kas kelas terkumpul dan tercatat rapi di sini.</div>
         </div>
-        <button className="btn" onClick={ekspor}>📥 Export Excel</button>
+        <button className="btn" onClick={ekspor}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="download" size={17} /> Export Excel</span></button>
       </div>
       {err && <div className="error">{err}</div>}
 
@@ -123,33 +122,33 @@ export default function DashboardPage() {
           <div className="hero-value">{sum ? rupiah(sum.saldo_tersedia) : '...'}</div>
           <div className="hero-sub">Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
           <div className="hero-actions">
-            <button className="btn" onClick={() => bukaModal('income')}>＋ Pemasukan</button>
-            <button className="btn-outline" onClick={() => bukaModal('expense')}>− Pengeluaran</button>
+            <button className="btn" onClick={() => bukaModal('income')}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="plus" size={17} /> Pemasukan</span></button>
+            <button className="btn-outline" onClick={() => bukaModal('expense')}>Pengeluaran</button>
           </div>
         </div>
         <div className="hero-spark">
           <AreaChart points={curve} height={110} />
-          <div className="hero-sub">▲ {pct(sum?.total_income || 0)}% dana masuk tercatat</div>
+          <div className="hero-sub">{pct(sum?.total_income || 0)}% dana masuk tercatat</div>
         </div>
       </div>
 
       <div className="fin-grid">
         <div className="fin-card solid">
-          <div className="k"><span>Total Pemasukan</span><span>💰</span></div>
+          <div className="k"><span>Total Pemasukan</span><Icon name="in" size={17} /></div>
           <div className="v">{sum ? rupiah(sum.total_income) : '...'}</div>
-          <div className="sub">▲ {pct(sum?.total_income || 0)}% dari dana masuk</div>
+          <div className="sub">{pct(sum?.total_income || 0)}% dari dana masuk</div>
           <AreaChart points={days.map((d) => d.income)} height={56} />
         </div>
         <div className="fin-card navy">
-          <div className="k"><span>Total Pengeluaran</span><span>💸</span></div>
+          <div className="k"><span>Total Pengeluaran</span><Icon name="out" size={17} /></div>
           <div className="v">{sum ? rupiah(sum.total_expense) : '...'}</div>
-          <div className="sub">▼ {pct(sum?.total_expense || 0)}% dari dana masuk</div>
+          <div className="sub">{pct(sum?.total_expense || 0)}% dari dana masuk</div>
           <AreaChart points={days.map((d) => d.expense)} height={56} />
         </div>
         <div className="fin-card">
-          <div className="k"><span>Total Tabungan</span><span>🏦</span></div>
+          <div className="k"><span>Total Tabungan</span><Icon name="savings" size={17} /></div>
           <div className="v">{sum ? rupiah(sum.total_savings) : '...'}</div>
-          <div className="sub">▲ {pct(sum?.total_savings || 0)}% dari dana masuk</div>
+          <div className="sub">{pct(sum?.total_savings || 0)}% dari dana masuk</div>
           <AreaChart points={days.map((d) => d.savings)} height={56} />
         </div>
       </div>
@@ -162,17 +161,17 @@ export default function DashboardPage() {
             <AreaChart points={curve} />
           </div>
           <div className="card">
-            <div className="card-head"><h3>Aksi Cepat</h3><span>⋮</span></div>
+            <div className="card-head"><h3>Aksi Cepat</h3></div>
             <div className="quick-grid">
-              <button className="quick-btn solid" onClick={() => bukaModal('income')}>💰<br />Pemasukan</button>
-              <button className="quick-btn" onClick={() => bukaModal('expense')}>💸<br />Pengeluaran</button>
-              <button className="quick-btn" onClick={() => bukaModal('savings')}>🏦<br />Tabungan</button>
+              <button className="quick-btn solid" onClick={() => bukaModal('income')}><Icon name="in" size={18} /><br />Pemasukan</button>
+              <button className="quick-btn" onClick={() => bukaModal('expense')}><Icon name="out" size={18} /><br />Pengeluaran</button>
+              <button className="quick-btn" onClick={() => bukaModal('savings')}><Icon name="savings" size={18} /><br />Tabungan</button>
             </div>
           </div>
           <div className="card">
             <div className="card-head"><h3>Aktivitas 7 Hari</h3><span className="label">masuk vs keluar</span></div>
             <WeekBars days={days} />
-            <div className="label">■ masuk • □ keluar</div>
+            <div className="label">Garis penuh = masuk, garis outline = keluar</div>
           </div>
         </div>
         <div className="dash-side">
@@ -189,7 +188,7 @@ export default function DashboardPage() {
                 <div className="tx-group-head"><span>{groupLabel(g.tanggal)}</span><span>{g.items.length} transaksi</span></div>
                 {g.items.map((t) => (
                   <div className="tx-item" key={t.id}>
-                    <div className={`tx-ico ${t.jenis}`}>{ICO[t.jenis] || '📝'}</div>
+                    <div className={`tx-ico ${t.jenis}`}><Icon name={ICO_JENIS[t.jenis] || 'report'} size={20} /></div>
                     <div className="tt"><b>{t.keterangan}{t.penerima ? ` → ${t.penerima}` : ''}</b><small>{fmtTanggal(t.tanggal)}</small></div>
                     <div className={`tx-amt ${t.jenis === 'income' || t.jenis === 'opening_balance' ? 'in' : 'out'}`}>
                       {(t.jenis === 'income' || t.jenis === 'opening_balance' ? '+' : '−') + rupiah(t.nominal).replace('Rp', '').trim()}
