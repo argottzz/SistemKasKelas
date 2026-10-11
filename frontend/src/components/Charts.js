@@ -63,16 +63,16 @@ export function MonthlyFlow({ data }) {
   // Kotak tooltip bulan yang di-hover: Masuk / Keluar / Tabungan / Bersih.
   const hd = hov >= 0 && hov < data.length ? data[hov] : null;
   const hx = hd ? X(hov) : 0, hy = hd ? Y(hd.net) : 0;
-  const tw = 196, th = 108;
-  let tx = hx + 14;
-  if (tx + tw > W - 4) tx = hx - tw - 14;
-  let ty = hy - th - 12;
-  if (ty < 2) ty = hy + 18;
   const hTitle = hd ? (hd.key ? new Date(hd.key + '-01T00:00:00').toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }) : hd.label) : '';
   const hMasuk = hd ? (hd.masuk ?? hd.income ?? 0) : 0;
   const hKeluar = hd ? (hd.keluar ?? hd.expense ?? 0) : 0;
   const hSav = hd ? (hd.savings ?? 0) : 0;
+  // Tooltip HTML (overlay) — tidak terpotong batas SVG. Flip di tepi.
+  const tipLeft = `${(hx / W) * 100}%`;
+  const tipTop = `${(hy / H) * 100}%`;
+  const tipTransform = `${hx > W - 230 ? 'translateX(calc(-100% - 14px))' : 'translateX(14px)'} ${hy > H * 0.5 ? 'translateY(calc(-100% - 12px))' : 'translateY(16px)'}`;
   return (
+    <div className="monthly-wrap">
     <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block', color: 'var(--muted)' }} role="img" aria-label="Grafik arus kas bulanan">
       <defs>
         <linearGradient id={`f${gid}`} x1="0" y1="0" x2="0" y2="1">
@@ -106,17 +106,17 @@ export function MonthlyFlow({ data }) {
           />
         </g>
       ))}
-      {hd && (
-        <g>
-          <rect x={tx} y={ty} width={tw} height={th} rx="10" fill="#112D4E" opacity="0.97" />
-          <text x={tx + 12} y={ty + 20} fontSize="12" fontWeight="800" fill="#fff">{hTitle}</text>
-          <text x={tx + 12} y={ty + 38} fontSize="11" fill="#DBE2EF">Masuk <tspan fontWeight="700" fill="#fff">{rupiah(hMasuk)}</tspan></text>
-          <text x={tx + 12} y={ty + 56} fontSize="11" fill="#DBE2EF">Keluar <tspan fontWeight="700" fill="#fff">{rupiah(hKeluar)}</tspan></text>
-          <text x={tx + 12} y={ty + 74} fontSize="11" fill="#DBE2EF">Tabungan <tspan fontWeight="700" fill="#fff">{rupiah(hSav)}</tspan></text>
-          <text x={tx + 12} y={ty + 94} fontSize="11" fontWeight="800" fill="#7CDB8A">Bersih {rupiah(hd.net)}</text>
-        </g>
-      )}
     </svg>
+      {hd && (
+        <div className="mtip" style={{ left: tipLeft, top: tipTop, transform: tipTransform }}>
+          <b>{hTitle}</b>
+          <span>Masuk <b>{rupiah(hMasuk)}</b></span>
+          <span>Keluar <b>{rupiah(hKeluar)}</b></span>
+          <span>Tabungan <b>{rupiah(hSav)}</b></span>
+          <span className="bersih">Bersih {rupiah(hd.net)}</span>
+        </div>
+      )}
+    </div>
   );
 }
 

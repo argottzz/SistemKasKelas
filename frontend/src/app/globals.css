@@ -119,6 +119,12 @@ img { max-width: 100%; }
 .wbinfo b { color: var(--ink); }
 .weekbar { cursor: pointer; border-radius: 8px; }
 .weekbar.hot { background: rgba(63, 114, 175, .12); }
+/* ===== Tooltip grafik arus kas (HTML overlay, anti-kepotong) ===== */
+.monthly-wrap { position: relative; }
+.mtip { position: absolute; z-index: 5; min-width: 172px; background: #112D4E; color: #DBE2EF; border-radius: 12px; padding: 10px 12px; display: grid; gap: 3px; font-size: 12px; line-height: 1.45; box-shadow: 0 8px 24px rgba(0, 0, 0, .3); pointer-events: none; white-space: nowrap; }
+.mtip > b { color: #fff; font-size: 13px; }
+.mtip span b { color: #fff; }
+.mtip .bersih { color: #7CDB8A; font-weight: 800; }
 
 /* ===== Profil ala referensi (kartu profil + mini stat + tab) ===== */
 .prof-grid { display: grid; grid-template-columns: 320px minmax(0, 1fr); gap: 16px; align-items: start; }
