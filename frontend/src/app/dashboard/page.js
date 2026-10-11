@@ -189,6 +189,17 @@ export default function DashboardPage() {
             <WeekBars days={days} />
             <div className="label">Garis penuh = masuk, garis outline = keluar</div>
           </div>
+          <div className="card">
+            <h3>Tabungan di Guru</h3>
+            <div className="value">{sum ? rupiah(sum.total_savings) : '...'}</div>
+            <div className="progress"><div style={{ width: `${inflow > 0 ? Math.min(100, ((sum?.total_savings || 0) / inflow) * 100) : 0}%` }} /></div>
+            <div className="label" style={{ marginTop: 6 }}>dari total dana masuk {sum ? rupiah(inflow) : '...'}</div>
+          </div>
+          <div className="card">
+            <h3>Kesehatan Kas</h3>
+            <Gauge ratio={ratio} label="porsi belanja" />
+            <div className="label" style={{ textAlign: 'center' }}>Semakin kecil semakin hemat</div>
+          </div>
         </div>
         <div className="dash-side">
           <div className="card">
@@ -222,17 +233,6 @@ export default function DashboardPage() {
               </div>
             ))}
             {groups.length === 0 && !err && <div className="label">Belum ada transaksi</div>}
-          </div>
-          <div className="card">
-            <h3>Tabungan di Guru</h3>
-            <div className="value">{sum ? rupiah(sum.total_savings) : '...'}</div>
-            <div className="progress"><div style={{ width: `${inflow > 0 ? Math.min(100, ((sum?.total_savings || 0) / inflow) * 100) : 0}%` }} /></div>
-            <div className="label" style={{ marginTop: 6 }}>dari total dana masuk {sum ? rupiah(inflow) : '...'}</div>
-          </div>
-          <div className="card">
-            <h3>Kesehatan Kas</h3>
-            <Gauge ratio={ratio} label="porsi belanja" />
-            <div className="label" style={{ textAlign: 'center' }}>Semakin kecil semakin hemat</div>
           </div>
         </div>
       </div>
