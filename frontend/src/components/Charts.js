@@ -60,9 +60,6 @@ export function MonthlyFlow({ data }) {
     if (a >= 1e3) return `${Math.round(v / 1e3)} rb`;
     return `${v}`;
   };
-  let peak = 0;
-  data.forEach((d, i) => { if (d.net > data[peak].net) peak = i; });
-  const px = X(peak), py = Y(data[peak].net);
   // Kotak tooltip bulan yang di-hover: Masuk / Keluar / Tabungan / Bersih.
   const hd = hov >= 0 && hov < data.length ? data[hov] : null;
   const hx = hd ? X(hov) : 0, hy = hd ? Y(hd.net) : 0;
@@ -91,7 +88,6 @@ export function MonthlyFlow({ data }) {
       ))}
       <path d={`${line} L${X(data.length - 1)},${H - padB} L${X(0)},${H - padB} Z`} fill={`url(#f${gid})`} />
       <path d={line} fill="none" stroke="#E8833A" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-      <circle cx={px} cy={py} r="5" fill="#E8833A" stroke="#fff" strokeWidth="2" />
       {data.map((d, i) => (
         <text key={i} x={X(i)} y={H - 8} textAnchor="middle" fontSize="10" fill="currentColor">{d.label}</text>
       ))}

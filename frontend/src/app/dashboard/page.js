@@ -219,7 +219,7 @@ export default function DashboardPage() {
           <div className="card">
             <div className="card-head"><h3>Arus Kas Bulanan</h3><span className="label">bersih per bulan • 12 bulan</span></div>
             <MonthlyFlow data={flowMonths} />
-            <div className="label">Titik = bulan tertinggi • hijau di atas nol, minus di bawah</div>
+            <div className="label">Arahkan kursor / ketuk garis untuk rincian tiap bulan</div>
           </div>
           <div className="card">
             <div className="card-head"><h3>Masuk vs Keluar per Bulan</h3><span className="label">12 bulan</span></div>
