@@ -27,25 +27,27 @@ export function Avatar({ nama, foto, size = 44 }) {
   );
 }
 
-export function SidebarNav() {
+export function MobileBar({ open, onToggle }) {
+  return (
+    <header className="mobilebar">
+      <button className="hamburger" onClick={onToggle} aria-label="Buka menu" aria-expanded={!!open}>
+        ☰
+      </button>
+      <span className="mobilebar-title">💰 KasSave</span>
+      <span style={{ width: 44 }} />
+    </header>
+  );
+}
+
+export function SidebarDrawer({ open, onClose }) {
   const path = usePathname();
   const { profile } = useProfile();
-  const [open, setOpen] = useState(false);
-  const close = () => setOpen(false);
-
   return (
     <>
-      <header className="mobilebar">
-        <button className="hamburger" onClick={() => setOpen((v) => !v)} aria-label="Buka menu" aria-expanded={open}>
-          ☰
-        </button>
-        <span className="mobilebar-title">💰 KasSave</span>
-        <span style={{ width: 44 }} />
-      </header>
-      {open && <div className="drawer-overlay" onClick={close} aria-hidden="true" />}
+      {open && <div className="drawer-overlay" onClick={onClose} aria-hidden="true" />}
       <aside className={`sidebar${open ? ' open' : ''}`}>
         <h2>💰 KasSave</h2>
-        <Link href="/profil" onClick={close} className={path.startsWith('/profil') ? 'active' : ''} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+        <Link href="/profil" onClick={onClose} className={path.startsWith('/profil') ? 'active' : ''} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <Avatar nama={profile.nama} foto={profile.foto} size={40} />
           <span>
             <div style={{ fontWeight: 700 }}>{profile.nama || 'Atur nama...'}</div>
@@ -53,11 +55,22 @@ export function SidebarNav() {
           </span>
         </Link>
         {MENU.map((m) => (
-          <Link key={m.href} href={m.href} onClick={close} className={path.startsWith(m.href) ? 'active' : ''}>
+          <Link key={m.href} href={m.href} onClick={onClose} className={path.startsWith(m.href) ? 'active' : ''}>
             {m.icon} {m.label}
           </Link>
         ))}
       </aside>
+    </>
+  );
+}
+
+export function SidebarNav() {
+  const [open, setOpen] = useState(false);
+  const close = () => setOpen(false);
+  return (
+    <>
+      <MobileBar open={open} onToggle={() => setOpen((v) => !v)} />
+      <SidebarDrawer open={open} onClose={close} />
     </>
   );
 }

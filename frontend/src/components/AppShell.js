@@ -1,14 +1,19 @@
 'use client';
+import { useState } from 'react';
 import { usePathname } from 'next/navigation';
-import { SidebarNav } from './Sidebar';
+import { MobileBar, SidebarDrawer } from './Sidebar';
 
 export default function AppShell({ children }) {
   const path = usePathname();
+  const [open, setOpen] = useState(false);
   if (path === '/') return <>{children}</>;
   return (
-    <div className="layout">
-      <SidebarNav />
-      <main className="main">{children}</main>
-    </div>
+    <>
+      <MobileBar open={open} onToggle={() => setOpen((v) => !v)} />
+      <div className="layout">
+        <SidebarDrawer open={open} onClose={() => setOpen(false)} />
+        <main className="main">{children}</main>
+      </div>
+    </>
   );
 }
