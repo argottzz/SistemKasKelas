@@ -203,9 +203,11 @@ export default function DashboardPage() {
               </select>
             </div>
             {rekap && (
-              <div className="label" style={{ marginBottom: 8 }}>
-                Rekap {monthLabel(month)}: masuk {rupiah(rekap.masuk)} • keluar {rupiah(rekap.keluar)} • bersih {rupiah(rekap.masuk - rekap.keluar)}{' '}
-                <button className="btn ghost" style={{ minHeight: 32, padding: '4px 12px', marginLeft: 6 }} onClick={eksporBulan}>Export bulan ini</button>
+              <div className="rekap-box">
+                <p className="label rekap-text" style={{ marginBottom: 0 }}>
+                  Rekap {monthLabel(month)}: masuk {rupiah(rekap.masuk)} • keluar {rupiah(rekap.keluar)} • bersih {rupiah(rekap.masuk - rekap.keluar)}
+                </p>
+                <button className="btn ghost rekap-btn" onClick={eksporBulan}>Export bulan ini</button>
               </div>
             )}
             {groups.map((g) => (
