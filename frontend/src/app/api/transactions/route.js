@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseServer } from '../../../lib/supabase-server';
+import { requireSession } from '../../../lib/supabase-route';
 import { validateTx } from '../../../lib/validate';
 
 export const runtime = 'nodejs';
@@ -29,7 +29,8 @@ function normKategori(v) {
 
 export async function GET(req) {
   try {
-    const sb = supabaseServer();
+    const { sb, user } = await requireSession();
+    if (!user) return errJson('Belum login.', 'UNAUTHORIZED', 401);
     const sp = req.nextUrl.searchParams;
     const jenis = sp.get('jenis');
     const q = sp.get('q');
@@ -91,7 +92,8 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const sb = supabaseServer();
+    const { sb, user } = await requireSession();
+    if (!user) return errJson('Belum login.', 'UNAUTHORIZED', 401);
     const b = await req.json();
     const input = {
       jenis: b.jenis,

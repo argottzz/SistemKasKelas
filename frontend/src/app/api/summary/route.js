@@ -1,5 +1,6 @@
 import { NextResponse } from 'next/server';
-import { supabaseServer, summarize } from '../../../lib/supabase-server';
+import { requireSession } from '../../../lib/supabase-route';
+import { summarize } from '../../../lib/supabase-server';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -10,7 +11,13 @@ const NO_STORE = { 'Cache-Control': 'no-store, no-cache, must-revalidate' };
 
 export async function GET() {
   try {
-    const sb = supabaseServer();
+    const { sb, user } = await requireSession();
+    if (!user) {
+      return NextResponse.json(
+        { message: 'Belum login.' },
+        { status: 401, headers: NO_STORE }
+      );
+    }
     const { data, error } = await sb.from('transactions').select('jenis,nominal');
     if (error) throw error;
     const s = summarize(data);

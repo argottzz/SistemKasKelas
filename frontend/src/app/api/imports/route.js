@@ -1,12 +1,13 @@
 import { NextResponse } from 'next/server';
-import { supabaseServer } from '../../../lib/supabase-server';
+import { requireSession } from '../../../lib/supabase-route';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const sb = supabaseServer();
+    const { sb, user } = await requireSession();
+    if (!user) return NextResponse.json({ message: 'Belum login.' }, { status: 401 });
     const { data, error } = await sb.from('import_batches').select('*').order('id', { ascending: false }).limit(50);
     if (error) throw error;
     return NextResponse.json({ data });

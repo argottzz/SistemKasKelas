@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import { supabaseServer } from '../../../../lib/supabase-server';
+import { requireSession } from '../../../../lib/supabase-route';
 import { norm, keyOf } from '../../../../lib/validate';
 
 export const runtime = 'nodejs';
@@ -7,7 +7,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
   try {
-    const sb = supabaseServer();
+    const { sb, user } = await requireSession();
+    if (!user) return NextResponse.json({ message: 'Belum login.' }, { status: 401 });
     const { namaFile, fileHash, rows } = await req.json();
     if (!fileHash || !Array.isArray(rows) || !rows.length) {
       return NextResponse.json({ message: 'Data konfirmasi tidak lengkap' }, { status: 400 });
