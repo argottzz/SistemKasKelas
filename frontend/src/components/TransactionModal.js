@@ -8,6 +8,7 @@ const TABS = [
   { key: 'income', label: 'Pemasukan', icon: 'in', color: 'var(--primary)', placeholder: 'cth: Iuran kas minggu ini' },
   { key: 'expense', label: 'Pengeluaran', icon: 'out', color: 'var(--ink)', placeholder: 'cth: Beli spidol dan isi ulang' },
   { key: 'savings', label: 'Tabungan', icon: 'savings', color: 'var(--primary)', placeholder: 'cth: Setoran tabungan ke guru' },
+  { key: 'opening_balance', label: 'Saldo Awal', icon: 'opening', color: 'var(--primary)', placeholder: 'cth: Sisa kas kelas 10' },
 ];
 
 const today = () => {

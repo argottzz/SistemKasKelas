@@ -185,6 +185,7 @@ export default function DashboardPage() {
               <button className="quick-btn solid" onClick={() => bukaModal('income')}><Icon name="in" size={18} /><br />Pemasukan</button>
               <button className="quick-btn" onClick={() => bukaModal('expense')}><Icon name="out" size={18} /><br />Pengeluaran</button>
               <button className="quick-btn" onClick={() => bukaModal('savings')}><Icon name="savings" size={18} /><br />Tabungan</button>
+              <button className="quick-btn" onClick={() => bukaModal('opening_balance')}><Icon name="opening" size={18} /><br />Saldo Awal</button>
             </div>
           </div>
           <div className="card">

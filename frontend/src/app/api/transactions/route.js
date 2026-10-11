@@ -4,11 +4,15 @@ import { validateTx } from '../../../lib/validate';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
+export const revalidate = 0;
+export const fetchCache = 'force-no-store';
+
+const NO_STORE = { 'Cache-Control': 'no-store, no-cache, must-revalidate' };
 
 // Bentuk error konsisten: { message, error: { code, message } }.
 // Field `message` dipertahankan agar UI lama tetap jalan (aditif).
 function errJson(message, code, status) {
-  return NextResponse.json({ message, error: { code, message } }, { status });
+  return NextResponse.json({ message, error: { code, message } }, { status, headers: NO_STORE });
 }
 
 const clamp = (n, min, max, fb) => {
@@ -79,7 +83,7 @@ export async function GET(req) {
     body.pagination = hasPaging
       ? { page, pageSize, totalItems, totalPages: Math.max(1, Math.ceil(totalItems / pageSize)) }
       : { page: 1, pageSize: size, totalItems, totalPages: 1 };
-    return NextResponse.json(body);
+    return NextResponse.json(body, { headers: NO_STORE });
   } catch (e) {
     return errJson(e.message || 'Gagal memuat transaksi', 'SERVER_ERROR', 500);
   }
