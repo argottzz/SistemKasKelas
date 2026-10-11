@@ -77,8 +77,8 @@ img { max-width: 100%; }
 .brand-logo { width: 30px; height: 30px; border-radius: 9px; object-fit: cover; background: #fff; flex-shrink: 0; }
 .mobilebar-title { font-weight: 700; font-size: 17px; display: flex; gap: 8px; align-items: center; }
 .sidebar a { padding: 11px 12px; border-radius: 12px; font-size: 14px; font-weight: 600; color: var(--sidebar-ink); opacity: .8; display: flex; gap: 10px; align-items: center; }
-.sidebar a:hover { background: rgba(47, 163, 107, .25); opacity: 1; }
-.sidebar a.active { background: var(--sidebar-active); color: #fff; opacity: 1; }
+.sidebar a:hover { background: rgba(255, 255, 255, .08); opacity: 1; }
+.sidebar a.active { background: rgba(255, 255, 255, .14); color: #fff; opacity: 1; box-shadow: inset 3px 0 0 var(--primary); }
 .side-profile { margin-top: auto; background: rgba(47, 163, 107, .18); border: 1px solid var(--line); border-radius: 14px; padding: 12px; }
 .theme-row { display: flex; align-items: center; justify-content: space-between; padding: 11px 12px; font-size: 14px; font-weight: 600; color: var(--sidebar-ink); opacity: .9; }
 .theme-switch { position: relative; width: 46px; height: 26px; border-radius: 999px; border: 1px solid var(--line); background: rgba(219, 226, 239, .2); cursor: pointer; flex-shrink: 0; }
