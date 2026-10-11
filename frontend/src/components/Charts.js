@@ -41,6 +41,14 @@ export function MonthlyFlow({ data }) {
   const vals = data.map((d) => d.net);
   const lo = Math.min(...vals, 0), hi = Math.max(...vals, 0);
   const span = hi - lo || 1;
+  // Tick sumbu Y bulat-bulat (snap 1 / 2 / 2.5 / 5 x orde) biar label rapi.
+  const rawStep = span / 3;
+  const mag = Math.pow(10, Math.floor(Math.log10(rawStep)));
+  const norm = rawStep / mag;
+  const step = (norm >= 5 ? 5 : norm >= 2.5 ? 2.5 : norm >= 2 ? 2 : 1) * mag;
+  const t0 = Math.floor(lo / step) * step;
+  const ticks = [0, 1, 2, 3, 4, 5].map((i) => t0 + i * step).filter((v) => v >= lo && v <= hi);
+  const halo = { paintOrder: 'stroke', stroke: 'var(--card)', strokeWidth: 4 };
   const X = (i) => padX + (i / (data.length - 1)) * (W - padX * 2);
   const Y = (v) => padT + (1 - (v - lo) / span) * (H - padT - padB);
   const line = data.map((d, i) => `${i === 0 ? 'M' : 'L'}${X(i).toFixed(1)},${Y(d.net).toFixed(1)}`).join(' ');
@@ -50,7 +58,6 @@ export function MonthlyFlow({ data }) {
     if (a >= 1e3) return `${Math.round(v / 1e3)} rb`;
     return `${v}`;
   };
-  const ticks = [0, 1, 2, 3].map((i) => lo + (span * i) / 3);
   let peak = 0;
   data.forEach((d, i) => { if (d.net > data[peak].net) peak = i; });
   const px = X(peak), py = Y(data[peak].net);
@@ -66,13 +73,13 @@ export function MonthlyFlow({ data }) {
       {ticks.map((t, i) => (
         <g key={i}>
           <line x1={padX} y1={Y(t)} x2={W - padX} y2={Y(t)} stroke="currentColor" strokeOpacity=".25" strokeDasharray="4 4" />
-          <text x={padX + 2} y={Y(t) - 4} fontSize="10" fill="currentColor">{shortRp(Math.round(t))}</text>
+          <text x={padX + 2} y={Y(t) - 4} fontSize="10" fill="currentColor" style={halo}>{shortRp(Math.round(t))}</text>
         </g>
       ))}
       <path d={`${line} L${X(data.length - 1)},${H - padB} L${X(0)},${H - padB} Z`} fill={`url(#f${gid})`} />
       <path d={line} fill="none" stroke="#E8833A" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
       <circle cx={px} cy={py} r="5" fill="#E8833A" stroke="#fff" strokeWidth="2" />
-      <text x={px} y={Math.max(12, py - 10)} textAnchor={anchor} fontSize="12" fontWeight="800" fill="#E8833A">
+      <text x={px} y={Math.max(12, py - 10)} textAnchor={anchor} fontSize="12" fontWeight="800" fill="#E8833A" style={halo}>
         {shortRp(data[peak].net)}
       </text>
       {data.map((d, i) => (
