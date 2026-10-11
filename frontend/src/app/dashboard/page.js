@@ -137,19 +137,16 @@ export default function DashboardPage() {
           <div className="k"><span>Total Pemasukan</span><Icon name="in" size={17} /></div>
           <div className="v">{sum ? rupiah(sum.total_income) : '...'}</div>
           <div className="sub">{pct(sum?.total_income || 0)}% dari dana masuk</div>
-          <AreaChart points={days.map((d) => d.income)} height={56} />
         </div>
         <div className="fin-card navy">
           <div className="k"><span>Total Pengeluaran</span><Icon name="out" size={17} /></div>
           <div className="v">{sum ? rupiah(sum.total_expense) : '...'}</div>
           <div className="sub">{pct(sum?.total_expense || 0)}% dari dana masuk</div>
-          <AreaChart points={days.map((d) => d.expense)} height={56} />
         </div>
         <div className="fin-card">
           <div className="k"><span>Total Tabungan</span><Icon name="savings" size={17} /></div>
           <div className="v">{sum ? rupiah(sum.total_savings) : '...'}</div>
           <div className="sub">{pct(sum?.total_savings || 0)}% dari dana masuk</div>
-          <AreaChart points={days.map((d) => d.savings)} height={56} />
         </div>
       </div>
 
