@@ -1,7 +1,7 @@
 'use client';
 import { useId } from 'react';
 
-// Grafik area saldo kumulatif (SVG murni, tanpa library).
+// Grafik area saldo kumulatif (SVG murni, tanpa library). Palet 3-warna: primer 3F72AF.
 export function AreaChart({ points, height = 170 }) {
   const gid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const W = 320, H = 100;
@@ -18,13 +18,13 @@ export function AreaChart({ points, height = 170 }) {
     <svg viewBox={`0 0 ${W} ${H + 14}`} style={{ width: '100%', height, display: 'block' }} role="img" aria-label="Grafik saldo">
       <defs>
         <linearGradient id={`g${gid}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#2f54eb" stopOpacity=".35" />
-          <stop offset="1" stopColor="#2f54eb" stopOpacity="0" />
+          <stop offset="0" stopColor="#3F72AF" stopOpacity=".35" />
+          <stop offset="1" stopColor="#3F72AF" stopOpacity="0" />
         </linearGradient>
       </defs>
       <path d={`${line} L${W},${H + 14} L0,${H + 14} Z`} fill={`url(#g${gid})`} />
-      <path d={line} fill="none" stroke="#2f54eb" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
-      <circle cx={X(points.length - 1)} cy={Y(points[points.length - 1])} r="4" fill="#0f172a" />
+      <path d={line} fill="none" stroke="#3F72AF" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx={X(points.length - 1)} cy={Y(points[points.length - 1])} r="4" fill="#3F72AF" stroke="#fff" strokeWidth="1.5" />
     </svg>
   );
 }
@@ -48,7 +48,7 @@ export function WeekBars({ days }) {
   );
 }
 
-// Gauge setengah lingkaran: porsi pengeluaran dari total dana masuk.
+// Gauge setengah lingkaran: porsi pengeluaran dari total dana masuk. Satu warna primer (hemat palet).
 export function Gauge({ ratio, label }) {
   const r = 64, cx = 80, cy = 78;
   const arc = (a0, a1) => {
@@ -58,11 +58,11 @@ export function Gauge({ ratio, label }) {
   };
   const cl = Math.min(Math.max(ratio, 0), 1);
   return (
-    <svg viewBox="0 0 160 92" style={{ width: '100%', maxWidth: 260, display: 'block', margin: '0 auto' }} role="img" aria-label={label}>
-      <path d={arc(Math.PI, 0)} fill="none" stroke="#e8edf5" strokeWidth="13" strokeLinecap="round" />
-      <path d={arc(Math.PI, Math.PI - cl * Math.PI)} fill="none" stroke={cl < 0.34 ? '#2f54eb' : cl < 0.67 ? '#22c55e' : '#f97316'} strokeWidth="13" strokeLinecap="round" />
-      <text x={cx} y={cy - 12} textAnchor="middle" fontSize="19" fontWeight="800" fill="#0f172a">{Math.round(cl * 100)}%</text>
-      <text x={cx} y={cy + 4} textAnchor="middle" fontSize="10" fill="#64748b">{label}</text>
+    <svg viewBox="0 0 160 92" style={{ width: '100%', maxWidth: 260, display: 'block', margin: '0 auto', color: 'var(--ink)' }} role="img" aria-label={label}>
+      <path d={arc(Math.PI, 0)} fill="none" stroke="rgba(63,114,175,.25)" strokeWidth="13" strokeLinecap="round" />
+      <path d={arc(Math.PI, Math.PI - cl * Math.PI)} fill="none" stroke="#3F72AF" strokeWidth="13" strokeLinecap="round" />
+      <text x={cx} y={cy - 12} textAnchor="middle" fontSize="19" fontWeight="800" fill="currentColor">{Math.round(cl * 100)}%</text>
+      <text x={cx} y={cy + 4} textAnchor="middle" fontSize="10" fill="currentColor" opacity=".65">{label}</text>
     </svg>
   );
 }
