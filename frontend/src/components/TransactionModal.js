@@ -1,6 +1,7 @@
 'use client';
 import { useEffect, useState } from 'react';
 import { Icon } from './icons';
+import { KATEGORI } from '../lib/validate';
 
 const TABS = [
   { key: 'income', label: 'Pemasukan', icon: 'in', color: 'var(--primary)', placeholder: 'cth: Iuran kas minggu ini' },
@@ -13,25 +14,37 @@ const today = () => {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
 };
 
-export default function TransactionModal({ open, initialJenis = 'income', onClose, onSaved }) {
+export default function TransactionModal({ open, initialJenis = 'income', editTx = null, onClose, onSaved }) {
+  const isEdit = !!editTx;
   const [jenis, setJenis] = useState(initialJenis);
   const [tanggal, setTanggal] = useState(today());
   const [nominal, setNominal] = useState('');
   const [keterangan, setKeterangan] = useState('');
   const [penerima, setPenerima] = useState('Tabungan kelas');
+  const [kategori, setKategori] = useState('');
   const [err, setErr] = useState('');
   const [busy, setBusy] = useState(false);
 
   useEffect(() => {
     if (open) {
-      setJenis(initialJenis);
-      setTanggal(today());
-      setNominal('');
-      setKeterangan('');
-      setPenerima('Tabungan kelas');
+      if (editTx) {
+        setJenis(editTx.jenis || initialJenis);
+        setTanggal(editTx.tanggal || today());
+        setNominal(editTx.nominal ?? '');
+        setKeterangan(editTx.keterangan || '');
+        setPenerima(editTx.penerima || 'Tabungan kelas');
+        setKategori(editTx.kategori || '');
+      } else {
+        setJenis(initialJenis);
+        setTanggal(today());
+        setNominal('');
+        setKeterangan('');
+        setPenerima('Tabungan kelas');
+        setKategori('');
+      }
       setErr('');
     }
-  }, [open, initialJenis]);
+  }, [open, initialJenis, editTx]);
 
   useEffect(() => {
     const onKey = (e) => { if (e.key === 'Escape') onClose?.(); };
@@ -47,14 +60,16 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
     setErr('');
     setBusy(true);
     try {
-      const res = await fetch('/api/transactions', {
-        method: 'POST',
+      const payload = { jenis, nominal, tanggal, keterangan, penerima: jenis === 'savings' ? penerima : null, kategori: kategori || null };
+      const url = isEdit ? '/api/transactions/' + editTx.id : '/api/transactions';
+      const res = await fetch(url, {
+        method: isEdit ? 'PATCH' : 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ jenis, nominal, tanggal, keterangan, penerima: jenis === 'savings' ? penerima : null }),
+        body: JSON.stringify(payload),
       });
       const j = await res.json();
-      if (!res.ok) throw new Error(j.message || 'Gagal menyimpan');
-      onSaved?.();
+      if (!res.ok) throw new Error(j.message || j.error?.message || 'Gagal menyimpan');
+      onSaved?.(isEdit ? 'Data berhasil diubah' : undefined);
       onClose?.();
     } catch (ex) {
       setErr(ex.message);
@@ -67,7 +82,7 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
     <div className="modal-overlay" onClick={onClose}>
       <div className="modal" onClick={(e) => e.stopPropagation()} role="dialog" aria-modal="true">
         <div className="modal-head">
-          <h3 style={{ margin: 0 }}>Tambah Data</h3>
+          <h3 style={{ margin: 0 }}>{isEdit ? 'Ubah Data' : 'Tambah Data'}</h3>
           <button className="modal-x" onClick={onClose} aria-label="Tutup">×</button>
         </div>
         <div className="modal-tabs">
@@ -96,11 +111,17 @@ export default function TransactionModal({ open, initialJenis = 'income', onClos
           <label className="fld">Nominal (Rp)
             <input inputMode="numeric" type="number" min="1" step="1" value={nominal} onChange={(e) => setNominal(e.target.value)} placeholder="cth: 50000" required />
           </label>
+          <label className="fld">Kategori (opsional)
+            <select value={kategori} onChange={(e) => setKategori(e.target.value)}>
+              <option value="">— Tanpa kategori —</option>
+              {KATEGORI.map((k) => <option key={k} value={k}>{k}</option>)}
+            </select>
+          </label>
           <label className="fld">Keterangan
             <textarea rows={2} value={keterangan} onChange={(e) => setKeterangan(e.target.value)} placeholder={tab.placeholder} required />
           </label>
           <button className="btn" disabled={busy}>
-            {busy ? 'Menyimpan...' : `Simpan ${tab.label}`}
+            {busy ? 'Menyimpan...' : isEdit ? 'Simpan Perubahan' : `Simpan ${tab.label}`}
           </button>
         </form>
       </div>

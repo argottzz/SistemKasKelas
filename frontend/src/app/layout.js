@@ -1,6 +1,7 @@
 import './globals.css';
 import { ProfileProvider } from '../context/ProfileContext';
 import { ThemeProvider } from '../context/ThemeContext';
+import { ToastProvider } from '../components/Toast';
 import AppShell from '../components/AppShell';
 
 export const metadata = {
@@ -17,7 +18,9 @@ export default function RootLayout({ children }) {
       <body>
         <ThemeProvider>
           <ProfileProvider>
-            <AppShell>{children}</AppShell>
+            <ToastProvider>
+              <AppShell>{children}</AppShell>
+            </ToastProvider>
           </ProfileProvider>
         </ThemeProvider>
       </body>
