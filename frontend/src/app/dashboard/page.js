@@ -3,7 +3,7 @@ import { useEffect, useMemo, useState } from 'react';
 import { rupiah, fmtTanggal } from '../../lib/api';
 import { downloadExcel } from '../../lib/excel';
 import { useProfile } from '../../context/ProfileContext';
-import { AreaChart, WeekBars, Gauge } from '../../components/Charts';
+import { MonthlyFlow, WeekBars, Gauge } from '../../components/Charts';
 import TransactionModal from '../../components/TransactionModal';
 import { Icon, ICO_JENIS } from '../../components/icons';
 
@@ -51,13 +51,40 @@ export default function DashboardPage() {
 
   useEffect(() => { load(); }, []);
 
-  const byDate = [...rows].sort((a, b) => (a.tanggal < b.tanggal ? -1 : 1));
-  let run = 0;
-  const curve = byDate.map((r) => {
-    if (r.jenis === 'opening_balance' || r.jenis === 'income') run += Number(r.nominal);
-    else run -= Number(r.nominal);
-    return run;
-  });
+  // Agregat 12 bulan terakhir: masuk, keluar, tabungan, bersih per bulan.
+  const flowMonths = useMemo(() => {
+    const out = [];
+    const base = new Date();
+    base.setDate(1);
+    for (let i = 11; i >= 0; i--) {
+      const t = new Date(base.getFullYear(), base.getMonth() - i, 1);
+      const key = `${t.getFullYear()}-${String(t.getMonth() + 1).padStart(2, '0')}`;
+      const list = rows.filter((r) => String(r.tanggal || '').startsWith(key));
+      const sumJenis = (...js) => list.filter((r) => js.includes(r.jenis)).reduce((a, r) => a + Number(r.nominal), 0);
+      const masuk = sumJenis('income', 'opening_balance');
+      const keluar = sumJenis('expense', 'savings');
+      out.push({
+        key,
+        label: t.toLocaleDateString('id-ID', { month: 'short' }),
+        income: sumJenis('income'),
+        expense: sumJenis('expense'),
+        savings: sumJenis('savings'),
+        masuk,
+        keluar,
+        net: masuk - keluar,
+      });
+    }
+    return out;
+  }, [rows]);
+
+  // Perubahan bulan berjalan vs bulan lalu (%). Nol -> null (tampil '—').
+  const momOf = (get) => {
+    if (flowMonths.length < 2) return null;
+    const cur = get(flowMonths[flowMonths.length - 1]);
+    const prev = get(flowMonths[flowMonths.length - 2]);
+    if (!prev) return null;
+    return Math.round(((cur - prev) / prev) * 100);
+  };
 
   const days = [];
   for (let i = range - 1; i >= 0; i--) {
@@ -77,6 +104,23 @@ export default function DashboardPage() {
   const inflow = (sum?.opening_balance || 0) + (sum?.total_income || 0);
   const ratio = inflow > 0 ? (sum?.total_expense || 0) / inflow : 0;
   const pct = (v) => (inflow > 0 ? Math.round((v / inflow) * 100) : 0);
+
+  // Kartu statistik: badge % bulan-ke-bulan. Baik = hijau, buruk = merah.
+  const statCards = [
+    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', icon: 'in', color: '#3F72AF', soft: 'rgba(63,114,175,.15)', mom: momOf((m) => m.income), goodWhenUp: true },
+    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', icon: 'out', color: '#7C5CBF', soft: 'rgba(124,92,191,.15)', mom: momOf((m) => m.expense), goodWhenUp: false },
+    { label: 'Total Tabungan', value: sum ? rupiah(sum.total_savings) : '...', icon: 'savings', color: '#E8833A', soft: 'rgba(232,131,58,.15)', mom: momOf((m) => m.savings), goodWhenUp: true },
+  ];
+  const momColor = (c) => {
+    if (c.mom === null || c.mom === undefined) return 'var(--muted)';
+    if (c.mom === 0) return 'var(--muted)';
+    const good = c.goodWhenUp ? c.mom > 0 : c.mom < 0;
+    return good ? '#1E9E6A' : '#D64545';
+  };
+  const momText = (c) => {
+    if (c.mom === null || c.mom === undefined) return '—';
+    return `${c.mom > 0 ? '+' : ''}${c.mom}%`;
+  };
 
   const months = useMemo(() => {
     const m = [...new Set(rows.map((r) => String(r.tanggal || '').slice(0, 7)).filter(Boolean))].sort().reverse();
@@ -154,29 +198,48 @@ export default function DashboardPage() {
       </div>
 
       <div className="fin-grid">
-        <div className="fin-card solid">
-          <div className="k"><span>Total Pemasukan</span><Icon name="in" size={17} /></div>
-          <div className="v">{sum ? rupiah(sum.total_income) : '...'}</div>
-          <div className="sub">{pct(sum?.total_income || 0)}% dari dana masuk</div>
-        </div>
-        <div className="fin-card navy">
-          <div className="k"><span>Total Pengeluaran</span><Icon name="out" size={17} /></div>
-          <div className="v">{sum ? rupiah(sum.total_expense) : '...'}</div>
-          <div className="sub">{pct(sum?.total_expense || 0)}% dari dana masuk</div>
-        </div>
-        <div className="fin-card">
-          <div className="k"><span>Total Tabungan</span><Icon name="savings" size={17} /></div>
-          <div className="v">{sum ? rupiah(sum.total_savings) : '...'}</div>
-          <div className="sub">{pct(sum?.total_savings || 0)}% dari dana masuk</div>
-        </div>
+        {statCards.map((c) => (
+          <div className="card stat-card" key={c.label}>
+            <div className="stat-ico" style={{ background: c.soft, color: c.color }}><Icon name={c.icon} size={22} /></div>
+            <div style={{ minWidth: 0 }}>
+              <div className="v">{c.value}</div>
+              <div className="k">{c.label}</div>
+            </div>
+            <div className="stat-mom" style={{ color: momColor(c) }}>{momText(c)}</div>
+          </div>
+        ))}
       </div>
 
       <div className="dash-grid">
         <div style={{ display: 'grid', gap: 16, minWidth: 0 }}>
           <div className="card">
-            <div className="card-head"><h3>Pergerakan Saldo</h3><span className="label">Mingguan</span></div>
-            <div className="label">Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
-            <AreaChart points={curve} />
+            <div className="card-head"><h3>Arus Kas Bulanan</h3><span className="label">bersih per bulan • 12 bulan</span></div>
+            <MonthlyFlow data={flowMonths} />
+            <div className="label">Titik = bulan tertinggi • hijau di atas nol, minus di bawah</div>
+          </div>
+          <div className="card">
+            <div className="card-head"><h3>Masuk vs Keluar per Bulan</h3><span className="label">12 bulan</span></div>
+            <WeekBars days={flowMonths.map((m) => ({ label: m.label, income: m.income, expense: m.expense, savings: m.savings }))} />
+            <div className="label">Garis penuh = masuk, garis outline = keluar</div>
+          </div>
+          <div className="card">
+            <div className="card-head"><h3>Ringkasan Bulanan</h3><span className="label">6 bulan terakhir</span></div>
+            <div className="table-wrap" style={{ boxShadow: 'none', border: 0 }}>
+              <table>
+                <thead><tr><th>Bulan</th><th>Masuk</th><th>Keluar</th><th>Tabungan</th><th>Status</th></tr></thead>
+                <tbody>
+                  {[...flowMonths].slice(-6).reverse().map((m) => (
+                    <tr key={m.key}>
+                      <td data-label="Bulan">{monthLabel(m.key)}</td>
+                      <td data-label="Masuk">{rupiah(m.masuk)}</td>
+                      <td data-label="Keluar">{rupiah(m.keluar)}</td>
+                      <td data-label="Tabungan">{rupiah(m.savings)}</td>
+                      <td data-label="Status"><span className={`badge ${m.net >= 0 ? 'income' : 'expense'}`}>{m.net >= 0 ? 'Surplus' : 'Defisit'}</span></td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
           </div>
           <div className="card">
             <div className="card-head"><h3>Aksi Cepat</h3></div>

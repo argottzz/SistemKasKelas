@@ -205,6 +205,12 @@ th { background: rgba(63, 114, 175, .1); font-size: 11px; color: var(--muted); t
 .hero-spark { min-width: 0; }
 .fin-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 16px; }
 .fin-card { border-radius: var(--radius); padding: 16px; border: 1px solid var(--line); border-top: 3px solid var(--primary); background: var(--card); color: var(--ink); box-shadow: var(--shadow); min-width: 0; }
+/* ===== Kartu statistik ala referensi (ikon lingkaran + badge MoM) ===== */
+.stat-card { display: flex; gap: 12px; align-items: center; }
+.stat-ico { width: 48px; height: 48px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; }
+.stat-card .v { font-size: 18px; font-weight: 800; letter-spacing: -0.01em; }
+.stat-card .k { font-size: 13px; color: var(--muted); }
+.stat-mom { margin-left: auto; font-size: 13px; font-weight: 800; white-space: nowrap; flex-shrink: 0; }
 .fin-card.solid, .fin-card.navy { background: var(--card); border: 1px solid var(--line); border-top: 3px solid var(--primary); color: var(--ink); }
 .fin-card .k { font-size: 13px; font-weight: 500; color: var(--muted); display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; }
 .fin-card .v { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }

@@ -29,6 +29,58 @@ export function AreaChart({ points, height = 170 }) {
   );
 }
 
+// Arus kas bulanan: garis + area nilai bersih per bulan, sumbu X nama bulan,
+// gridline Y, titik + label di puncak. Data: [{label, net}].
+export function MonthlyFlow({ data }) {
+  if (!data || data.length < 2) {
+    return <div className="label" style={{ padding: '40px 0', textAlign: 'center' }}>Belum cukup data untuk grafik</div>;
+  }
+  const gid = useId().replace(/[^a-zA-Z0-9]/g, '');
+  const W = 640, H = 170, padB = 24, padT = 26, padX = 10;
+  const vals = data.map((d) => d.net);
+  const lo = Math.min(...vals, 0), hi = Math.max(...vals, 0);
+  const span = hi - lo || 1;
+  const X = (i) => padX + (i / (data.length - 1)) * (W - padX * 2);
+  const Y = (v) => padT + (1 - (v - lo) / span) * (H - padT - padB);
+  const line = data.map((d, i) => `${i === 0 ? 'M' : 'L'}${X(i).toFixed(1)},${Y(d.net).toFixed(1)}`).join(' ');
+  const shortRp = (v) => {
+    const a = Math.abs(v);
+    if (a >= 1e6) return `${(v / 1e6).toLocaleString('id-ID', { maximumFractionDigits: 1 })} jt`;
+    if (a >= 1e3) return `${Math.round(v / 1e3)} rb`;
+    return `${v}`;
+  };
+  const ticks = [0, 1, 2, 3].map((i) => lo + (span * i) / 3);
+  let peak = 0;
+  data.forEach((d, i) => { if (d.net > data[peak].net) peak = i; });
+  const px = X(peak), py = Y(data[peak].net);
+  const anchor = peak <= 1 ? 'start' : peak >= data.length - 2 ? 'end' : 'middle';
+  return (
+    <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block', color: 'var(--muted)' }} role="img" aria-label="Grafik arus kas bulanan">
+      <defs>
+        <linearGradient id={`f${gid}`} x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stopColor="#E8833A" stopOpacity=".35" />
+          <stop offset="1" stopColor="#E8833A" stopOpacity="0" />
+        </linearGradient>
+      </defs>
+      {ticks.map((t, i) => (
+        <g key={i}>
+          <line x1={padX} y1={Y(t)} x2={W - padX} y2={Y(t)} stroke="currentColor" strokeOpacity=".25" strokeDasharray="4 4" />
+          <text x={padX + 2} y={Y(t) - 4} fontSize="10" fill="currentColor">{shortRp(Math.round(t))}</text>
+        </g>
+      ))}
+      <path d={`${line} L${X(data.length - 1)},${H - padB} L${X(0)},${H - padB} Z`} fill={`url(#f${gid})`} />
+      <path d={line} fill="none" stroke="#E8833A" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+      <circle cx={px} cy={py} r="5" fill="#E8833A" stroke="#fff" strokeWidth="2" />
+      <text x={px} y={Math.max(12, py - 10)} textAnchor={anchor} fontSize="12" fontWeight="800" fill="#E8833A">
+        {shortRp(data[peak].net)}
+      </text>
+      {data.map((d, i) => (
+        <text key={i} x={X(i)} y={H - 8} textAnchor="middle" fontSize="10" fill="currentColor">{d.label}</text>
+      ))}
+    </svg>
+  );
+}
+
 // Batang 7 hari terakhir: pemasukan (biru) vs pengeluaran (oranye).
 export function WeekBars({ days }) {
   if (!days || !days.length) return <div className="label">Belum ada data minggu ini</div>;
