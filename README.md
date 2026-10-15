@@ -3,8 +3,10 @@
 Web pencatatan kas kelas — responsif (HP + laptop) + PWA. Satu codebase Next.js, API Express, MySQL.
 
 ## Data awal
-44 transaksi Kelas 11 dari `Laporan Kas RPL 2 2627.xlsx` sudah masuk DB:
-opening 476.000 + income 2.026.500 − expense 577.500 − savings 1.000.000 = **saldo 925.000**.
+48 transaksi Kelas 11 dari `Laporan Kas RPL 2 2627.xlsx` sudah masuk DB (Supabase live):
+opening 476.000 + income 2.421.500 − expense 666.000 − savings_baru 1.000.000 = **bendahara 1.231.500**.
+Tabungan total = 1.000.000 + bawaan 5.200.000 (Excel M9) = **6.200.000**.
+Total Pemasukan / aset (M14) = bendahara + tabungan = **7.431.500**.
 
 ## Menu
 Dashboard (ringkasan + transaksi terbaru) • Laporan (riwayat + tombol + Tambah popup pemasukan/pengeluaran/tabungan) • Impor Excel • Pengguna (khusus bendahara: ubah role pengurus↔bendahara).

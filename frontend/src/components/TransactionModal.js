@@ -46,14 +46,17 @@ export default function TransactionModal({ open, initialJenis = 'income', editTx
         setKategori('');
       }
       setErr('');
-      // Saldo dasar untuk prediksi: pakai prop bila ada, bila tidak ambil fresh dari server.
+      // Saldo dasar untuk prediksi: kas di tangan (bendahara), bukan total aset.
       if (saldoTersedia !== null && saldoTersedia !== undefined) {
         setBaseSaldo(saldoTersedia);
       } else {
         (async () => {
           try {
             const r = await fetch('/api/summary', { cache: 'no-store' });
-            if (r.ok) setBaseSaldo((await r.json()).saldo_tersedia ?? 0);
+            if (r.ok) {
+              const js = await r.json();
+              setBaseSaldo(js.uang_dibendahara ?? js.saldo_akhir ?? js.saldo_tersedia ?? 0);
+            }
           } catch {}
         })();
       }
@@ -123,8 +126,8 @@ export default function TransactionModal({ open, initialJenis = 'income', editTx
         {err && <div className="error" style={{ marginBottom: 10 }}>{err}</div>}
         {baseSaldo !== null && baseSaldo !== undefined && (
           <div className="label" style={{ marginBottom: 0 }}>
-            Saldo tersedia saat ini {rupiah(baseSaldo)}
-            {prediksi !== null && <> • Saldo nanti jadi {rupiah(prediksi)}</>}
+            Uang di bendahara saat ini {rupiah(baseSaldo)}
+            {prediksi !== null && <> • Nanti jadi {rupiah(prediksi)}</>}
           </div>
         )}
         <form onSubmit={submit} style={{ display: 'grid', gap: 12 }}>

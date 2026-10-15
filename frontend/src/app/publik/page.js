@@ -47,9 +47,9 @@ export default function PublikPage() {
 
       <div className="hero-card">
         <div>
-          <div className="hero-label">Saldo Tersedia</div>
-          <div className="hero-value">{sum ? rupiah(sum.saldo_tersedia) : '...'}</div>
-          <div className="hero-sub">Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
+          <div className="hero-label">Uang di Bendahara • Publik</div>
+          <div className="hero-value">{sum ? rupiah(sum.uang_dibendahara ?? sum.saldo_akhir) : '...'}</div>
+          <div className="hero-sub">Total pemasukan {sum ? rupiah(sum.total_pemasukan ?? sum.saldo_tersedia) : '...'} • Tabungan {sum ? rupiah(sum.total_savings) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
         </div>
       </div>
 
@@ -57,7 +57,7 @@ export default function PublikPage() {
         <div className="card stat-card">
           <div className="stat-ico" style={{ background: 'rgba(47,163,107,.15)', color: '#2FA36B' }}><Icon name="in" size={26} /></div>
           <div style={{ minWidth: 0 }}>
-            <div className="v">{sum ? rupiah(sum.total_income) : '...'}</div>
+            <div className="v">{sum ? rupiah(sum.total_pemasukan ?? sum.total_income) : '...'}</div>
             <div className="k">Total Pemasukan</div>
           </div>
         </div>

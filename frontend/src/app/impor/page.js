@@ -61,13 +61,18 @@ export default function ImporPage() {
       });
       const j = await res.json();
       if (!res.ok) throw new Error(j.message || j.error?.message || 'Gagal menyimpan impor');
-      // Ambil saldo terbaru agar terlihat langsung ikut berubah (tetap 1.226.000-an bila data lama masih ada).
+      // Ambil saldo terbaru agar terlihat langsung ikut berubah.
       let saldoBaru = null;
+      let pemasukanBaru = null;
       try {
         const s = await fetch('/api/summary', { cache: 'no-store' });
-        if (s.ok) saldoBaru = (await s.json()).saldo_tersedia;
+        if (s.ok) {
+          const js = await s.json();
+          saldoBaru = js.uang_dibendahara ?? js.saldo_akhir;
+          pemasukanBaru = js.total_pemasukan ?? js.saldo_tersedia;
+        }
       } catch {}
-      toast?.show(`Impor berhasil: ${j.jumlah} baris.${saldoBaru !== null ? ` Saldo tersedia ${rupiah(saldoBaru)}.` : ''}`);
+      toast?.show(`Impor berhasil: ${j.jumlah} baris.${saldoBaru !== null ? ` Bendahara ${rupiah(saldoBaru)} • Pemasukan ${rupiah(pemasukanBaru)}.` : ''}`);
       setPv(null); setFile(null);
       loadHist();
     } catch (e) {
@@ -121,10 +126,15 @@ export default function ImporPage() {
           <h3>Langkah 2 & 3 — Pratinjau {pv.namaFile}</h3>
           <div className="stat-row">
             <div className="stat-box"><div className="t">Baris valid</div><div className="n">{pv.totals.count}</div></div>
-            <div className="stat-box"><div className="t">Saldo hasil file</div><div className="n">{rupiah(pv.saldoHasil)}</div></div>
-            <div className="stat-box"><div className="t">Masuk / Keluar</div><div className="n" style={{ fontSize: 14 }}>{rupiah(pv.totals.income)} / {rupiah(pv.totals.expense)}</div></div>
+            <div className="stat-box"><div className="t">Uang di Bendahara</div><div className="n">{rupiah(pv.uang_dibendahara ?? pv.saldoHasil)}</div></div>
+            <div className="stat-box"><div className="t">Total Pemasukan</div><div className="n">{rupiah(pv.totals.total_pemasukan ?? pv.totalPemasukan ?? pv.saldoHasil)}</div></div>
           </div>
-          <p className="label">Tabungan {rupiah(pv.totals.savings)} • Saldo awal {rupiah(pv.totals.opening)}</p>
+          <div className="stat-row">
+            <div className="stat-box"><div className="t">Masuk / Keluar</div><div className="n" style={{ fontSize: 14 }}>{rupiah(pv.totals.income)} / {rupiah(pv.totals.expense)}</div></div>
+            <div className="stat-box"><div className="t">Tabungan total</div><div className="n">{rupiah(pv.totals.total_savings ?? pv.totals.savings)}</div></div>
+            <div className="stat-box"><div className="t">Saldo awal</div><div className="n">{rupiah(pv.totals.opening)}</div></div>
+          </div>
+          <p className="label">Rumus: pemasukan = bendahara + tabungan (tabungan termasuk bawaan Rp5.200.000).</p>
           {pv.errors?.length > 0 && (
             <div className="error">
               <div style={{ fontWeight: 600, marginBottom: 4 }}>{pv.errors.length} baris perlu perhatian (10 pertama):</div>
