@@ -10,6 +10,7 @@ export default function PublikPage() {
   const [sum, setSum] = useState(null);
   const [rows, setRows] = useState([]);
   const [err, setErr] = useState('');
+  const [view, setView] = useState('bendahara');
 
   useEffect(() => {
     (async () => {
@@ -47,9 +48,12 @@ export default function PublikPage() {
 
       <div className="hero-card">
         <div>
-          <div className="hero-label">Uang di Bendahara • Publik</div>
-          <div className="hero-value">{sum ? rupiah(sum.uang_dibendahara ?? sum.saldo_akhir) : '...'}</div>
-          <div className="hero-sub">Total pemasukan {sum ? rupiah(sum.total_pemasukan ?? sum.saldo_tersedia) : '...'} • Tabungan {sum ? rupiah(sum.total_savings) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
+          <div className="seg" role="tablist" aria-label="Pilih tampil saldo">
+            <button type="button" role="tab" aria-selected={view === 'bendahara'} className={`seg-btn${view === 'bendahara' ? ' active' : ''}`} onClick={() => setView('bendahara')}>Uang di Bendahara</button>
+            <button type="button" role="tab" aria-selected={view === 'tabungan'} className={`seg-btn${view === 'tabungan' ? ' active' : ''}`} onClick={() => setView('tabungan')}>Tabungan</button>
+          </div>
+          <div className="hero-label">{view === 'bendahara' ? 'Uang di Bendahara • Publik' : 'Tabungan • Publik'}</div>
+          <div className="hero-value">{sum ? rupiah(view === 'bendahara' ? (sum.uang_dibendahara ?? sum.saldo_akhir) : sum.total_savings) : '...'}</div>
         </div>
       </div>
 
