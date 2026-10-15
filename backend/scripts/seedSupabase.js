@@ -12,7 +12,7 @@ const { supabase } = require('../src/config/supabase');
 const { parseKelas11Layout, totals } = require('../src/services/importService');
 
 const NAMA_FILE = 'Laporan Kas RPL 2 2627.xlsx';
-const TARGET = { opening: 476000, income: 2371500, expense: 621500, savings: 1000000, saldo: 1226000, count: 46 };
+const TARGET = { opening: 476000, income: 2421500, expense: 666000, savings: 1000000, saldo: 1231500, count: 48 };
 
 const norm = (s) => String(s || '').trim().toLowerCase().replace(/\s+/g, ' ');
 // Identitas transaksi konsisten di kedua format:
@@ -56,7 +56,7 @@ async function main() {
     console.error('[seed] Didapat:', { ...t, saldo, count: rows.length });
     process.exit(2);
   }
-  console.log('[seed] validasi OK (46 transaksi, saldo 1226000)');
+  console.log('[seed] validasi OK (48 transaksi, saldo 1231500)');
 
   const before = await backup();
 

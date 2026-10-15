@@ -83,6 +83,9 @@ function parseTemplate(ws) {
 }
 
 // Layout khusus Kelas 11: dipakai juga oleh seed (dipanggil dari script seed via modul ini bila perlu)
+// Dinamis: pindai semua baris (bukan hardcode 4..42 / 4..15 / L4 saja) agar
+// tahan terhadap tambahan baris Okt (36..47+), banyak baris nabung, dan label
+// bulan yang salah (10 & 15 Okt tertulis NOVEMBER tapi tanggalnya Oktober).
 async function parseKelas11Layout(buffer) {
   const ExcelJS2 = require('exceljs');
   const wb = new ExcelJS2.Workbook();
@@ -91,39 +94,72 @@ async function parseKelas11Layout(buffer) {
   const { parseTanggalIndonesia: p, toNumberID: n } = require('../utils/dateId');
   const rows = [];
   const errors = [];
+  // Nilai sel bisa berupa objek formula { result, formula } -> pakai result.
+  const val = (cell) => {
+    const v = cell ? cell.value : null;
+    if (v && typeof v === 'object') {
+      if (v.result !== undefined) return v.result;
+      if (v.richText) return v.richText.map((x) => x.text).join('');
+      if (v.text) return v.text;
+    }
+    return v;
+  };
+  const str = (v) => (v === null || v === undefined ? '' : String(v).trim());
   const push = (tglRaw, ket, jenis, nomRaw, penerima = null) => {
-    const tgl = p(tglRaw);
-    const nominal = n(nomRaw);
+    const tgl = tglRaw instanceof Date ? p(tglRaw) : p(tglRaw);
+    const nominal = n(nomRaw && nomRaw.result !== undefined ? nomRaw.result : nomRaw);
     if (!tgl || !nominal || !ket) { errors.push(`Lewati: ${ket} | ${tglRaw} | ${nomRaw}`); return; }
     rows.push({ tanggal_transaksi: tgl, keterangan: ket, jenis, nominal, penerima_tabungan: penerima, nama_kategori: null });
   };
-  push('23 Juli 2026', 'Sisa uang kas kelas 10', 'opening_balance', 476000);
-  // Pemasukan: kolom C/D/E (3,4,5) baris 4..42, lewati baris total
-  ws.eachRow((row, r) => {
-    if (r < 4 || r > 42) return;
-    const label = String(row.getCell(3).value || '').trim();
-    if (/^total/i.test(label)) return;
-    const tglRaw = row.getCell(4).value;
-    const nom = row.getCell(5).value;
-    if (tglRaw && nom && n(nom)) {
-      push(typeof tglRaw === 'string' ? tglRaw : String(tglRaw), `Iuran kas ${p(typeof tglRaw === 'string' ? tglRaw : String(tglRaw)) || ''}`.trim(), 'income', nom);
+  let hasOpening = false;
+  ws.eachRow((row) => {
+    const C = val(row.getCell(3)), D = val(row.getCell(4)), E = val(row.getCell(5));
+    const G = val(row.getCell(7)), H = val(row.getCell(8)), I = val(row.getCell(9)), J = val(row.getCell(10));
+    const L = val(row.getCell(12)), M = val(row.getCell(13));
+
+    // Saldo awal: C mengandung "sisa". Nominal bisa di D (file asli) atau E (export app).
+    if (typeof C === 'string' && /sisa/i.test(C)) {
+      const nominal = n(E) ?? n(D);
+      const tgl = p(D) || p(E);
+      if (nominal && !hasOpening) {
+        rows.push({ tanggal_transaksi: tgl || null, keterangan: str(C), jenis: 'opening_balance', nominal, penerima_tabungan: null, nama_kategori: null });
+        hasOpening = true;
+      } else if (!nominal) {
+        errors.push('Saldo awal tidak valid');
+      }
+    } else if (typeof C !== 'string' || !/^(total|saldo akhir|uang di bendahara|ringkasan|pemasukan|pengeluaran|tabungan)/i.test(str(C))) {
+      // Pemasukan: D tanggal valid + E nominal. Baris subtotal gugur sendiri.
+      const tglIn = D instanceof Date ? p(D) : p(D);
+      const nomIn = n(E);
+      if (tglIn && nomIn) {
+        rows.push({ tanggal_transaksi: tglIn, keterangan: `Iuran kas ${tglIn}`, jenis: 'income', nominal: nomIn, penerima_tabungan: null, nama_kategori: null });
+      }
+    } else if (/^saldo akhir/i.test(str(C))) {
+      // Baris "Saldo Akhir ..." adalah net bulanan (bukan transaksi) -> lewati.
+    }
+
+    // Pengeluaran (kolom G-J): lewati baris total/saldo/ringkasan.
+    if (typeof G !== 'string' || !/^(total|saldo|uang|ringkasan)/i.test(str(G))) {
+      const tglOut = H instanceof Date ? p(H) : p(H);
+      const nomOut = n(J);
+      if (tglOut && nomOut) {
+        const ket = str(I) || 'Pengeluaran';
+        rows.push({ tanggal_transaksi: tglOut, keterangan: ket, jenis: 'expense', nominal: nomOut, penerima_tabungan: null, nama_kategori: null });
+      }
+    }
+
+    // Nabung (kolom L-M): dukung banyak baris, lewati total/bawaan/ringkasan.
+    // Baris bawaan "Saldo tabungan bawaan" tidak punya tanggal valid -> gugur sendiri.
+    const tglSav = L instanceof Date ? p(L) : p(L);
+    const nomSav = n(M);
+    if (tglSav && nomSav) {
+      rows.push({ tanggal_transaksi: tglSav, keterangan: 'Setoran tabungan ke guru', jenis: 'savings', nominal: nomSav, penerima_tabungan: 'Guru / Wali Kelas', nama_kategori: null });
     }
   });
-  // Pengeluaran: kolom G/H/I/J (7,8,9,10)
-  ws.eachRow((row, r) => {
-    if (r < 4 || r > 15) return;
-    const label = String(row.getCell(7).value || '').trim();
-    if (/^total/i.test(label)) return;
-    const tglRaw = row.getCell(8).value;
-    const ket = row.getCell(9).value ? String(row.getCell(9).value).trim() : '';
-    const nom = row.getCell(10).value;
-    if (tglRaw && ket && nom && n(nom)) push(typeof tglRaw === 'string' ? tglRaw : String(tglRaw), ket, 'expense', nom);
-  });
-  // Tabungan: kolom L/M (12,13) baris 4
-  const tglNabung = ws.getCell('L4').value;
-  const nomNabung = ws.getCell('M4').value;
-  if (tglNabung && nomNabung) {
-    push(typeof tglNabung === 'string' ? tglNabung : String(tglNabung), 'Setoran tabungan ke guru', 'savings', nomNabung, 'Guru / Wali Kelas');
+  // Tanggal saldo awal tak diketahui -> ikuti pemasukan paling awal.
+  const firstIncome = rows.filter((r) => r.jenis === 'income').map((r) => r.tanggal_transaksi).sort()[0];
+  for (const r of rows) {
+    if (r.jenis === 'opening_balance' && !r.tanggal_transaksi) r.tanggal_transaksi = firstIncome || '2026-07-23';
   }
   return { rows, errors };
 }
