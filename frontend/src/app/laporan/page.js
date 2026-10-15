@@ -108,14 +108,12 @@ function LaporanDalam() {
     }
   };
 
-  const totalTampil = rows.reduce((a, r) => a + (r.jenis === 'expense' || r.jenis === 'savings' ? -Number(r.nominal) : Number(r.nominal)), 0);
-
   return (
     <>
       <div className="page-head">
         <div>
           <h2>Laporan Kas</h2>
-          <div className="greet-sub">{pagination.totalItems} transaksi • halaman {pagination.page} dari {pagination.totalPages}{sum ? ` • Bendahara ${rupiah(sum.uang_dibendahara ?? sum.saldo_akhir)} • Pemasukan ${rupiah(sum.total_pemasukan ?? sum.saldo_tersedia)}` : ''}</div>
+          <div className="greet-sub">{pagination.totalItems} transaksi • halaman {pagination.page} dari {pagination.totalPages}</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="btn ghost" onClick={ekspor}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="download" size={17} /> Export</span></button>
@@ -139,7 +137,7 @@ function LaporanDalam() {
       )}
 
       <div className="card" style={{ marginBottom: 12 }}>
-        <div className="card-head"><h3>Hasil tampil</h3><span className="label">{rows.length} baris • bersih {rupiah(totalTampil)}</span></div>
+        <div className="card-head"><h3>Hasil tampil</h3><span className="label">{rows.length} baris</span></div>
         <div className="filters" style={{ marginBottom: 0 }}>
           <select value={jenis} onChange={(e) => setJenis(e.target.value)} aria-label="Filter jenis">
             <option value="">Semua jenis</option>

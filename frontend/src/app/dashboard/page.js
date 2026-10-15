@@ -200,14 +200,6 @@ export default function DashboardPage() {
           </div>
           <div className="hero-label">{view === 'bendahara' ? 'Uang di Bendahara • KasSave' : 'Total Pemasukan • KasSave'}</div>
           <div className="hero-value">{sum ? rupiah(view === 'bendahara' ? (sum.uang_dibendahara ?? sum.saldo_akhir ?? sum.saldo_tersedia) : (sum.total_pemasukan ?? sum.saldo_tersedia)) : '...'}</div>
-          <div className="hero-sub">
-            {sum ? (
-              view === 'bendahara'
-                ? `Total pemasukan ${rupiah(sum.total_pemasukan ?? sum.saldo_tersedia)} • Tabungan ${rupiah(sum.total_savings)} • ${sum?.jumlah_transaksi ?? '...'} transaksi`
-                : `Tunai di tangan ${rupiah(sum.uang_dibendahara ?? sum.saldo_akhir)} • Tabungan ${rupiah(sum.total_savings)} • ${sum?.jumlah_transaksi ?? '...'} transaksi`
-            ) : '...'}
-          </div>
-          <div className="hero-sub" style={{ marginTop: 2 }}>Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • Rumus: pemasukan = bendahara + tabungan</div>
           <div className="hero-actions">
             <button className="btn" onClick={() => bukaModal('income')}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="plus" size={17} /> Pemasukan</span></button>
             <button className="btn-outline" onClick={() => bukaModal('expense')}>Pengeluaran</button>
