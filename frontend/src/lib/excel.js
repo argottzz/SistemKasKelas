@@ -159,5 +159,20 @@ export function totalsOf(rows) {
     else if (r.jenis === 'expense') t.expense += r.nominal;
     else if (r.jenis === 'savings') t.savings += r.nominal;
   }
-  return { ...t, saldo: t.opening + t.income - t.expense - t.savings, count: rows.length };
+  // Samakan dengan summarize(): bendahara = cash - savings_baru,
+  // tabungan_total = savings_baru + 5200000 bawaan, pemasukan = bendahara + tabungan.
+  const TABUNGAN_BAWAAN = 5200000;
+  const uang_dibendahara = t.opening + t.income - t.expense - t.savings;
+  const total_savings = t.savings + TABUNGAN_BAWAAN;
+  const total_pemasukan = uang_dibendahara + total_savings;
+  return {
+    ...t,
+    saldo: uang_dibendahara,
+    uang_dibendahara,
+    total_savings,
+    total_pemasukan,
+    saldo_tersedia: total_pemasukan,
+    total_pengeluaran_ringkas: total_pemasukan - t.expense,
+    count: rows.length,
+  };
 }

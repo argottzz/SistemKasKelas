@@ -3,7 +3,7 @@ const { getSummary, getRecent } = require('../services/dashboardService');
 async function summary(req, res, next) {
   try {
     const s = await getSummary();
-    res.json({ ...s, peringatan_saldo_besar: s.saldo_tersedia > 1000000 });
+    res.json({ ...s, peringatan_saldo_besar: s.uang_dibendahara > 1000000 });
   } catch (e) { next(e); }
 }
 

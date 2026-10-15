@@ -22,7 +22,7 @@ export async function GET() {
     if (error) throw error;
     const s = summarize(data);
     return NextResponse.json(
-      { ...s, peringatan_saldo_besar: s.saldo_tersedia > 1000000 },
+      { ...s, peringatan_saldo_besar: s.uang_dibendahara > 1000000 },
       { headers: NO_STORE }
     );
   } catch (e) {

@@ -1,5 +1,9 @@
 const { supabase } = require('../config/supabase');
 
+// Samakan dengan Excel asli Kelas 11 cell M9: SUM(tabungan_baru)+5200000.
+// 5200000 = saldo tabungan bawaan (bukan dari baris transaksi berjalan).
+const TABUNGAN_BAWAAN = 5200000;
+
 async function getSummary() {
   const { data, error } = await supabase.from('transactions').select('jenis,nominal');
   if (error) throw error;
@@ -11,12 +15,21 @@ async function getSummary() {
     else if (r.jenis === 'expense') expense += n;
     else if (r.jenis === 'savings') savings += n;
   }
+  const uang_dibendahara = opening + income - expense - savings;
+  const total_savings = savings + TABUNGAN_BAWAAN;
+  const total_pemasukan = uang_dibendahara + total_savings;
   return {
     opening_balance: opening,
     total_income: income,
     total_expense: expense,
-    total_savings: savings,
-    saldo_tersedia: opening + income - expense - savings,
+    total_savings,
+    savings_baru: savings,
+    tabungan_bawaan: TABUNGAN_BAWAAN,
+    uang_dibendahara,
+    total_pemasukan,
+    saldo_tersedia: total_pemasukan,
+    saldo_akhir: uang_dibendahara,
+    total_pengeluaran_ringkas: total_pemasukan - expense,
     jumlah_transaksi: data.length,
   };
 }

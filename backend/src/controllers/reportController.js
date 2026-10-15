@@ -1,6 +1,8 @@
 const { supabase } = require('../config/supabase');
 const { getSummary } = require('../services/dashboardService');
 
+const TABUNGAN_BAWAAN = 5200000;
+
 async function summary(req, res, next) {
   try {
     const { startDate, endDate } = req.query;
@@ -8,7 +10,7 @@ async function summary(req, res, next) {
       const s = await getSummary();
       return res.json({
         ...s,
-        saldo_akhir: s.saldo_tersedia,
+        saldo_akhir: s.uang_dibendahara,
         periode: { startDate: null, endDate: null },
       });
     }
@@ -30,7 +32,13 @@ async function summary(req, res, next) {
       total_income: income,
       total_expense: expense,
       total_savings: savings,
+      savings_baru: savings,
+      tabungan_bawaan: 0,
+      uang_dibendahara: opening + income - expense - savings,
+      total_pemasukan: opening + income,
+      saldo_tersedia: opening + income,
       saldo_akhir: opening + income - expense - savings,
+      total_pengeluaran_ringkas: opening + income - expense,
       jumlah_transaksi: data.length,
       periode: { startDate: startDate || null, endDate: endDate || null },
     });
