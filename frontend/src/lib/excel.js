@@ -15,19 +15,27 @@ function sortedMonths(rows) {
 }
 
 // rows: [{jenis, nominal, tanggal, keterangan, penerima}]
+// Format disamakan dengan teks S1: Pemasukan (per bulan + Saldo Akhir net),
+// Pengeluaran (per bulan + Total), Nabung (+ bawaan 5,2jt), Ringkasan 4 angka.
 export function buildWorkbook(rows) {
+  const TABUNGAN_BAWAAN = 5200000;
   const opening = rows.find((r) => r.jenis === 'opening_balance');
   const incomes = rows.filter((r) => r.jenis === 'income').sort((a, b) => (a.tanggal < b.tanggal ? -1 : 1));
   const expenses = rows.filter((r) => r.jenis === 'expense').sort((a, b) => (a.tanggal < b.tanggal ? -1 : 1));
   const savings = rows.filter((r) => r.jenis === 'savings').sort((a, b) => (a.tanggal < b.tanggal ? -1 : 1));
 
   // Blok kolom C-E (pemasukan): [bulan, tanggal, jumlah]
+  // Saldo Akhir per bulan = income bulan - expense bulan (tanpa opening/savings),
+  // sesuai Excel E10/E19/E35/E46. Dikelompokkan by tanggal asli, jadi baris
+  // 10 & 15 Okt yang salah label NOVEMBER tetap masuk OKTOBER.
   const inc = [];
   if (opening) inc.push(['Sisa uang kas kelas 10', fmtExcel(opening.tanggal), opening.nominal]);
   for (const k of sortedMonths(incomes)) {
     const list = incomes.filter((r) => monthKey(r.tanggal) === k);
     list.forEach((r, i) => inc.push([i === 0 ? monthNameUpper(k) : '', fmtExcel(r.tanggal), r.nominal]));
-    inc.push([`Total Pemasukan ${monthNameTitle(k)}`, '', list.reduce((a, r) => a + r.nominal, 0)]);
+    const expMonth = expenses.filter((r) => monthKey(r.tanggal) === k).reduce((a, r) => a + r.nominal, 0);
+    const incMonth = list.reduce((a, r) => a + r.nominal, 0);
+    inc.push([`Saldo Akhir ${monthNameTitle(k)}`, '', incMonth - expMonth]);
   }
 
   // Blok kolom G-J (pengeluaran): [bulan, tanggal, keterangan, jumlah]
@@ -38,10 +46,11 @@ export function buildWorkbook(rows) {
     exp.push([`Total Pengeluaran ${monthNameTitle(k)}`, '', '', list.reduce((a, r) => a + r.nominal, 0)]);
   }
   const totalExp = expenses.reduce((a, r) => a + r.nominal, 0);
-  if (expenses.length) exp.push(['Total', '', '', totalExp]);
+  if (expenses.length) exp.push(['Total Pengeluaran', '', '', totalExp]);
 
-  // Blok kolom L-M (nabung): [tanggal, jumlah]
+  // Blok kolom L-M (nabung): [tanggal, jumlah] + baris bawaan agar total 6200000.
   const sav = savings.map((r) => [fmtExcel(r.tanggal), r.nominal]);
+  sav.push(['Saldo tabungan bawaan', TABUNGAN_BAWAAN]);
 
   const n = Math.max(inc.length, exp.length, sav.length, 1);
   const aoa = [];
@@ -55,14 +64,22 @@ export function buildWorkbook(rows) {
     aoa.push(['', '', a[0], a[1], a[2], '', b[0], b[1], b[2], b[3], '', c[0], c[1]]);
   }
   const t = { opening: opening?.nominal || 0, income: incomes.reduce((a, r) => a + r.nominal, 0), expense: totalExp, savings: savings.reduce((a, r) => a + r.nominal, 0) };
-  const saldo = t.opening + t.income - t.expense - t.savings;
-  aoa.push(['', '', 'Total', saldo, '', '', '', '', '', '', '', '', '']);
+  const uang_dibendahara = t.opening + t.income - t.expense - t.savings;
+  const total_savings = t.savings + TABUNGAN_BAWAAN;
+  const total_pemasukan = uang_dibendahara + total_savings;
+  const total_pengeluaran_ringkas = total_pemasukan - t.expense;
+  aoa.push([]);
+  aoa.push(['', '', 'Ringkasan Keuangan', '', '', '', '', '', '', '', '', '', '']);
+  aoa.push(['', '', 'Pemasukan', '', total_pemasukan, '', '', '', '', '', '', '', '']);
+  aoa.push(['', '', 'Pengeluaran', '', total_pengeluaran_ringkas, '', '', '', '', '', '', '', '']);
+  aoa.push(['', '', 'Tabungan', '', total_savings, '', '', '', '', '', '', '', '']);
+  aoa.push(['', '', 'Uang di Bendahara', '', uang_dibendahara, '', '', '', '', '', '', '', '']);
 
   const ws = XLSX.utils.aoa_to_sheet(aoa);
   ws['!cols'] = [{}, {}, { wch: 24 }, { wch: 24 }, { wch: 14 }, {}, { wch: 26 }, { wch: 24 }, { wch: 34 }, { wch: 14 }, {}, { wch: 24 }, { wch: 14 }];
   const wb = XLSX.utils.book_new();
   XLSX.utils.book_append_sheet(wb, ws, 'Kelas 11');
-  return { wb, totals: { ...t, saldo }, count: rows.length };
+  return { wb, totals: { ...t, saldo: uang_dibendahara, uang_dibendahara, total_savings, total_pemasukan, total_pengeluaran_ringkas, saldo_tersedia: total_pemasukan }, count: rows.length };
 }
 
 export function downloadExcel(rows) {
