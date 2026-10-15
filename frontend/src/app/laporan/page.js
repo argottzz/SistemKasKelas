@@ -115,7 +115,7 @@ function LaporanDalam() {
       <div className="page-head">
         <div>
           <h2>Laporan Kas</h2>
-          <div className="greet-sub">{pagination.totalItems} transaksi • halaman {pagination.page} dari {pagination.totalPages}{sum ? ` • Saldo tersedia ${rupiah(sum.saldo_tersedia)}` : ''}</div>
+          <div className="greet-sub">{pagination.totalItems} transaksi • halaman {pagination.page} dari {pagination.totalPages}{sum ? ` • Bendahara ${rupiah(sum.uang_dibendahara ?? sum.saldo_akhir)} • Pemasukan ${rupiah(sum.total_pemasukan ?? sum.saldo_tersedia)}` : ''}</div>
         </div>
         <div style={{ display: 'flex', gap: 8 }}>
           <button className="btn ghost" onClick={ekspor}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="download" size={17} /> Export</span></button>
@@ -123,6 +123,20 @@ function LaporanDalam() {
         </div>
       </div>
       {err && <div className="error">{err} <button className="btn ghost" style={{ marginLeft: 8, minHeight: 32, padding: '4px 12px' }} onClick={() => load(page)}>Coba lagi</button></div>}
+
+      {sum && (
+        <div className="card" style={{ marginBottom: 12 }}>
+          <div className="card-head"><h3>Ringkasan Keuangan</h3><span className="label">sesuai teks S1</span></div>
+          <div className="stat-row" style={{ marginBottom: 0 }}>
+            <div className="stat-box"><div className="t">Pemasukan</div><div className="n">{rupiah(sum.total_pemasukan ?? sum.saldo_tersedia)}</div></div>
+            <div className="stat-box"><div className="t">Pengeluaran</div><div className="n">{rupiah(sum.total_expense)}</div></div>
+            <div className="stat-box"><div className="t">Tabungan</div><div className="n">{rupiah(sum.total_savings)}</div></div>
+          </div>
+          <div className="stat-row" style={{ marginBottom: 0, marginTop: 10, gridTemplateColumns: '1fr' }}>
+            <div className="stat-box"><div className="t">Uang di Bendahara</div><div className="n">{rupiah(sum.uang_dibendahara ?? sum.saldo_akhir)}</div></div>
+          </div>
+        </div>
+      )}
 
       <div className="card" style={{ marginBottom: 12 }}>
         <div className="card-head"><h3>Hasil tampil</h3><span className="label">{rows.length} baris • bersih {rupiah(totalTampil)}</span></div>
@@ -183,7 +197,7 @@ function LaporanDalam() {
         open={modalOpen}
         initialJenis={modalJenis}
         editTx={editTx}
-        saldoTersedia={sum?.saldo_tersedia}
+        saldoTersedia={sum?.uang_dibendahara ?? sum?.saldo_akhir}
         onClose={() => { setModalOpen(false); setEditTx(null); }}
         onSaved={(msg) => { if (msg) toast?.show(msg); else toast?.show('Tersimpan. Saldo dihitung ulang.'); load(editTx ? page : 1); }}
       />
