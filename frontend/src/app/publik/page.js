@@ -50,10 +50,10 @@ export default function PublikPage() {
         <div>
           <div className="seg" role="tablist" aria-label="Pilih tampil saldo">
             <button type="button" role="tab" aria-selected={view === 'bendahara'} className={`seg-btn${view === 'bendahara' ? ' active' : ''}`} onClick={() => setView('bendahara')}>Uang di Bendahara</button>
-            <button type="button" role="tab" aria-selected={view === 'tabungan'} className={`seg-btn${view === 'tabungan' ? ' active' : ''}`} onClick={() => setView('tabungan')}>Tabungan</button>
+            <button type="button" role="tab" aria-selected={view === 'pemasukan'} className={`seg-btn${view === 'pemasukan' ? ' active' : ''}`} onClick={() => setView('pemasukan')}>Total Pemasukan</button>
           </div>
-          <div className="hero-label">{view === 'bendahara' ? 'Uang di Bendahara • Publik' : 'Tabungan • Publik'}</div>
-          <div className="hero-value">{sum ? rupiah(view === 'bendahara' ? (sum.uang_dibendahara ?? sum.saldo_akhir) : sum.total_savings) : '...'}</div>
+          <div className="hero-label">{view === 'bendahara' ? 'Uang di Bendahara • Publik' : 'Total Pemasukan • Publik'}</div>
+          <div className="hero-value">{sum ? rupiah(view === 'bendahara' ? (sum.uang_dibendahara ?? sum.saldo_akhir) : (sum.total_pemasukan ?? sum.saldo_tersedia)) : '...'}</div>
         </div>
       </div>
 
