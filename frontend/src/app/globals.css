@@ -229,6 +229,9 @@ th { background: rgba(47, 163, 107, .1); font-size: 11px; color: var(--muted); t
 .hero-card .hero-label { font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 8px; }
 .hero-card .hero-value { font-size: 26px; font-weight: 700; letter-spacing: -0.01em; }
 .hero-card .hero-sub { font-size: 13px; color: var(--muted); margin-top: 6px; }
+.seg { display: inline-flex; background: rgba(47, 163, 107, .12); border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 2px; margin-bottom: 10px; }
+.seg-btn { border: 0; background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; padding: 8px 14px; border-radius: 999px; cursor: pointer; min-height: 36px; }
+.seg-btn.active { background: var(--primary); color: var(--primary-ink); box-shadow: var(--shadow); }
 .hero-actions { display: flex; gap: 8px; margin-top: 14px; flex-wrap: wrap; }
 .btn-outline { background: transparent; color: var(--ink); border: 1px solid var(--line); padding: 12px 18px; border-radius: 12px; font-size: 14px; font-weight: 600; cursor: pointer; min-height: 44px; }
 .btn-outline:hover { border-color: var(--primary); color: var(--primary); }

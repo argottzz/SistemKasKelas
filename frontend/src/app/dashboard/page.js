@@ -34,6 +34,8 @@ export default function DashboardPage() {
   const [modalJenis, setModalJenis] = useState('income');
   const [month, setMonth] = useState('');
   const [range, setRange] = useState(7);
+  // 2 opsi tampil: uang tunai di tangan vs total aset (pemasukan ringkas).
+  const [view, setView] = useState('bendahara');
 
   const load = async () => {
     try {
@@ -105,13 +107,14 @@ export default function DashboardPage() {
     });
   }
 
-  const inflow = (sum?.opening_balance || 0) + (sum?.total_income || 0);
+  const inflow = sum?.total_pemasukan || ((sum?.opening_balance || 0) + (sum?.total_income || 0));
   const ratio = inflow > 0 ? (sum?.total_expense || 0) / inflow : 0;
   const pct = (v) => (inflow > 0 ? Math.round((v / inflow) * 100) : 0);
 
   // Kartu statistik: badge % bulan-ke-bulan. Baik = hijau, buruk = merah.
+  // Total Pemasukan = aset ringkas (M14, 7431500). Bukan income mentah.
   const statCards = [
-    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', icon: 'in', color: '#2FA36B', soft: 'rgba(47,163,107,.15)', mom: momOf((m) => m.income), goodWhenUp: true },
+    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_pemasukan ?? sum.total_income) : '...', icon: 'in', color: '#2FA36B', soft: 'rgba(47,163,107,.15)', mom: momOf((m) => m.income), goodWhenUp: true },
     { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', icon: 'out', color: '#1E3A5F', soft: 'rgba(30,58,95,.1)', mom: momOf((m) => m.expense), goodWhenUp: false },
     { label: 'Total Tabungan', value: sum ? rupiah(sum.total_savings) : '...', icon: 'savings', color: '#BE861C', soft: 'rgba(190,134,28,.15)', mom: momOf((m) => m.savings), goodWhenUp: true },
   ];
@@ -161,7 +164,7 @@ export default function DashboardPage() {
     try {
       if (!filtered.length) { setErr('Tidak ada data pada bulan ini untuk diekspor'); return; }
       const t = downloadExcel(filtered);
-      alert(`Excel terunduh (${monthLabel(month)}): ${t.count} baris, saldo ${rupiah(t.saldo)}`);
+      alert(`Excel terunduh (${monthLabel(month)}): ${t.count} baris, bendahara ${rupiah(t.uang_dibendahara ?? t.saldo)}`);
     } catch (e) {
       setErr('Gagal export: ' + e.message);
     }
@@ -170,7 +173,7 @@ export default function DashboardPage() {
   const ekspor = async () => {
     try {
       const t = downloadExcel(rows);
-      alert(`Excel terunduh: ${t.count} baris, saldo ${rupiah(t.saldo)}`);
+      alert(`Excel terunduh: ${t.count} baris, bendahara ${rupiah(t.uang_dibendahara ?? t.saldo)}, pemasukan ${rupiah(t.total_pemasukan)}`);
     } catch (e) {
       setErr('Gagal export: ' + e.message);
     }
@@ -191,9 +194,20 @@ export default function DashboardPage() {
 
       <div className="hero-card">
         <div>
-          <div className="hero-label">Saldo Tersedia • KasSave</div>
-          <div className="hero-value">{sum ? rupiah(sum.saldo_tersedia) : '...'}</div>
-          <div className="hero-sub">Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • {sum?.jumlah_transaksi ?? '...'} transaksi</div>
+          <div className="seg" role="tablist" aria-label="Pilih tampil saldo">
+            <button type="button" role="tab" aria-selected={view === 'bendahara'} className={`seg-btn${view === 'bendahara' ? ' active' : ''}`} onClick={() => setView('bendahara')}>Uang di Bendahara</button>
+            <button type="button" role="tab" aria-selected={view === 'pemasukan'} className={`seg-btn${view === 'pemasukan' ? ' active' : ''}`} onClick={() => setView('pemasukan')}>Total Pemasukan</button>
+          </div>
+          <div className="hero-label">{view === 'bendahara' ? 'Uang di Bendahara • KasSave' : 'Total Pemasukan • KasSave'}</div>
+          <div className="hero-value">{sum ? rupiah(view === 'bendahara' ? (sum.uang_dibendahara ?? sum.saldo_akhir ?? sum.saldo_tersedia) : (sum.total_pemasukan ?? sum.saldo_tersedia)) : '...'}</div>
+          <div className="hero-sub">
+            {sum ? (
+              view === 'bendahara'
+                ? `Total pemasukan ${rupiah(sum.total_pemasukan ?? sum.saldo_tersedia)} • Tabungan ${rupiah(sum.total_savings)} • ${sum?.jumlah_transaksi ?? '...'} transaksi`
+                : `Tunai di tangan ${rupiah(sum.uang_dibendahara ?? sum.saldo_akhir)} • Tabungan ${rupiah(sum.total_savings)} • ${sum?.jumlah_transaksi ?? '...'} transaksi`
+            ) : '...'}
+          </div>
+          <div className="hero-sub" style={{ marginTop: 2 }}>Saldo awal {sum ? rupiah(sum.opening_balance) : '...'} • Rumus: pemasukan = bendahara + tabungan</div>
           <div className="hero-actions">
             <button className="btn" onClick={() => bukaModal('income')}><span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="plus" size={17} /> Pemasukan</span></button>
             <button className="btn-outline" onClick={() => bukaModal('expense')}>Pengeluaran</button>
@@ -314,7 +328,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <TransactionModal open={modalOpen} initialJenis={modalJenis} saldoTersedia={sum?.saldo_tersedia} onClose={() => setModalOpen(false)} onSaved={() => load()} />
+      <TransactionModal open={modalOpen} initialJenis={modalJenis} saldoTersedia={sum?.uang_dibendahara ?? sum?.saldo_akhir} onClose={() => setModalOpen(false)} onSaved={() => load()} />
     </>
   );
 }
