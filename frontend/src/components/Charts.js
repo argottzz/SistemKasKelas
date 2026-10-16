@@ -35,6 +35,7 @@ export function AreaChart({ points, height = 170 }) {
 // Arahkan kursor / ketuk titik mana pun -> tooltip rincian bulan itu.
 export function MonthlyFlow({ data }) {
   const [hov, setHov] = useState(-1);
+  const gid = useId().replace(/[^a-zA-Z0-9]/g, '');
   if (!data || data.length < 2) {
     return <div className="label" style={{ padding: '40px 0', textAlign: 'center' }}>Belum cukup data untuk grafik</div>;
   }
@@ -43,7 +44,6 @@ export function MonthlyFlow({ data }) {
   if (kosong) {
     return <div className="label" style={{ padding: '40px 0', textAlign: 'center' }}>Belum ada data keuangan untuk ditampilkan</div>;
   }
-  const gid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const W = 640, H = 170, padB = 24, padT = 26, padX = 10;
   const vals = data.map((d) => d.net);
   const lo = Math.min(...vals, 0), hi = Math.max(...vals, 0);
