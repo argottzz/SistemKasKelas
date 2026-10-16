@@ -2,11 +2,12 @@
 // Berjalan di Edge — hanya pakai anon key publik.
 import { NextResponse } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
+import { isBendahara } from './lib/allowlist';
 
 export async function middleware(req) {
   const path = req.nextUrl.pathname;
   const isLogin = path === '/login';
-  const isPublik = path === '/publik' || path === '/unduh';
+  const isPublik = path === '/publik' || path === '/unduh' || path === '/akses-ditolak';
   const isApi = path.startsWith('/api/');
   const isSw = path === '/sw.js';
   const loginUrl = new URL('/login', req.url);
@@ -38,6 +39,19 @@ export async function middleware(req) {
     );
     const { data } = await sb.auth.getUser();
     const user = data?.user || null;
+
+    // Halaman penolakan selalu boleh dibuka (publik, perlu untuk pesan ramah).
+    if (path === '/akses-ditolak') return NextResponse.next();
+    // Login tapi email tidak ada di BENDAHARA_EMAILS -> tolak dengan ramah.
+    if (user && !isBendahara(user.email)) {
+      if (isApi) {
+        return NextResponse.json(
+          { message: 'Akses ditolak: email belum terdaftar sebagai bendahara.' },
+          { status: 403 }
+        );
+      }
+      return NextResponse.redirect(new URL('/akses-ditolak', req.url));
+    }
 
     // Root: tamu -> /publik (siswa/wali), sesi login -> /dashboard (bendahara).
     if (path === '/') {
