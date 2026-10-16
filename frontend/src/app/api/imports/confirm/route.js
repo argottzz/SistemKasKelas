@@ -7,9 +7,8 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
   try {
-    const { sb, user, allowed } = await requireSession();
+    const { sb, user } = await requireSession();
     if (!user) return NextResponse.json({ message: 'Belum login.' }, { status: 401 });
-    if (!allowed) return NextResponse.json({ message: 'Akses ditolak: email belum terdaftar sebagai bendahara.' }, { status: 403 });
     const { namaFile, fileHash, rows } = await req.json();
     if (!fileHash || !Array.isArray(rows) || !rows.length) {
       return NextResponse.json({ message: 'Data konfirmasi tidak lengkap' }, { status: 400 });

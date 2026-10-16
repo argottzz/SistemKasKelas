@@ -6,9 +6,8 @@ export const dynamic = 'force-dynamic';
 
 export async function GET() {
   try {
-    const { sb, user, allowed } = await requireSession();
+    const { sb, user } = await requireSession();
     if (!user) return NextResponse.json({ message: 'Belum login.' }, { status: 401 });
-    if (!allowed) return NextResponse.json({ message: 'Akses ditolak: email belum terdaftar sebagai bendahara.' }, { status: 403 });
     const { data, error } = await sb.from('import_batches').select('*').order('id', { ascending: false }).limit(50);
     if (error) throw error;
     return NextResponse.json({ data });

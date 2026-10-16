@@ -11,17 +11,11 @@ const NO_STORE = { 'Cache-Control': 'no-store, no-cache, must-revalidate' };
 
 export async function GET() {
   try {
-    const { sb, user, allowed } = await requireSession();
+    const { sb, user } = await requireSession();
     if (!user) {
       return NextResponse.json(
         { message: 'Belum login.' },
         { status: 401, headers: NO_STORE }
-      );
-    }
-    if (!allowed) {
-      return NextResponse.json(
-        { message: 'Akses ditolak: email belum terdaftar sebagai bendahara.' },
-        { status: 403, headers: NO_STORE }
       );
     }
     const { data, error } = await sb.from('transactions').select('jenis,nominal');

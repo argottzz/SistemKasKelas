@@ -6,7 +6,7 @@ import { MobileBar, SidebarDrawer } from './Sidebar';
 export default function AppShell({ children }) {
   const path = usePathname();
   const [open, setOpen] = useState(false);
-  if (path === '/' || path === '/login' || path === '/publik' || path === '/unduh' || path === '/akses-ditolak') return <main className="main">{children}</main>;
+  if (path === '/' || path === '/login' || path === '/publik' || path === '/unduh') return <main className="main">{children}</main>;
   return (
     <>
       <MobileBar open={open} onToggle={() => setOpen((v) => !v)} />
