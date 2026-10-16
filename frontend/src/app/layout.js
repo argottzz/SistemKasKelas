@@ -3,6 +3,7 @@ import { ProfileProvider } from '../context/ProfileContext';
 import { ThemeProvider } from '../context/ThemeContext';
 import { ToastProvider } from '../components/Toast';
 import AppShell from '../components/AppShell';
+import PwaRegister from '../components/PwaRegister';
 
 export const metadata = {
   title: 'KasSave',
@@ -17,6 +18,7 @@ export default function RootLayout({ children }) {
   return (
     <html lang="id" suppressHydrationWarning>
       <body>
+        <PwaRegister />
         <ThemeProvider>
           <ProfileProvider>
             <ToastProvider>
