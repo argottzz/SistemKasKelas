@@ -100,7 +100,7 @@ export default function PublikPage() {
 
   return (
     <>
-      <div className="page-head">
+      <div className="page-head sticky-head">
         <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <img src="/logo.png" alt="KasSave" className="brand-logo" style={{ width: 40, height: 40 }} />
           <div>
@@ -178,7 +178,10 @@ export default function PublikPage() {
       <div className="card">
         <div className="card-head">
           <h3>Transaksi Terbaru</h3>
-          <span className="label only-view" title="Anda hanya dapat melihat data, tidak dapat mengubahnya."><Icon name="lock" size={14} /> Hanya Lihat</span>
+          <div style={{ display: 'flex', gap: 8, alignItems: 'center', flexWrap: 'wrap' }}>
+            <span className="label" style={{ marginBottom: 0 }} aria-live="polite">Menampilkan {tampil.length} dari {tersaring.length}</span>
+            <span className="label only-view" title="Anda hanya dapat melihat data, tidak dapat mengubahnya."><Icon name="lock" size={14} /> Hanya Lihat</span>
+          </div>
         </div>
         <div className="filters">
           <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cari keterangan..." aria-label="Cari transaksi" disabled={filterMati} title={filterMati ? 'Belum ada data untuk difilter' : undefined} />
@@ -191,7 +194,7 @@ export default function PublikPage() {
           <input type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} aria-label="Filter tanggal" disabled={filterMati} title={filterMati ? 'Belum ada data untuk difilter' : undefined} />
           {filterAktif && <button type="button" className="btn ghost" onClick={resetFilter}>Reset</button>}
         </div>
-        <div className="label" aria-live="polite">Menampilkan {tampil.length} dari {tersaring.length} transaksi (100 terbaru).</div>
+        <div className="label" aria-live="polite" style={{ marginBottom: 10 }}>100 transaksi terbaru • filter: kata kunci, jenis, tanggal.</div>
         {loading ? (
           <div style={{ display: 'grid', gap: 8 }}>
             {[0, 1, 2].map((i) => <span key={i} className="skel" style={{ display: 'block', height: 52 }} aria-label="Memuat transaksi">memuat transaksi</span>)}

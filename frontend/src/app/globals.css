@@ -276,7 +276,10 @@ th { background: rgba(47, 163, 107, .1); font-size: 11px; color: var(--muted); t
 .seg-btn { border: 0; background: transparent; color: var(--muted); font-size: 13px; font-weight: 700; padding: 8px 14px; border-radius: 999px; cursor: pointer; min-height: 36px; transition: background-color .2s ease, color .2s ease, box-shadow .2s ease, transform .2s ease; }
 .seg-btn.active { background: var(--primary); color: var(--primary-ink); box-shadow: var(--shadow); }
 .seg-btn:not(.active):hover { color: var(--ink); }
-/* Tombol header terasa responsif saat hover */
+/* Sticky header publik: tombol selalu terjangkau di daftar panjang */
+.sticky-head { position: sticky; top: 0; z-index: 50; background: var(--bg); background: color-mix(in srgb, var(--bg) 84%, transparent); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding-top: 12px; padding-bottom: 12px; }
+/* Track dasar sparkline agar struktur terlihat saat semua nol */
+.publik-bars { background: rgba(127, 140, 141, .14); border-radius: 8px; padding: 8px 8px 6px; }
 .hover-lift { transition: transform .15s ease, box-shadow .15s ease, filter .15s ease; }
 .hover-lift:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
 /* Filter nonaktif saat belum ada data */
