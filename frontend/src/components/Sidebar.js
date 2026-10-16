@@ -1,6 +1,6 @@
 'use client';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { usePathname, useRouter } from 'next/navigation';
 import { useProfile } from '../context/ProfileContext';
 import { useTheme } from '../context/ThemeContext';
@@ -13,6 +13,7 @@ const MENU = [
   { href: '/impor', label: 'Impor', icon: 'upload' },
   { href: '/profil', label: 'Profil', icon: 'user' },
   { href: '/unduh', label: 'Download', icon: 'download' },
+  { href: '/publik', label: 'Tampilan Publik', icon: 'eye' },
 ];
 
 export function initialOf(nama) {
@@ -57,6 +58,19 @@ export function SidebarDrawer({ open, onClose }) {
   const router = useRouter();
   const { profile } = useProfile();
   const { theme, toggle } = useTheme() || { theme: 'light', toggle: () => {} };
+  const [email, setEmail] = useState(null);
+  useEffect(() => {
+    let hidup = true;
+    (async () => {
+      try {
+        const { data } = await supabaseBrowser().auth.getUser();
+        if (hidup) setEmail(data?.user?.email || null);
+      } catch {
+        if (hidup) setEmail(null);
+      }
+    })();
+    return () => { hidup = false; };
+  }, []);
   const keluar = async () => {
     try {
       await supabaseBrowser().auth.signOut();
@@ -72,9 +86,10 @@ export function SidebarDrawer({ open, onClose }) {
         <h2><img src="/logo.png" alt="KasSave" className="brand-logo" /> KasSave</h2>
         <Link href="/profil" onClick={onClose} className={path.startsWith('/profil') ? 'active' : ''} style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
           <Avatar nama={profile.nama} foto={profile.foto} size={40} />
-          <span>
-            <div style={{ fontWeight: 700 }}>{profile.nama || 'Atur nama...'}</div>
-            <div style={{ fontSize: 12, opacity: 0.75 }}>Bendahara Kelas</div>
+          <span style={{ minWidth: 0 }}>
+            <div style={{ fontWeight: 700, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{profile.nama || 'Bendahara'}</div>
+            <div style={{ fontSize: 12, opacity: 0.75, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' }}>{email === null ? 'memuat akun...' : (email || 'Akun lokal')}</div>
+            <span className="badge savings" style={{ marginTop: 4, fontSize: 11 }}>Bendahara</span>
           </span>
         </Link>
         {MENU.map((m) => (
