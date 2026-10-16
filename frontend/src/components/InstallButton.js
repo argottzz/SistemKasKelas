@@ -43,7 +43,7 @@ export default function InstallButton({ large = false }) {
   // iPhone: tidak ada prompt otomatis -> arahkan ke panduan manual di /unduh.
   if (ios && !deferred) {
     return (
-      <a className="btn" href="/unduh#iphone" style={{ display: 'inline-flex', gap: 8, alignItems: 'center', justifyContent: 'center', width: large ? '100%' : undefined }}>
+      <a className="btn btn-download" href="/unduh#iphone" style={{ display: 'inline-flex', gap: 8, alignItems: 'center', justifyContent: 'center', width: large ? '100%' : undefined }}>
         <Icon name="download" size={18} /> Download Aplikasi
       </a>
     );
@@ -62,7 +62,7 @@ export default function InstallButton({ large = false }) {
   };
 
   return (
-    <button type="button" className="btn" onClick={install} style={{ display: 'inline-flex', gap: 8, alignItems: 'center', justifyContent: 'center', width: large ? '100%' : undefined }}>
+    <button type="button" className="btn btn-download" onClick={install} style={{ display: 'inline-flex', gap: 8, alignItems: 'center', justifyContent: 'center', width: large ? '100%' : undefined }}>
       <Icon name="download" size={18} /> Download Aplikasi
     </button>
   );
