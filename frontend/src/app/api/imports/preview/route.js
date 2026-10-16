@@ -8,8 +8,9 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(req) {
   try {
-    const { sb, user } = await requireSession();
+    const { sb, user, allowed } = await requireSession();
     if (!user) return NextResponse.json({ message: 'Belum login.' }, { status: 401 });
+    if (!allowed) return NextResponse.json({ message: 'Akses ditolak: email belum terdaftar sebagai bendahara.' }, { status: 403 });
     const form = await req.formData();
     const file = form.get('file');
     if (!file || typeof file.arrayBuffer !== 'function') {

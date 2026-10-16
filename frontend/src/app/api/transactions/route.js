@@ -29,8 +29,9 @@ function normKategori(v) {
 
 export async function GET(req) {
   try {
-    const { sb, user } = await requireSession();
+    const { sb, user, allowed } = await requireSession();
     if (!user) return errJson('Belum login.', 'UNAUTHORIZED', 401);
+    if (!allowed) return errJson('Akses ditolak: email belum terdaftar sebagai bendahara.', 'FORBIDDEN', 403);
     const sp = req.nextUrl.searchParams;
     const jenis = sp.get('jenis');
     const q = sp.get('q');
@@ -92,8 +93,9 @@ export async function GET(req) {
 
 export async function POST(req) {
   try {
-    const { sb, user } = await requireSession();
+    const { sb, user, allowed } = await requireSession();
     if (!user) return errJson('Belum login.', 'UNAUTHORIZED', 401);
+    if (!allowed) return errJson('Akses ditolak: email belum terdaftar sebagai bendahara.', 'FORBIDDEN', 403);
     const b = await req.json();
     const input = {
       jenis: b.jenis,

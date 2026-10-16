@@ -14,8 +14,9 @@ const ALLOWED = ['jenis', 'nominal', 'tanggal', 'keterangan', 'penerima', 'kateg
 // PATCH partial: hanya field yang dikirim yang berubah (validasi gabungan di boundary).
 export async function PATCH(req, { params }) {
   try {
-    const { sb, user } = await requireSession();
+    const { sb, user, allowed } = await requireSession();
     if (!user) return errJson('Belum login.', 'UNAUTHORIZED', 401);
+    if (!allowed) return errJson('Akses ditolak: email belum terdaftar sebagai bendahara.', 'FORBIDDEN', 403);
     const b = await req.json();
 
     const { data: existing, error: findErr } = await sb
@@ -73,8 +74,9 @@ export async function PATCH(req, { params }) {
 
 export async function DELETE(req, { params }) {
   try {
-    const { sb, user } = await requireSession();
+    const { sb, user, allowed } = await requireSession();
     if (!user) return errJson('Belum login.', 'UNAUTHORIZED', 401);
+    if (!allowed) return errJson('Akses ditolak: email belum terdaftar sebagai bendahara.', 'FORBIDDEN', 403);
     const { data, error } = await sb.from('transactions').delete().eq('id', params.id).select('id');
     if (error) throw error;
     if (!data || !data.length) return errJson('Transaksi tidak ditemukan', 'NOT_FOUND', 404);
