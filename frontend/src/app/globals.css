@@ -208,6 +208,24 @@ th { background: rgba(47, 163, 107, .1); font-size: 11px; color: var(--muted); t
 .btn.danger { background: transparent; color: var(--ink); border: 1px solid var(--line); }
 .btn.ghost { background: rgba(47, 163, 107, .14); color: var(--ink); }
 .btn:disabled { opacity: .55; cursor: not-allowed; }
+/* ===== Tombol download PWA: lebih berisi + respons interaktif ===== */
+.btn-download { padding: 15px 26px; font-size: 16px; border-radius: 14px; box-shadow: 0 4px 14px rgba(47, 163, 107, .35); transition: transform .12s ease, box-shadow .12s ease, filter .12s ease; }
+.btn-download:hover { filter: brightness(1.05); transform: translateY(-1px); box-shadow: 0 8px 22px rgba(47, 163, 107, .42); }
+.btn-download:active { transform: translateY(1px) scale(.99); box-shadow: 0 2px 8px rgba(47, 163, 107, .3); }
+/* ===== Link publik di halaman unduh: kontras + ikon ===== */
+.unduh-publik { border: 1px solid var(--primary); background: var(--card); }
+.unduh-publik:hover { border-color: var(--primary); background: rgba(47, 163, 107, .12); }
+/* ===== Badge netral agar tidak bersaing dengan tombol utama ===== */
+.badge-muted { background: rgba(30, 58, 95, .08); color: var(--muted); border: 1px solid var(--line); }
+/* ===== Instruksi unduh: lega dibaca ===== */
+.step-list { display: grid; gap: 10px; margin-top: 10px; }
+.step-item { font-size: 14px; line-height: 1.75; color: var(--muted); background: rgba(47, 163, 107, .06); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
+.step-item b { color: var(--ink); }
+.plat-head { display: flex; align-items: center; gap: 10px; }
+.plat-ico { width: 40px; height: 40px; border-radius: 12px; display: grid; place-items: center; flex-shrink: 0; background: rgba(47, 163, 107, .14); color: var(--primary); }
+.pwa-points { display: grid; gap: 8px; margin: 10px 0 0; padding: 0; list-style: none; }
+.pwa-points li { display: flex; gap: 10px; align-items: flex-start; font-size: 14px; line-height: 1.65; color: var(--ink); }
+.pwa-check { width: 24px; height: 24px; border-radius: 50%; display: grid; place-items: center; flex-shrink: 0; background: rgba(47, 163, 107, .16); color: var(--primary); margin-top: 1px; }
 .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .filters input, .filters select { padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; font-size: 14px; background: var(--card); color: var(--ink); }
 .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 10px; flex-wrap: wrap; }
