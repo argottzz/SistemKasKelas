@@ -81,24 +81,24 @@ export function MonthlyFlow({ data }) {
     <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', display: 'block', color: 'var(--muted)' }} role="img" aria-label="Grafik arus kas bulanan">
       <defs>
         <linearGradient id={`f${gid}`} x1="0" y1="0" x2="0" y2="1">
-          <stop offset="0" stopColor="#BE861C" stopOpacity=".35" />
-          <stop offset="1" stopColor="#BE861C" stopOpacity="0" />
+          <stop offset="0" style={{ stopColor: 'var(--green)' }} stopOpacity=".35" />
+          <stop offset="1" style={{ stopColor: 'var(--green)' }} stopOpacity="0" />
         </linearGradient>
       </defs>
       {ticks.map((t, i) => (
         <g key={i}>
           <line x1={padX} y1={Y(t)} x2={W - padX} y2={Y(t)} stroke="currentColor" strokeOpacity=".25" strokeDasharray="4 4" />
-          <text x={padX + 2} y={Y(t) - 4} fontSize="10" fill="currentColor" style={halo}>{shortRp(Math.round(t))}</text>
+          <text x={padX + 6} y={Y(t) - 4} fontSize="10" fill="currentColor" style={halo}>{shortRp(Math.round(t))}</text>
         </g>
       ))}
       <path d={`${line} L${X(data.length - 1)},${H - padB} L${X(0)},${H - padB} Z`} fill={`url(#f${gid})`} />
-      <path d={line} fill="none" stroke="#BE861C" strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
+      <path d={line} fill="none" style={{ stroke: 'var(--green)' }} strokeWidth="2.5" strokeLinejoin="round" strokeLinecap="round" />
       {data.map((d, i) => (
         <text key={i} x={X(i)} y={H - 8} textAnchor="middle" fontSize="10" fill="currentColor">{d.label}</text>
       ))}
       {data.map((d, i) => (
         <g key={`h${i}`}>
-          {hov === i && <circle cx={X(i)} cy={Y(d.net)} r="6" fill="#BE861C" stroke="#fff" strokeWidth="2" />}
+          {hov === i && <circle cx={X(i)} cy={Y(d.net)} r="6" style={{ fill: 'var(--green)' }} stroke="#fff" strokeWidth="2" />}
           <circle
             cx={X(i)}
             cy={Y(d.net)}
