@@ -118,9 +118,9 @@ export default function DashboardPage() {
   // Kartu statistik: badge % bulan-ke-bulan. Baik = hijau, buruk = merah.
   // Total Pemasukan = aset ringkas (M14, 7431500). Bukan income mentah.
   const statCards = [
-    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_pemasukan ?? sum.total_income) : '—', icon: 'in', color: '#2FA36B', soft: 'rgba(47,163,107,.15)', mom: momOf((m) => m.income), goodWhenUp: true },
-    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '—', icon: 'out', color: '#1E3A5F', soft: 'rgba(30,58,95,.1)', mom: momOf((m) => m.expense), goodWhenUp: false },
-    { label: 'Total Tabungan', value: sum ? rupiah(sum.total_savings) : '—', icon: 'savings', color: '#BE861C', soft: 'rgba(190,134,28,.15)', mom: momOf((m) => m.savings), goodWhenUp: true },
+    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_pemasukan ?? sum.total_income) : '—', icon: 'in', cls: 'income', mom: momOf((m) => m.income), goodWhenUp: true },
+    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '—', icon: 'out', cls: 'expense', mom: momOf((m) => m.expense), goodWhenUp: false },
+    { label: 'Total Tabungan', value: sum ? rupiah(sum.total_savings) : '—', icon: 'savings', cls: 'savings', mom: momOf((m) => m.savings), goodWhenUp: true },
   ];
   const momColor = (c) => {
     if (c.mom === null || c.mom === undefined) return 'var(--muted)';
@@ -130,7 +130,8 @@ export default function DashboardPage() {
   };
   const momText = (c) => {
     if (c.mom === null || c.mom === undefined) return '—';
-    return `${c.mom > 0 ? '+' : ''}${c.mom}%`;
+    const panah = c.mom > 0 ? '▲ ' : c.mom < 0 ? '▼ ' : '';
+    return `${panah}${c.mom > 0 ? '+' : ''}${c.mom}%`;
   };
 
   const months = useMemo(() => {
@@ -214,7 +215,7 @@ export default function DashboardPage() {
       <div className="fin-grid">
         {statCards.map((c) => (
           <div className="card stat-card" key={c.label}>
-            <div className="stat-ico" style={{ background: c.soft, color: c.color }}><Icon name={c.icon} size={26} /></div>
+            <div className={`stat-ico ${c.cls}`}><Icon name={c.icon} size={26} /></div>
             <div style={{ minWidth: 0 }}>
               <div className="v">{loading ? <span className="skel" aria-label="Memuat">memuat</span> : c.value}</div>
               <div className="k">{c.label}</div>

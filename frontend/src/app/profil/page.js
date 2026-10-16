@@ -118,9 +118,9 @@ export default function ProfilPage() {
   const riwayat = rows.slice(0, 8);
 
   const stats = [
-    { label: 'Saldo Tersedia', value: sum ? rupiah(sum.saldo_tersedia) : '...', sub: `${pct(sum?.saldo_tersedia)}% dari dana masuk`, vals: monthly.net, color: '#2FA36B' },
-    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', sub: `${pct(sum?.total_income)}% dari dana masuk`, vals: monthly.income, color: '#1E3A5F' },
-    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', sub: `${pct(sum?.total_expense)}% dari dana masuk`, vals: monthly.expense, color: '#BE861C' },
+    { label: 'Saldo Tersedia', value: sum ? rupiah(sum.saldo_tersedia) : '...', sub: `${pct(sum?.saldo_tersedia)}% dari dana masuk`, vals: monthly.net, color: 'var(--green)', cls: 'income' },
+    { label: 'Total Pemasukan', value: sum ? rupiah(sum.total_income) : '...', sub: `${pct(sum?.total_income)}% dari dana masuk`, vals: monthly.income, color: 'var(--blue)', cls: 'expense' },
+    { label: 'Total Pengeluaran', value: sum ? rupiah(sum.total_expense) : '...', sub: `${pct(sum?.total_expense)}% dari dana masuk`, vals: monthly.expense, color: 'var(--amber)', cls: 'savings' },
   ];
 
   return (
@@ -170,7 +170,7 @@ export default function ProfilPage() {
           <div className="mini-grid">
             {stats.map((s) => (
               <div className="card mini-card" key={s.label}>
-                <div className="mini-num" style={{ color: s.color }}>{s.value}</div>
+                <div className={`mini-num c-${s.cls}`}>{s.value}</div>
                 <div style={{ fontWeight: 600, fontSize: 14, margin: '2px 0 6px' }}>{s.label}</div>
                 <MiniBars vals={s.vals} color={s.color} />
                 <div className="label" style={{ marginTop: 6, marginBottom: 0 }}>{s.sub} • 5 bulan</div>
