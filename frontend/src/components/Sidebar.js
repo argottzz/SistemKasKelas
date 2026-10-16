@@ -12,6 +12,7 @@ const MENU = [
   { href: '/laporan', label: 'Laporan', icon: 'report' },
   { href: '/impor', label: 'Impor', icon: 'upload' },
   { href: '/profil', label: 'Profil', icon: 'user' },
+  { href: '/unduh', label: 'Download', icon: 'download' },
 ];
 
 export function initialOf(nama) {

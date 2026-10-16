@@ -42,7 +42,10 @@ export default function PublikPage() {
             <div className="greet-sub">Lihat saldo & laporan. Tanpa login, tanpa ubah data.</div>
           </div>
         </div>
-        <Link className="btn ghost" href="/login">Masuk bendahara</Link>
+        <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
+          <Link className="btn ghost" href="/unduh">Download aplikasi</Link>
+          <Link className="btn ghost" href="/login">Masuk bendahara</Link>
+        </div>
       </div>
       {err && <div className="error">{err}</div>}
 
