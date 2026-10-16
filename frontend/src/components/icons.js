@@ -27,6 +27,7 @@ const PATHS = {
   monitor: (<><rect x="2" y="3" width="20" height="14" rx="2" /><line x1="8" y1="21" x2="16" y2="21" /><line x1="12" y1="17" x2="12" y2="21" /></>),
   check: (<><polyline points="20 6 9 17 4 12" /></>),
   lock: (<><rect x="3" y="11" width="18" height="11" rx="2" /><path d="M7 11V7a5 5 0 0 1 10 0v4" /></>),
+  wallet: (<><rect x="1" y="6" width="22" height="14" rx="2" /><line x1="1" y1="10" x2="23" y2="10" /><circle cx="18" cy="15" r="1.2" /></>),
 };
 
 export function Icon({ name, size = 18 }) {

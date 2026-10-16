@@ -1,5 +1,5 @@
 'use client';
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import Link from 'next/link';
 import { supabaseBrowser } from '../../lib/supabase-client';
 import { summarize } from '../../lib/supabase-server';
@@ -22,29 +22,34 @@ export default function PublikPage() {
   const [sum, setSum] = useState(null);
   const [rows, setRows] = useState([]);
   const [err, setErr] = useState('');
+  const [loading, setLoading] = useState(true);
   const [view, setView] = useState('bendahara');
   const [q, setQ] = useState('');
   const [jenisFilter, setJenisFilter] = useState('');
   const [tanggal, setTanggal] = useState('');
   const [semua, setSemua] = useState(false);
 
-  useEffect(() => {
-    (async () => {
-      try {
-        const sb = supabaseBrowser();
-        const { data, error } = await sb
-          .from('v_transaksi_publik')
-          .select('tanggal,jenis,nominal,keterangan')
-          .order('tanggal', { ascending: false })
-          .limit(100);
-        if (error) throw error;
-        setRows(data || []);
-        setSum(summarize(data || []));
-      } catch (e) {
-        setErr('Gagal memuat data kas.');
-      }
-    })();
+  const load = useCallback(async () => {
+    try {
+      setErr('');
+      setLoading(true);
+      const sb = supabaseBrowser();
+      const { data, error } = await sb
+        .from('v_transaksi_publik')
+        .select('tanggal,jenis,nominal,keterangan')
+        .order('tanggal', { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      setRows(data || []);
+      setSum(summarize(data || []));
+    } catch (e) {
+      setErr('Gagal memuat data kas.');
+    } finally {
+      setLoading(false);
+    }
   }, []);
+
+  useEffect(() => { load(); }, [load]);
 
   // Pemasukan 7 hari terakhir dari data yang tampil (tanpa statistik baru).
   const spark = useMemo(() => {
@@ -82,6 +87,7 @@ export default function PublikPage() {
 
   const filterAktif = q.trim() !== '' || jenisFilter !== '' || tanggal !== '';
   const tampil = semua || filterAktif ? tersaring : tersaring.slice(0, BATAS_AWAL);
+  const filterMati = loading || rows.length === 0;
 
   const resetFilter = () => {
     setQ('');
@@ -89,6 +95,8 @@ export default function PublikPage() {
     setTanggal('');
     setSemua(false);
   };
+
+  const nilaiHero = view === 'bendahara' ? (sum?.uang_dibendahara ?? sum?.saldo_akhir ?? 0) : (sum?.total_pemasukan ?? sum?.saldo_tersedia ?? 0);
 
   return (
     <>
@@ -101,15 +109,20 @@ export default function PublikPage() {
           </div>
         </div>
         <div style={{ display: 'flex', gap: 8, flexWrap: 'wrap' }}>
-          <Link className="btn ghost unduh-publik" href="/unduh">
+          <Link className="btn ghost unduh-publik hover-lift" href="/unduh">
             <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="download" size={17} /> Download aplikasi</span>
           </Link>
-          <Link className="btn" href="/login">
+          <Link className="btn hover-lift" href="/login">
             <span style={{ display: 'inline-flex', gap: 8, alignItems: 'center' }}><Icon name="user" size={17} /> Masuk bendahara</span>
           </Link>
         </div>
       </div>
-      {err && <div className="error">{err}</div>}
+      {err && (
+        <div className="error" style={{ display: 'flex', gap: 10, alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap' }}>
+          <span>{err}</span>
+          <button type="button" className="btn ghost" onClick={load}>Muat ulang</button>
+        </div>
+      )}
 
       <div className="hero-card">
         <div className="publik-hero">
@@ -119,16 +132,20 @@ export default function PublikPage() {
               <button type="button" role="tab" aria-selected={view === 'pemasukan'} className={`seg-btn${view === 'pemasukan' ? ' active' : ''}`} onClick={() => setView('pemasukan')}>Total Pemasukan</button>
             </div>
             <div className="hero-label">{view === 'bendahara' ? 'Uang di Bendahara • Publik' : 'Total Pemasukan • Publik'}</div>
-            <div className="hero-value">{sum ? rupiah(view === 'bendahara' ? (sum.uang_dibendahara ?? sum.saldo_akhir) : (sum.total_pemasukan ?? sum.saldo_tersedia)) : '...'}</div>
-            {pctBendahara !== null && <div className="hero-sub">{pctBendahara}% dari total pemasukan masih di bendahara.</div>}
+            <div className="hero-value">{loading ? <span className="skel" style={{ minWidth: 220 }} aria-label="Memuat saldo">memuat saldo</span> : rupiah(nilaiHero)}</div>
+            {pctBendahara !== null && !loading && <div className="hero-sub">{pctBendahara}% dari total pemasukan masih di bendahara.</div>}
           </div>
           <div className="publik-spark">
             <div className="label" style={{ marginBottom: 0 }}>Pemasukan 7 hari terakhir</div>
-            <div className="publik-bars" role="img" aria-label="Grafik pemasukan 7 hari terakhir">
-              {spark.map((s) => (
-                <i key={s.k} title={`${s.label}: ${rupiah(s.total)}`} style={{ height: `${Math.max(7, (s.total / maksSpark) * 100)}%`, opacity: s.total > 0 ? 0.4 + 0.6 * (s.total / maksSpark) : 0.15 }} />
-              ))}
-            </div>
+            {loading ? (
+              <span className="skel" style={{ display: 'block', height: 56, marginTop: 8 }} aria-label="Memuat grafik">memuat grafik</span>
+            ) : (
+              <div className="publik-bars" role="img" aria-label="Grafik pemasukan 7 hari terakhir">
+                {spark.map((s) => (
+                  <i key={s.k} title={`${s.label}: ${rupiah(s.total)}`} style={{ height: `${Math.max(7, (s.total / maksSpark) * 100)}%`, opacity: s.total > 0 ? 0.4 + 0.6 * (s.total / maksSpark) : 0.15 }} />
+                ))}
+              </div>
+            )}
             <div className="label" style={{ marginTop: 6, marginBottom: 0 }}>{spark[0]?.label} – {spark[6]?.label} • dari data tampil</div>
           </div>
         </div>
@@ -138,21 +155,21 @@ export default function PublikPage() {
         <div className="card stat-card">
           <div className="stat-ico income"><Icon name="in" size={26} /></div>
           <div style={{ minWidth: 0 }}>
-            <div className="v">{sum ? rupiah(sum.total_pemasukan ?? sum.total_income) : '...'}</div>
+            <div className="v">{loading ? <span className="skel" aria-label="Memuat">memuat</span> : rupiah(sum?.total_pemasukan ?? sum?.total_income ?? 0)}</div>
             <div className="k">Total Pemasukan</div>
           </div>
         </div>
         <div className="card stat-card">
           <div className="stat-ico expense"><Icon name="out" size={26} /></div>
           <div style={{ minWidth: 0 }}>
-            <div className="v">{sum ? rupiah(sum.total_expense) : '...'}</div>
+            <div className="v">{loading ? <span className="skel" aria-label="Memuat">memuat</span> : rupiah(sum?.total_expense ?? 0)}</div>
             <div className="k">Total Pengeluaran</div>
           </div>
         </div>
         <div className="card stat-card">
           <div className="stat-ico savings"><Icon name="savings" size={26} /></div>
           <div style={{ minWidth: 0 }}>
-            <div className="v">{sum ? rupiah(sum.total_savings) : '...'}</div>
+            <div className="v">{loading ? <span className="skel" aria-label="Memuat">memuat</span> : rupiah(sum?.total_savings ?? 0)}</div>
             <div className="k">Total Tabungan</div>
           </div>
         </div>
@@ -164,18 +181,22 @@ export default function PublikPage() {
           <span className="label only-view" title="Anda hanya dapat melihat data, tidak dapat mengubahnya."><Icon name="lock" size={14} /> Hanya Lihat</span>
         </div>
         <div className="filters">
-          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cari keterangan..." aria-label="Cari transaksi" />
-          <select value={jenisFilter} onChange={(e) => setJenisFilter(e.target.value)} aria-label="Filter jenis transaksi">
+          <input type="search" value={q} onChange={(e) => setQ(e.target.value)} placeholder="Cari keterangan..." aria-label="Cari transaksi" disabled={filterMati} title={filterMati ? 'Belum ada data untuk difilter' : undefined} />
+          <select value={jenisFilter} onChange={(e) => setJenisFilter(e.target.value)} aria-label="Filter jenis transaksi" disabled={filterMati} title={filterMati ? 'Belum ada data untuk difilter' : undefined}>
             <option value="">Semua jenis</option>
             <option value="income">Pemasukan</option>
             <option value="expense">Pengeluaran</option>
             <option value="savings">Tabungan</option>
           </select>
-          <input type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} aria-label="Filter tanggal" />
+          <input type="date" value={tanggal} onChange={(e) => setTanggal(e.target.value)} aria-label="Filter tanggal" disabled={filterMati} title={filterMati ? 'Belum ada data untuk difilter' : undefined} />
           {filterAktif && <button type="button" className="btn ghost" onClick={resetFilter}>Reset</button>}
         </div>
-        <div className="label">Menampilkan {tampil.length} dari {tersaring.length} transaksi (100 terbaru).</div>
-        {tampil.length ? tampil.map((t, i) => {
+        <div className="label" aria-live="polite">Menampilkan {tampil.length} dari {tersaring.length} transaksi (100 terbaru).</div>
+        {loading ? (
+          <div style={{ display: 'grid', gap: 8 }}>
+            {[0, 1, 2].map((i) => <span key={i} className="skel" style={{ display: 'block', height: 52 }} aria-label="Memuat transaksi">memuat transaksi</span>)}
+          </div>
+        ) : tampil.length ? tampil.map((t, i) => {
           const masuk = isMasuk(t.jenis);
           const merah = t.jenis === 'expense';
           return (
@@ -187,8 +208,13 @@ export default function PublikPage() {
             </div>
           );
         }) : (
-          <div className="label">
-            {rows.length ? 'Tidak ada transaksi yang cocok. Ubah kata kunci atau filter.' : 'Belum ada data tampil. Jika kas sebenarnya ada, view publik belum dipasang.'}
+          <div className="empty-state">
+            <span className="empty-ico"><Icon name="wallet" size={26} /></span>
+            <b>{rows.length ? 'Tidak ada transaksi yang cocok.' : 'Belum ada transaksi tercatat untuk kelas ini.'}</b>
+            <span className="label" style={{ marginBottom: 0 }}>
+              {rows.length ? 'Ubah kata kunci atau filter di atas.' : 'Data akan muncul di sini setelah bendahara mencatat kas.'}
+            </span>
+            {rows.length > 0 && filterAktif && <button type="button" className="btn ghost" onClick={resetFilter}>Reset filter</button>}
           </div>
         )}
         {!filterAktif && tersaring.length > BATAS_AWAL && (
