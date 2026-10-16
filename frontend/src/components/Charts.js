@@ -38,6 +38,11 @@ export function MonthlyFlow({ data }) {
   if (!data || data.length < 2) {
     return <div className="label" style={{ padding: '40px 0', textAlign: 'center' }}>Belum cukup data untuk grafik</div>;
   }
+  // Semua nol -> garis datar 0 menipu; tampilkan empty state netral.
+  const kosong = data.every((d) => !Number(d.masuk) && !Number(d.keluar) && !Number(d.savings));
+  if (kosong) {
+    return <div className="label" style={{ padding: '40px 0', textAlign: 'center' }}>Belum ada data keuangan untuk ditampilkan</div>;
+  }
   const gid = useId().replace(/[^a-zA-Z0-9]/g, '');
   const W = 640, H = 170, padB = 24, padT = 26, padX = 10;
   const vals = data.map((d) => d.net);
