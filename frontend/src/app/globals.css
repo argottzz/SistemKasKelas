@@ -23,11 +23,11 @@
   --shadow: 0 1px 2px rgba(17, 45, 78, .05), 0 4px 16px rgba(17, 45, 78, .05);
 }
 [data-theme="dark"] {
-  --bg: #0C2038;
-  --card: #18334F;
-  --ink: #EAF1EA;
-  --muted: rgba(234, 241, 234, .7);
-  --line: rgba(234, 241, 234, .24);
+  --bg: #091E17;
+  --card: #112C23;
+  --ink: #ECFDF5;
+  --muted: #8CAFA2;
+  --line: #1D4034;
   --primary: #6FCF97;
   --primary-ink: #0C2038;
   --sidebar-bg: #082A21;
@@ -217,6 +217,20 @@ th { background: rgba(47, 163, 107, .1); font-size: 11px; color: var(--muted); t
 .unduh-publik:hover { border-color: var(--primary); background: rgba(47, 163, 107, .12); }
 /* ===== Badge netral agar tidak bersaing dengan tombol utama ===== */
 .badge-muted { background: rgba(30, 58, 95, .08); color: var(--muted); border: 1px solid var(--line); }
+[data-theme="dark"] .badge-muted { background: rgba(236, 253, 245, .08); }
+/* ===== Warna ikon statistik: adaptif terang/gelap ===== */
+.stat-ico.income { background: rgba(47, 163, 107, .15); color: #2FA36B; }
+.stat-ico.expense { background: rgba(46, 90, 138, .14); color: #2E5A8A; }
+.stat-ico.savings { background: rgba(190, 134, 28, .15); color: #BE861C; }
+[data-theme="dark"] .stat-ico.income { background: rgba(111, 207, 151, .16); color: #6FCF97; }
+[data-theme="dark"] .stat-ico.expense { background: rgba(156, 195, 229, .16); color: #9CC3E5; }
+[data-theme="dark"] .stat-ico.savings { background: rgba(227, 179, 65, .16); color: #E3B341; }
+.c-income { color: #2FA36B; }
+.c-expense { color: #2E5A8A; }
+.c-savings { color: #BE861C; }
+[data-theme="dark"] .c-income { color: #6FCF97; }
+[data-theme="dark"] .c-expense { color: #9CC3E5; }
+[data-theme="dark"] .c-savings { color: #E3B341; }
 /* ===== Instruksi unduh: lega dibaca ===== */
 .step-list { display: grid; gap: 10px; margin-top: 10px; }
 .step-item { font-size: 14px; line-height: 1.75; color: var(--muted); background: rgba(47, 163, 107, .06); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; }
