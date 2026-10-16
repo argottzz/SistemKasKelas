@@ -140,7 +140,7 @@ export default function TransactionModal({ open, initialJenis = 'income', editTx
             </label>
           )}
           <label className="fld">Nominal (Rp)
-            <input inputMode="numeric" type="number" min="1" step="1" value={nominal} onChange={(e) => setNominal(e.target.value)} placeholder="cth: 50000" required />
+            <input inputMode="numeric" type="number" min="1" step="1" value={nominal} onChange={(e) => setNominal(e.target.value)} placeholder="cth: 50000" required autoFocus />
           </label>
           <label className="fld">Kategori (opsional)
             <select value={kategori} onChange={(e) => setKategori(e.target.value)}>
