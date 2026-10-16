@@ -7,7 +7,7 @@
   --line: rgba(47, 163, 107, .2);
   --primary: #2FA36B;
   --primary-ink: #ffffff;
-  --sidebar-bg: #1E3A5F;
+  --sidebar-bg: #0C3B2E;
   --sidebar-ink: #DBE2EF;
   --sidebar-active: #2FA36B;
   /* alias -> hijau/navy/emas logo */
@@ -30,7 +30,7 @@
   --line: rgba(234, 241, 234, .24);
   --primary: #6FCF97;
   --primary-ink: #0C2038;
-  --sidebar-bg: #071627;
+  --sidebar-bg: #082A21;
   --sidebar-ink: #DBE2EF;
   --sidebar-active: #2FA36B;
   --blue: #A3BEDD;
@@ -233,6 +233,10 @@ th { background: rgba(47, 163, 107, .1); font-size: 11px; color: var(--muted); t
 .publik-bars i { flex: 1; border-radius: 4px; background: var(--green); opacity: .35; min-height: 4px; display: block; }
 .tx-amt.neg { color: var(--red); }
 .only-view { display: inline-flex; gap: 6px; align-items: center; }
+/* ===== Skeleton loader: pengganti '...' saat data di-fetch ===== */
+.skel { display: inline-block; border-radius: 8px; min-width: 96px; min-height: 1em; background: linear-gradient(90deg, rgba(127, 140, 141, .18) 25%, rgba(127, 140, 141, .34) 50%, rgba(127, 140, 141, .18) 75%); background-size: 200% 100%; animation: skel-shimmer 1.2s ease-in-out infinite; color: transparent !important; user-select: none; }
+@keyframes skel-shimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
+@media (prefers-reduced-motion: reduce) { .skel { animation: none; } }
 .filters { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px; }
 .filters input, .filters select { padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px; font-size: 14px; background: var(--card); color: var(--ink); }
 .topbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; gap: 10px; flex-wrap: wrap; }
