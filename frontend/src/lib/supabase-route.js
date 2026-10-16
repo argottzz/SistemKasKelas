@@ -3,7 +3,6 @@
 // Tidak memakai service-role key.
 import { cookies } from 'next/headers';
 import { createServerClient } from '@supabase/ssr';
-import { isBendahara } from './allowlist';
 
 export function supabaseRoute() {
   const store = cookies();
@@ -27,11 +26,10 @@ export function supabaseRoute() {
   );
 }
 
-// Ambil sesi user login. Kembalikan { sb, user, allowed }.
-// allowed = email ada di BENDAHARA_EMAILS (fail-closed bila env kosong).
+// Ambil sesi user login. Kembalikan { sb, user } atau { sb: null, user: null }.
 export async function requireSession() {
   const sb = supabaseRoute();
   const { data, error } = await sb.auth.getUser();
-  if (error || !data?.user) return { sb: null, user: null, allowed: false };
-  return { sb, user: data.user, allowed: isBendahara(data.user.email) };
+  if (error || !data?.user) return { sb: null, user: null };
+  return { sb, user: data.user };
 }
